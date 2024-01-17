@@ -13,7 +13,10 @@ return new class extends Migration {
             $table->date('start_education');
             $table->date('end_education');
             $table->foreignId('curator_id')->constrained();
-            $table->foreignId('group_id')->constrained();
+            $table
+                ->foreignId('group_id')
+                ->constrained()
+                ->cascadeOnDelete();
             $table->unique(['number', 'group_id']);
             $table->timestamps();
         });

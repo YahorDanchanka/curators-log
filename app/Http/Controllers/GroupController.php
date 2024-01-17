@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GroupRequest;
 use App\Models\Course;
+use App\Models\Curator;
 use App\Models\Group;
-use Illuminate\Http\Request;
+use App\Models\Specialty;
+use App\Services\GroupService;
 use Inertia\Inertia;
 
 class GroupController extends Controller
@@ -23,51 +26,47 @@ class GroupController extends Controller
         return Inertia::render('group/IndexPage', compact('groups'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        extract($this->getFormData());
+        return Inertia::render('group/CreatePage', compact('specialties', 'curators'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(GroupRequest $request, GroupService $groupService)
     {
-        //
+        $groupService->create($request);
+        return to_route('groups.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Group $group)
     {
-        //
+        $group->load('courses');
+        $group->append('name');
+        extract($this->getFormData());
+        return Inertia::render('group/EditPage', compact('group', 'specialties', 'curators'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(GroupRequest $request, Group $group, GroupService $groupService)
     {
-        //
+        $groupService->update($group, $request);
+        return to_route('groups.index');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Group $group)
     {
-        //
+        $group->delete();
+        return to_route('groups.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    protected function getFormData(): array
     {
-        //
+        $specialties = Specialty::select(['id', 'name'])->get();
+        $curators = Curator::select(['id', 'surname', 'name', 'patronymic'])
+            ->orderBy('surname')
+            ->orderBy('name')
+            ->orderBy('patronymic')
+            ->get();
+        $curators->each(fn(Curator $curator) => $curator->append('full_name'));
+        return compact('specialties', 'curators');
     }
 }
