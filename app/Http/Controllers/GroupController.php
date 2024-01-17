@@ -8,13 +8,14 @@ use App\Models\Curator;
 use App\Models\Group;
 use App\Models\Specialty;
 use App\Services\GroupService;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Inertia\Inertia;
 
 class GroupController extends Controller
 {
     public function index()
     {
-        $groups = Group::with('courses.curator')
+        $groups = Group::with(['courses' => fn(HasMany $query) => $query->with('curator')])
             ->latest()
             ->get();
 
