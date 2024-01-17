@@ -19,5 +19,5 @@ createInertiaApp({
       .use(plugin)
       .use(Quasar, { lang: quasarLangRu, plugins: { Notify } })
       .mount(el)
-  },
+  }
 })
