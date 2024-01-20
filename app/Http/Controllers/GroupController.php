@@ -9,6 +9,7 @@ use App\Models\Group;
 use App\Models\Specialty;
 use App\Services\GroupService;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class GroupController extends Controller
@@ -55,7 +56,12 @@ class GroupController extends Controller
 
     public function destroy(Group $group)
     {
-        $group->delete();
+        try {
+            $group->delete();
+        } catch (\Exception $exception) {
+            throw ValidationException::withMessages(['Группа связана с другими записями.']);
+        }
+
         return to_route('groups.index');
     }
 

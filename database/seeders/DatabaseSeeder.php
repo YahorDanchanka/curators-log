@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
             SpecialtySeeder::class,
             GroupSeeder::class,
             CourseSeeder::class,
+            StudentSeeder::class,
+            CharacteristicSeeder::class,
         ]);
     }
 }

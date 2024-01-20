@@ -5,6 +5,7 @@
         <q-toolbar>
           <q-btn icon="menu" @click="toggleLeftDrawer" dense flat round />
           <q-toolbar-title> Журнал куратора </q-toolbar-title>
+          <q-btn v-if="props.saving" icon="save" flat round dense @click="emitSavingEvent" />
         </q-toolbar>
       </q-header>
 
@@ -23,7 +24,13 @@
 import { ref } from 'vue'
 import BaseLayout from '@/layouts/BaseLayout.vue'
 
+const props = defineProps<{ saving?: boolean }>()
+
 const leftDrawerOpen = ref(false)
+
+function emitSavingEvent() {
+  document.dispatchEvent(new Event('save'))
+}
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value

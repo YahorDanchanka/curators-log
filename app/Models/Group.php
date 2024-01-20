@@ -24,6 +24,14 @@ class Group extends Model
         return $this->belongsTo(Specialty::class);
     }
 
+    public function students(): HasMany
+    {
+        return $this->hasMany(Student::class)
+            ->orderBy('surname')
+            ->orderBy('name')
+            ->orderBy('patronymic');
+    }
+
     protected function currentCourse(): Attribute
     {
         return Attribute::make(

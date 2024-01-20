@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\SocioPedagogicalCharacteristicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,4 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [MainController::class, 'index'])->name('home');
+
+/** <Groups> */
 Route::resource('groups', GroupController::class)->except(['show']);
+Route::controller(SocioPedagogicalCharacteristicController::class)
+    ->prefix('groups/{group}/courses/{course}/socio-pedagogical-characteristic')
+    ->name('groups.courses.socio-pedagogical-characteristic.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'sync')->name('sync');
+    });
+/** </Groups> */
