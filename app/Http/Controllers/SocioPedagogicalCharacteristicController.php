@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SocioPedagogicalCharacteristicRequest;
 use App\Models\Characteristic;
 use App\Models\CharacteristicStudent;
-use App\Models\Course;
 use App\Models\Group;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -15,8 +14,13 @@ use Inertia\Inertia;
 
 class SocioPedagogicalCharacteristicController extends Controller
 {
-    public function index(Group $group, Course $course)
+    public function index(Group $group, string $course_number)
     {
+        $course = $group
+            ->courses()
+            ->where('number', $course_number)
+            ->firstOrFail();
+
         $course->append('group_name');
 
         $group->load([
@@ -37,8 +41,13 @@ class SocioPedagogicalCharacteristicController extends Controller
         ]);
     }
 
-    public function sync(SocioPedagogicalCharacteristicRequest $request, Group $group, Course $course)
+    public function sync(SocioPedagogicalCharacteristicRequest $request, Group $group, string $course_number)
     {
+        $course = $group
+            ->courses()
+            ->where('number', $course_number)
+            ->firstOrFail();
+
         $validated = $request->validated();
 
         DB::transaction(function () use ($validated, $group, $course) {
@@ -55,7 +64,7 @@ class SocioPedagogicalCharacteristicController extends Controller
 
         return to_route('groups.courses.socio-pedagogical-characteristic.index', [
             'group' => $group->id,
-            'course' => $course->id,
+            'course_number' => $course->number,
         ]);
     }
 }

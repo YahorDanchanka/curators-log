@@ -103,7 +103,7 @@ function attachOrDetachCharacteristic(student: StudentModel, characteristic: Cha
 }
 
 document.addEventListener('save', () => {
-  onSave(SocioPedagogicalCharacteristicService.sync(props.group.id, props.course.id, attachedCharacteristics.value))
+  onSave(SocioPedagogicalCharacteristicService.sync(props.group.id, props.course.number, attachedCharacteristics.value))
 })
 </script>
 

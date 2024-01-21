@@ -21,7 +21,7 @@ Route::get('/', [MainController::class, 'index'])->name('home');
 /** <Groups> */
 Route::resource('groups', GroupController::class)->except(['show']);
 Route::controller(SocioPedagogicalCharacteristicController::class)
-    ->prefix('groups/{group}/courses/{course}/socio-pedagogical-characteristic')
+    ->prefix('groups/{group}/courses/{course_number}/socio-pedagogical-characteristic')
     ->name('groups.courses.socio-pedagogical-characteristic.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
