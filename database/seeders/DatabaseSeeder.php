@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             CourseSeeder::class,
             StudentSeeder::class,
             CharacteristicSeeder::class,
+            ExpulsionSeeder::class,
         ]);
     }
 }

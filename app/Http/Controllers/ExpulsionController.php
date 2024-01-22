@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\ExpulsionRequest;
+use App\Models\Course;
+use App\Models\Expulsion;
+use App\Models\Group;
+use App\Models\Student;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Inertia\Inertia;
+
+class ExpulsionController extends Controller
+{
+    public function index(Group $group, string $course_number)
+    {
+        $course = $this->getFormData($group, $course_number)['course'];
+        return Inertia::render('expulsion/IndexPage', compact('group', 'course'));
+    }
+
+    public function create(Group $group, string $course_number)
+    {
+        $course = $this->getFormData($group, $course_number)['course'];
+        return Inertia::render('expulsion/CreatePage', compact('group', 'course'));
+    }
+
+    public function store(ExpulsionRequest $request, Group $group, string $course_number)
+    {
+        $course = $this->findCourse($group, $course_number);
+        $validated = $request->validated();
+        $course->expulsions()->create($validated);
+
+        return to_route('groups.courses.expulsions.index', [
+            'group' => $group->id,
+            'course' => $course->number,
+        ]);
+    }
+
+    public function edit(Group $group, string $course_number, Expulsion $expulsion)
+    {
+        $course = $this->getFormData($group, $course_number)['course'];
+        return Inertia::render('expulsion/EditPage', compact('group', 'course', 'expulsion'));
+    }
+
+    public function update(ExpulsionRequest $request, Group $group, string $course_number, Expulsion $expulsion)
+    {
+        $course = $this->findCourse($group, $course_number);
+        $expulsion->update($request->validated());
+        return to_route('groups.courses.expulsions.index', [
+            'group' => $group->id,
+            'course' => $course->number,
+        ]);
+    }
+
+    public function destroy(Group $group, string $course_number, Expulsion $expulsion)
+    {
+        $course = $this->findCourse($group, $course_number);
+        $expulsion->delete();
+        return to_route('groups.courses.expulsions.index', [
+            'group' => $group->id,
+            'course' => $course->id,
+        ]);
+    }
+
+    /**
+     * @param Group $group
+     * @param string|int $course_number
+     * @return Course
+     */
+    protected function findCourse(Group $group, string|int $course_number)
+    {
+        return $group
+            ->courses()
+            ->with(['expulsions' => fn(HasMany $query) => $query->orderBy('date')])
+            ->where('number', $course_number)
+            ->firstOrFail();
+    }
+
+    protected function getFormData(Group $group, string|int $course_number): array
+    {
+        $course = $this->findCourse($group, $course_number);
+
+        $group->load([
+            'students' => fn(HasMany $query) => $query->select(['id', 'surname', 'name', 'patronymic', 'group_id']),
+        ]);
+
+        $group->students->each(fn(Student $student) => $student->append('initials'));
+
+        return compact('course');
+    }
+}

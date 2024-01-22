@@ -26,7 +26,12 @@ class SocioPedagogicalCharacteristicController extends Controller
         $group->load([
             'students' => fn(HasMany $query) => $query
                 ->select(['id', 'surname', 'name', 'patronymic', 'birthday', 'group_id'])
-                ->with(['characteristics' => fn(BelongsToMany $query) => $query->where('course_id', $course->id)]),
+                ->with([
+                    'characteristics' => fn(BelongsToMany $query) => $query->where('course_id', $course->id),
+                    'expulsion',
+                ])
+                ->doesntHave('expulsion')
+                ->orWhereRelation('expulsion.course', 'number', '>=', $course_number),
         ]);
 
         $group->students->each(fn(Student $student) => $student->append(['initials', 'is_nonresident', 'is_dorm']));
