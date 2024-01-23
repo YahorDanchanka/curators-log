@@ -1,6 +1,7 @@
-import { CourseTable, CuratorModel } from '@/types'
+import { CourseTable, CuratorModel, ExpulsionTable } from '@/types'
 
 export type CourseModel = CourseTable & {
-  curator?: CuratorModel
   group_name?: string
+  curator?: CuratorModel
+  expulsions?: ExpulsionTable[]
 }

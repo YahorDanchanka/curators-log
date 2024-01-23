@@ -7,8 +7,10 @@ export default Joi.defaults((schema) =>
     messages: {
       'any.required': i18n.global.t('validation.required'),
       'string.empty': i18n.global.t('validation.required'),
-      'date.base': i18n.global.t('validation.required'),
       'string.max': i18n.global.t('validation.max.string'),
+      'date.base': i18n.global.t('validation.required'),
+      'date.max': i18n.global.t('validation.max.date'),
+      'date.min': i18n.global.t('validation.min.date'),
       'number.base': i18n.global.t('validation.required'),
       'number.min': i18n.global.t('validation.min.numeric'),
       'number.max': i18n.global.t('validation.max.numeric'),
