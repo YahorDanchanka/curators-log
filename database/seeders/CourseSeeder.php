@@ -38,6 +38,34 @@ class CourseSeeder extends Seeder
                 'curator_id' => 1,
                 'group_id' => 1,
             ],
+            [
+                'number' => 1,
+                'start_education' => '2023-09-01',
+                'end_education' => '2024-07-10',
+                'curator_id' => 2,
+                'group_id' => 2,
+            ],
+            [
+                'number' => 2,
+                'start_education' => '2024-09-01',
+                'end_education' => '2025-07-10',
+                'curator_id' => 2,
+                'group_id' => 2,
+            ],
+            [
+                'number' => 3,
+                'start_education' => '2025-09-01',
+                'end_education' => '2026-07-10',
+                'curator_id' => 2,
+                'group_id' => 2,
+            ],
+            [
+                'number' => 4,
+                'start_education' => '2026-09-01',
+                'end_education' => '2027-07-10',
+                'curator_id' => 2,
+                'group_id' => 2,
+            ],
         ]);
     }
 }
