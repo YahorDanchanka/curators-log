@@ -29,6 +29,11 @@ class Course extends Model
         return $this->hasMany(Expulsion::class);
     }
 
+    public function characteristics(): HasMany
+    {
+        return $this->hasMany(CharacteristicStudent::class);
+    }
+
     protected function groupName(): Attribute
     {
         return Attribute::make(

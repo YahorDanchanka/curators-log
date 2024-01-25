@@ -4,6 +4,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\SocioPedagogicalCharacteristicController;
 use App\Http\Controllers\ExpulsionController;
+use App\Http\Controllers\LeadershipController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,5 +30,12 @@ Route::controller(SocioPedagogicalCharacteristicController::class)
         Route::post('/', 'sync')->name('sync');
     });
 /** </Groups> */
+
+Route::prefix('groups/{group}/courses/{course_number}')
+    ->name('groups.courses.')
+    ->group(function () {
+        Route::get('/leadership', [LeadershipController::class, 'index'])->name('leadership.index');
+        Route::post('/leadership', [LeadershipController::class, 'sync'])->name('leadership.sync');
+    });
 
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);

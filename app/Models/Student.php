@@ -6,6 +6,7 @@ use App\Traits\ModelInitials;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -17,12 +18,17 @@ class Student extends Model
 
     public function characteristics(): BelongsToMany
     {
-        return $this->belongsToMany(Characteristic::class)->withPivot(['course_id']);
+        return $this->belongsToMany(Characteristic::class)->withPivot(['id', 'course_id']);
     }
 
     public function expulsion(): HasOne
     {
         return $this->hasOne(Expulsion::class);
+    }
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
     }
 
     /** Иногородний */
