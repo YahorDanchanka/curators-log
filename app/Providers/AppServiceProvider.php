@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\GroupCompositionService;
+use App\Services\LeadershipService;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 
@@ -13,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         Sanctum::ignoreMigrations();
+
+        $this->app->singleton(LeadershipService::class, fn() => new LeadershipService());
+        $this->app->singleton(GroupCompositionService::class, fn() => new GroupCompositionService());
     }
 
     /**
@@ -20,6 +26,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }

@@ -57,6 +57,17 @@ class CharacteristicSeeder extends Seeder
                 'name' => 'Несовершеннолетние, в отношении которых проводится комплексная реабилитация',
                 'type' => 'socio-pedagogical',
             ],
+            ['name' => 'Староста', 'type' => 'leadership'],
+            ['name' => 'Заместитель старосты', 'type' => 'leadership'],
+            ['name' => 'Секретарь ОО «БРСМ» учебной группы', 'type' => 'leadership'],
+            ['name' => 'Профсоюзный организатор', 'type' => 'leadership'],
+            ['name' => 'Учебный', 'type' => 'group-composition'],
+            ['name' => 'Информационно-идеологический', 'type' => 'group-composition'],
+            ['name' => 'Физкультурно-спортивный', 'type' => 'group-composition'],
+            ['name' => 'Трудовой', 'type' => 'group-composition'],
+            ['name' => 'Культурно-массовый', 'type' => 'group-composition'],
+            ['name' => 'Охраны правопорядка', 'type' => 'group-composition'],
+            ['name' => 'Редакционный', 'type' => 'group-composition'],
         ]);
     }
 }

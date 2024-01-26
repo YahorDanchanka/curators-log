@@ -16,18 +16,16 @@ class SocioPedagogicalCharacteristicController extends Controller
 {
     public function index(Group $group, string $course_number)
     {
-        $course = $group
-            ->courses()
-            ->where('number', $course_number)
-            ->firstOrFail();
-
+        $course = $group->findCourseByNumber($course_number);
         $course->append('group_name');
 
         $group->load([
             'students' => fn(HasMany $query) => $query
                 ->select(['id', 'surname', 'name', 'patronymic', 'birthday', 'group_id'])
                 ->with([
-                    'characteristics' => fn(BelongsToMany $query) => $query->where('course_id', $course->id),
+                    'characteristics' => fn(BelongsToMany $query) => $query
+                        ->where('type', 'socio-pedagogical')
+                        ->where('course_id', $course->id),
                     'expulsion',
                 ])
                 ->doesntHave('expulsion')
@@ -48,11 +46,7 @@ class SocioPedagogicalCharacteristicController extends Controller
 
     public function sync(SocioPedagogicalCharacteristicRequest $request, Group $group, string $course_number)
     {
-        $course = $group
-            ->courses()
-            ->where('number', $course_number)
-            ->firstOrFail();
-
+        $course = $group->findCourseByNumber($course_number);
         $validated = $request->validated();
 
         DB::transaction(function () use ($validated, $group, $course) {

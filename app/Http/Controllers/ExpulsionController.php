@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExpulsionRequest;
-use App\Models\Course;
 use App\Models\Expulsion;
 use App\Models\Group;
 use App\Models\Student;
@@ -26,7 +25,7 @@ class ExpulsionController extends Controller
 
     public function store(ExpulsionRequest $request, Group $group, string $course_number)
     {
-        $course = $this->findCourse($group, $course_number);
+        $course = $group->findCourseByNumber($course_number);
         $validated = $request->validated();
         $course->expulsions()->create($validated);
 
@@ -44,7 +43,7 @@ class ExpulsionController extends Controller
 
     public function update(ExpulsionRequest $request, Group $group, string $course_number, Expulsion $expulsion)
     {
-        $course = $this->findCourse($group, $course_number);
+        $course = $group->findCourseByNumber($course_number);
         $expulsion->update($request->validated());
         return to_route('groups.courses.expulsions.index', [
             'group' => $group->id,
@@ -54,7 +53,7 @@ class ExpulsionController extends Controller
 
     public function destroy(Group $group, string $course_number, Expulsion $expulsion)
     {
-        $course = $this->findCourse($group, $course_number);
+        $course = $group->findCourseByNumber($course_number);
         $expulsion->delete();
         return to_route('groups.courses.expulsions.index', [
             'group' => $group->id,
@@ -62,23 +61,9 @@ class ExpulsionController extends Controller
         ]);
     }
 
-    /**
-     * @param Group $group
-     * @param string|int $course_number
-     * @return Course
-     */
-    protected function findCourse(Group $group, string|int $course_number)
-    {
-        return $group
-            ->courses()
-            ->with(['expulsions' => fn(HasMany $query) => $query->orderBy('date')])
-            ->where('number', $course_number)
-            ->firstOrFail();
-    }
-
     protected function getFormData(Group $group, string|int $course_number): array
     {
-        $course = $this->findCourse($group, $course_number);
+        $course = $group->findCourseByNumber($course_number);
 
         $group->load([
             'students' => fn(HasMany $query) => $query->select(['id', 'surname', 'name', 'patronymic', 'group_id']),

@@ -32,6 +32,17 @@ class Group extends Model
             ->orderBy('patronymic');
     }
 
+    public function findCourseByNumber($course_number): Course
+    {
+        /** @var Course $course */
+        $course = $this->courses()
+            ->with(['expulsions' => fn(HasMany $query) => $query->orderBy('date')])
+            ->where('number', $course_number)
+            ->firstOrFail();
+
+        return $course;
+    }
+
     protected function currentCourse(): Attribute
     {
         return Attribute::make(
