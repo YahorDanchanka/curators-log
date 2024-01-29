@@ -43,6 +43,10 @@ Route::prefix('groups/{group}/courses/{course_number}')
             'student-employment.index'
         );
 
+        Route::get('/student-employment/print', [StudentEmploymentController::class, 'print'])->name(
+            'student-employment.print'
+        );
+
         Route::post('/student-employment', [StudentEmploymentController::class, 'sync'])->name(
             'student-employment.sync'
         );

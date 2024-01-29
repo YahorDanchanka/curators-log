@@ -131,7 +131,7 @@ import { CourseModel, GroupModel, IEnum, StudentModel } from '@/types'
 import CourseTitle from '@/components/CourseTitle.vue'
 import { StudentRepository } from '@/repositories'
 import { StudentCharacteristicService, StudentEmploymentService } from '@/services'
-import { onSave } from '@/helpers'
+import { downloadFile, onSave } from '@/helpers'
 
 const props = defineProps<{
   group: GroupModel
@@ -154,5 +154,11 @@ studentEmploymentService.load(studentRepository.value)
 
 document.addEventListener('save', () => {
   onSave(studentEmploymentService.save(props.group.id, props.course.number))
+})
+
+document.addEventListener('print', () => {
+  downloadFile(
+    route('groups.courses.student-employment.print', { group: props.group.id, course_number: props.course.number })
+  )
 })
 </script>

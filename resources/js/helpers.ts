@@ -21,3 +21,7 @@ export function onSave(promise: Promise) {
       Notify.create({ type: 'negative', message: 'Ошибка сохранения.' })
     })
 }
+
+export function downloadFile(url: string) {
+  window.location.href = url
+}
