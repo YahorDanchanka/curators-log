@@ -2,8 +2,12 @@
 
 namespace App\Enums;
 
+use App\Traits\EnumToArray;
+
 enum CharacteristicId: int
 {
+    use EnumToArray;
+
     /** Староста */
     case LEADER_ID = 19;
     /** Заместитель старосты */
@@ -26,4 +30,6 @@ enum CharacteristicId: int
     case LAW_SECTOR_ID = 28;
     /** Редакционный */
     case EDITORIAL_SECTOR_ID = 29;
+    /** Учащиеся, члены ОО «БРСМ» */
+    case BRSM_ID = 30;
 }

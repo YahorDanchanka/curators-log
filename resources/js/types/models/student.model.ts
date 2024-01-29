@@ -1,9 +1,10 @@
-import { CharacteristicStudentTable, CharacteristicTable, StudentTable } from '@/types'
+import { CharacteristicStudentTable, CharacteristicTable, StudentEmploymentTable, StudentTable } from '@/types'
 
 export type StudentModel = StudentTable & {
+  characteristics?: (CharacteristicTable & { pivot: CharacteristicStudentTable })[]
+  employments?: StudentEmploymentTable[]
   full_name?: string
   initials?: string
-  characteristics?: (CharacteristicTable & { pivot: CharacteristicStudentTable })[]
   is_nonresident?: boolean
   is_dorm?: boolean
 }

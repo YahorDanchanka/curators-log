@@ -68,6 +68,7 @@ class CharacteristicSeeder extends Seeder
             ['name' => 'Культурно-массовый', 'type' => 'group-composition'],
             ['name' => 'Охраны правопорядка', 'type' => 'group-composition'],
             ['name' => 'Редакционный', 'type' => 'group-composition'],
+            ['name' => 'Учащиеся, члены ОО «БРСМ»', 'type' => 'student-employment'],
         ]);
     }
 }

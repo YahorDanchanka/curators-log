@@ -34,6 +34,11 @@ class Course extends Model
         return $this->hasMany(CharacteristicStudent::class);
     }
 
+    public function studentEmployment(): HasMany
+    {
+        return $this->hasMany(StudentEmployment::class);
+    }
+
     protected function groupName(): Attribute
     {
         return Attribute::make(
