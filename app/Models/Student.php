@@ -37,6 +37,21 @@ class Student extends Model
         return $this->hasMany(StudentEmployment::class);
     }
 
+    public function relatives(): BelongsToMany
+    {
+        return $this->belongsToMany(Relative::class)->withPivot('type');
+    }
+
+    protected function adultRelatives(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->relatives->whereNull('birthday')->values());
+    }
+
+    protected function minorRelatives(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->relatives->whereNotNull('birthday')->values());
+    }
+
     /** Иногородний */
     protected function isNonresident(): Attribute
     {

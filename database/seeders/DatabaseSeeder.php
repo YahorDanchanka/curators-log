@@ -14,6 +14,8 @@ class DatabaseSeeder extends Seeder
             SpecialtySeeder::class,
             GroupSeeder::class,
             CourseSeeder::class,
+            AdministrativeDivisionSeeder::class,
+            AddressSeeder::class,
             StudentSeeder::class,
             CharacteristicSeeder::class,
             ExpulsionSeeder::class,

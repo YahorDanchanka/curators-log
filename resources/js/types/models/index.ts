@@ -1,4 +1,6 @@
+export * from './address.model'
 export * from './course.model'
 export * from './curator.model'
 export * from './group.model'
+export * from './relative.model'
 export * from './student.model'
