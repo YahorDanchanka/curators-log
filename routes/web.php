@@ -61,5 +61,10 @@ Route::controller(StudentCharacteristicController::class)
         Route::delete('/detach', 'detach')->name('detach');
     });
 
+Route::get('groups/{group}/students/{student_number}/relatives/print', [
+    StudentRelativeController::class,
+    'print',
+])->name('groups.students.relatives.print');
+
 Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);

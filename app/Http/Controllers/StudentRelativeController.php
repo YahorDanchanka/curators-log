@@ -9,6 +9,7 @@ use App\Models\Relative;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class StudentRelativeController extends Controller
 {
@@ -18,7 +19,10 @@ class StudentRelativeController extends Controller
         $student->load('relatives');
         $student->append(['initials', 'adult_relatives', 'minor_relatives']);
         $student->relatives->each(fn(Relative $relative) => $relative->address?->append('address'));
-        return Inertia::render('student-relative/IndexPage', compact('group', 'student', 'studentNumber'));
+        return Inertia::render('student-relative/IndexPage', [
+            ...compact('group', 'student', 'studentNumber'),
+            'printing' => true,
+        ]);
     }
 
     public function create(Request $request, Group $group, string $studentNumber)
@@ -89,5 +93,55 @@ class StudentRelativeController extends Controller
         });
 
         return to_route('groups.students.relatives.index', ['group' => $group->id, 'student' => $studentNumber]);
+    }
+
+    public function print(Group $group, string $studentNumber)
+    {
+        $student = $group->findStudentByNumber($studentNumber);
+
+        $templateProcessor = new TemplateProcessor(resource_path('documents/student-relatives.docx'));
+        $templateProcessor->setValue('initials', $student->initials);
+
+        $templateProcessor->cloneRowAndSetValues(
+            'surname',
+            $student->adult_relatives
+                ->map(
+                    fn(Relative $relative) => [
+                        'surname' => $relative->surname,
+                        'name' => $relative->name,
+                        'patronymic' => $relative->patronymic,
+                        'sex' => $relative->sex,
+                        'type' => $relative->pivot->type,
+                        'job' => $relative->job,
+                        'position' => $relative->position,
+                        'phone' => $relative->phone,
+                        'address' => $relative->address->address,
+                    ]
+                )
+                ->values()
+                ->toArray()
+        );
+
+        $templateProcessor->cloneRowAndSetValues(
+            'surname1',
+            $student->minor_relatives
+                ->map(
+                    fn(Relative $relative) => [
+                        'surname1' => $relative->surname,
+                        'name1' => $relative->name,
+                        'patronymic1' => $relative->patronymic,
+                        'sex1' => $relative->sex,
+                        'birthday1' => $relative->birthday,
+                        'educational_institution1' => $relative->educational_institution,
+                    ]
+                )
+                ->values()
+                ->toArray()
+        );
+
+        return response()->streamDownload(
+            fn() => $templateProcessor->saveAs('php://output'),
+            "Родственники {$student->initials}.docx"
+        );
     }
 }

@@ -24,6 +24,7 @@ import { GroupModel, RelativeModel, StudentModel } from '@/types'
 import AdultRelativeTable from '@/components/AdultRelativeTable.vue'
 import MinorRelativeTable from '@/components/MinorRelativeTable.vue'
 import { StudentRelativeService } from '@/services'
+import { downloadFile } from '@/helpers'
 
 const props = defineProps<{ group: GroupModel; student: StudentModel; studentNumber: string }>()
 
@@ -45,4 +46,8 @@ function onEdit(relative: RelativeModel, type: string = 'adult') {
 function onDelete(relative: RelativeModel) {
   StudentRelativeService.delete(props.group.id, props.studentNumber, relative.id)
 }
+
+document.addEventListener('print', () => {
+  downloadFile(route('groups.students.relatives.print', { group: props.group.id, student_number: props.studentNumber }))
+})
 </script>
