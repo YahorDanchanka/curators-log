@@ -7,6 +7,7 @@ use App\Http\Controllers\ExpulsionController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\StudentCharacteristicController;
 use App\Http\Controllers\StudentEmploymentController;
+use App\Http\Controllers\StudentRelativeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,4 +61,5 @@ Route::controller(StudentCharacteristicController::class)
         Route::delete('/detach', 'detach')->name('detach');
     });
 
+Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);

@@ -1,4 +1,6 @@
+export * from './address.form-model'
 export * from './course.form-model'
 export * from './expulsion.form-model'
 export * from './group.form-model'
 export * from './leadership.form-model'
+export * from './relative.form-model'

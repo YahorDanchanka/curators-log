@@ -43,6 +43,15 @@ class Group extends Model
         return $course;
     }
 
+    public function findStudentByNumber($studentNumber): Student
+    {
+        /** @var Student $student */
+        $student = $this->students()
+            ->skip((int) $studentNumber - 1)
+            ->firstOrFail();
+        return $student;
+    }
+
     protected function currentCourse(): Attribute
     {
         return Attribute::make(

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\CharacteristicId;
+use App\Models\AdministrativeDivision;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -41,6 +42,7 @@ class HandleInertiaRequests extends Middleware
             'enums' => [
                 'CharacteristicId' => CharacteristicId::array(),
             ],
+            'administrativeDivisions' => AdministrativeDivision::all(),
         ]);
     }
 }
