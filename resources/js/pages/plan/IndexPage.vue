@@ -78,7 +78,7 @@ import { date, date as quasarDate } from 'quasar'
 import { Head } from '@inertiajs/vue3'
 import { CourseModel, GroupModel } from '@/types'
 import { PlanService } from '@/services'
-import { formatDate, onSave } from '@/helpers'
+import { downloadFile, formatDate, onSave } from '@/helpers'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel; month: string }>()
 
@@ -98,5 +98,15 @@ const calendarBoundaries = computed(() => quasarDate.formatDate(quasarDate.start
 
 document.addEventListener('save', () => {
   onSave(planService.save(props.group.id, props.course.number, props.month))
+})
+
+document.addEventListener('print', () => {
+  downloadFile(
+    route('groups.courses.plans.print', {
+      group: props.group.id,
+      course_number: props.course.number,
+      month: props.month,
+    })
+  )
 })
 </script>
