@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Services\GroupCompositionService;
 use App\Services\LeadershipService;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 

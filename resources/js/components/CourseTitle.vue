@@ -8,8 +8,5 @@
 </template>
 
 <script setup lang="ts">
-import { router } from '@inertiajs/vue3'
-import route from 'ziggy-js'
-
 const props = defineProps<{ title: string; courseNumber: number }>()
 </script>
