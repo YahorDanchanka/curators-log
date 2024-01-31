@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/vue3'
-import { Notify } from 'quasar'
+import { Notify, date } from 'quasar'
 import { VisitOptions } from '@inertiajs/core/types/types'
 
 export function difference<T>(arr1: T, arr2: T): T {
@@ -24,4 +24,8 @@ export function onSave(promise: Promise) {
 
 export function downloadFile(url: string) {
   window.location.href = url
+}
+
+export function formatDate(value: string, fromFormat: string = 'YYYY-MM-DD', toFormat: string = 'DD.MM.YYYY'): string {
+  return date.formatDate(date.extractDate(value, fromFormat), toFormat)
 }
