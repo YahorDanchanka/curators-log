@@ -60,6 +60,7 @@ Route::prefix('groups/{group}/courses/{course_number}')
 
         Route::get('/reports/{month}', [ReportController::class, 'show'])->name('reports.show');
         Route::get('/reports/{month}/load-plan', [ReportController::class, 'loadPlan'])->name('reports.load-plan');
+        Route::get('/reports/print', [ReportController::class, 'print'])->name('reports.print');
         Route::post('/reports/{month}', [ReportController::class, 'sync'])->name('reports.sync');
     });
 
