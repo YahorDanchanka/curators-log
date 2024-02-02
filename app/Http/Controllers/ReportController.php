@@ -12,16 +12,35 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use PhpOffice\PhpWord\Element\Table;
 use PhpOffice\PhpWord\Element\TextBreak;
-use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Shared\Converter;
-use PhpOffice\PhpWord\SimpleType\TblWidth;
-use PhpOffice\PhpWord\Style\Language;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class ReportController extends Controller
 {
+    public function index(Group $group, string $courseNumber)
+    {
+        $course = $group->findCourseByNumber($courseNumber);
+
+        $groupedReports = $course->reports
+            ->sortBy(function (Report $report) use ($course) {
+                $numericMonth = (int) $report->month;
+                $date = Carbon::createFromFormat(
+                    'Y-m-d',
+                    $numericMonth >= 9 && $numericMonth <= 12 ? $course->start_education : $course->end_education
+                );
+                $date->setMonth($numericMonth);
+                return $date->timestamp;
+            })
+            ->groupBy('month')
+            ->keyBy(fn(Collection $reports, mixed $month) => $month . 'a');
+
+        return Inertia::render('report/IndexPage', [
+            ...compact('group', 'course', 'groupedReports'),
+            'printing' => true,
+        ]);
+    }
+
     public function show(Group $group, string $courseNumber, string $month)
     {
         $course = $group->findCourseByNumber($courseNumber);

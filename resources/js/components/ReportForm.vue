@@ -68,7 +68,7 @@ import { cloneDeep, groupBy } from 'lodash'
 import { date as quasarDate } from 'quasar'
 import { ReportFormModel, ReportFormModelItem } from '@/types'
 
-const props = defineProps<{ date: Date }>()
+const props = defineProps<{ date: Date; disable?: boolean }>()
 const reports = defineModel<ReportFormModel>({ required: true })
 const emit = defineEmits(['loadPlan'])
 
