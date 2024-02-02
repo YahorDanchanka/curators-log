@@ -9,6 +9,7 @@ use App\Http\Controllers\StudentCharacteristicController;
 use App\Http\Controllers\StudentEmploymentController;
 use App\Http\Controllers\StudentRelativeController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,6 +57,12 @@ Route::prefix('groups/{group}/courses/{course_number}')
         Route::get('/plans/{month}', [PlanController::class, 'index'])->name('plans.index');
         Route::post('/plans/{month}', [PlanController::class, 'sync'])->name('plans.sync');
         Route::get('/plans/{month}/print', [PlanController::class, 'print'])->name('plans.print');
+
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/{month}', [ReportController::class, 'show'])->name('reports.show');
+        Route::get('/reports/{month}/load-plan', [ReportController::class, 'loadPlan'])->name('reports.load-plan');
+        Route::get('/reports/print', [ReportController::class, 'print'])->name('reports.print');
+        Route::post('/reports/{month}', [ReportController::class, 'sync'])->name('reports.sync');
     });
 
 Route::controller(StudentCharacteristicController::class)
