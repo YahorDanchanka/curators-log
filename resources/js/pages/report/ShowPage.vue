@@ -7,13 +7,13 @@
       о выполнении плана воспитательной и идеологической работы куратора учебной группы, проведении внеплановых
       мероприятий
     </h1>
-    <ReportForm v-model="reports" :date="date" />
+    <ReportForm v-model="reports" :date="date" @load-plan="loadPlan" />
   </q-page>
 </template>
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import { CourseModel, GroupModel, ReportFormModel } from '@/types'
 import { inertiaFetch, onSave } from '@/helpers'
 import ReportForm from '@/components/ReportForm.vue'
@@ -29,6 +29,16 @@ const date = computed(() => {
   instance.setMonth(+props.month - 1)
   return instance
 })
+
+function loadPlan() {
+  router.get(
+    route('groups.courses.reports.load-plan', {
+      group: props.group.id,
+      course_number: props.course.number,
+      month: props.month,
+    })
+  )
+}
 
 document.addEventListener('save', () => {
   onSave(

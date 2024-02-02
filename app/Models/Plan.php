@@ -22,4 +22,25 @@ class Plan extends Model
                 : $this->asDate($this->start_date)->format('Y.m.d')
         );
     }
+
+    /**
+     * Возвращает порядковый номер недели согласно дате составления плана
+     *
+     * @return Attribute
+     */
+    protected function week(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $day = $this->asDate($this->start_date)->day;
+
+                return match (true) {
+                    $day > 21 => 4,
+                    $day > 14 => 3,
+                    $day > 7 => 2,
+                    default => 1,
+                };
+            }
+        );
+    }
 }

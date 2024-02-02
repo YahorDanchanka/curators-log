@@ -59,6 +59,7 @@ Route::prefix('groups/{group}/courses/{course_number}')
         Route::get('/plans/{month}/print', [PlanController::class, 'print'])->name('plans.print');
 
         Route::get('/reports/{month}', [ReportController::class, 'show'])->name('reports.show');
+        Route::get('/reports/{month}/load-plan', [ReportController::class, 'loadPlan'])->name('reports.load-plan');
         Route::post('/reports/{month}', [ReportController::class, 'sync'])->name('reports.sync');
     });
 

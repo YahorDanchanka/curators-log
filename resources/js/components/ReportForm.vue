@@ -6,12 +6,13 @@
       </div>
       <div class="report-table__cell" style="grid-row: span 2">Содержание деятельности</div>
       <div class="report-table__cell" style="grid-column: span 2">Количество часов</div>
-      <div class="report-table__cell" style="grid-row: span 2">Действия</div>
+      <div class="report-table__cell">Действия</div>
       <div class="report-table__cell">в течение недели</div>
       <div class="report-table__cell">
         6-й<br />
         день
       </div>
+      <div class="report-table__cell link" @click="emit('loadPlan')">Загрузить из плана</div>
     </header>
     <div class="report-table__body">
       <template v-for="(reports, week) in groupedReportsByWeek" :key="week">
@@ -69,6 +70,7 @@ import { ReportFormModel, ReportFormModelItem } from '@/types'
 
 const props = defineProps<{ date: Date }>()
 const reports = defineModel<ReportFormModel>({ required: true })
+const emit = defineEmits(['loadPlan'])
 
 const groupedReportsByWeek = ref<{ [key: string]: ReportFormModel }>({
   '1': [],
