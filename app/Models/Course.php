@@ -44,6 +44,11 @@ class Course extends Model
         return $this->hasMany(Plan::class);
     }
 
+    public function reports(): HasMany
+    {
+        return $this->hasMany(Report::class);
+    }
+
     protected function groupName(): Attribute
     {
         return Attribute::make(
