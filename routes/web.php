@@ -5,6 +5,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\SocioPedagogicalCharacteristicController;
 use App\Http\Controllers\ExpulsionController;
 use App\Http\Controllers\LeadershipController;
+use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\StudentCharacteristicController;
 use App\Http\Controllers\StudentEmploymentController;
 use App\Http\Controllers\StudentRelativeController;
@@ -63,6 +64,9 @@ Route::prefix('groups/{group}/courses/{course_number}')
         Route::get('/reports/{month}/load-plan', [ReportController::class, 'loadPlan'])->name('reports.load-plan');
         Route::get('/reports/print', [ReportController::class, 'print'])->name('reports.print');
         Route::post('/reports/{month}', [ReportController::class, 'sync'])->name('reports.sync');
+
+        Route::get('/education-level', [EducationLevelController::class, 'index'])->name('education-level.index');
+        Route::post('/education-level', [EducationLevelController::class, 'sync'])->name('education-level.sync');
     });
 
 Route::controller(StudentCharacteristicController::class)

@@ -32,4 +32,34 @@ enum CharacteristicId: int
     case EDITORIAL_SECTOR_ID = 29;
     /** Учащиеся, члены ОО «БРСМ» */
     case BRSM_ID = 30;
+    /** Идейная убежденность и общественно-политическая активность */
+    case IDEO_POLITICAL_ID = 31;
+    /** Гражданственность и патриотизм */
+    case PATRIOTISM_ID = 32;
+    /** Национальное и поликультурное самосознание */
+    case SELF_AWARENESS_ID = 33;
+    /** Овладение информационной культурой */
+    case MASTERING_INFORMATION_ID = 34;
+    /** Культура здорового образа жизни */
+    case HEALTHY_LIFESTYLE_ID = 35;
+    /** Правовая культура */
+    case LEGAL_CULTURE_ID = 36;
+    /** Культура общения */
+    case COMMUNICATION_CULTURE_ID = 37;
+    /** Экологическая культура */
+    case ECOLOGICAL_CULTURE_ID = 38;
+    /** Культура семейных отношений и готовность к семейной жизни */
+    case FAMILY_READINESS_ID = 39;
+    /** Профессионально значимые качества работника */
+    case EMPLOYEE_SKILL_ID = 40;
+    /** Отношение к труду */
+    case ATTITUDE_TO_LABOUR_ID = 41;
+    /** Экономическая культура */
+    case ECONOMIC_CULTURE_ID = 42;
+    /** Отношение к ценностям */
+    case ATTITUDE_TO_VALUES_ID = 43;
+    /** Внеучебные интересы личности */
+    case EXTRA_INTEREST_ID = 44;
+    /** Культурно бытовые ценности */
+    case CULTURAL_VALUE_ID = 45;
 }

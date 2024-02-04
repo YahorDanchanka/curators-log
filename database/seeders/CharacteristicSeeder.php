@@ -69,6 +69,21 @@ class CharacteristicSeeder extends Seeder
             ['name' => 'Охраны правопорядка', 'type' => 'group-composition'],
             ['name' => 'Редакционный', 'type' => 'group-composition'],
             ['name' => 'Учащиеся, члены ОО «БРСМ»', 'type' => 'student-employment'],
+            ['name' => 'Идейная убежденность и общественно-политическая активность', 'type' => 'education-level'],
+            ['name' => 'Гражданственность и патриотизм', 'type' => 'education-level'],
+            ['name' => 'Национальное и поликультурное самосознание', 'type' => 'education-level'],
+            ['name' => 'Овладение информационной культурой', 'type' => 'education-level'],
+            ['name' => 'Культура здорового образа жизни', 'type' => 'education-level'],
+            ['name' => 'Правовая культура', 'type' => 'education-level'],
+            ['name' => 'Культура общения', 'type' => 'education-level'],
+            ['name' => 'Экологическая культура', 'type' => 'education-level'],
+            ['name' => 'Культура семейных отношений и готовность к семейной жизни', 'type' => 'education-level'],
+            ['name' => 'Профессионально значимые качества работника', 'type' => 'education-level'],
+            ['name' => 'Отношение к труду', 'type' => 'education-level'],
+            ['name' => 'Экономическая культура', 'type' => 'education-level'],
+            ['name' => 'Отношение к ценностям', 'type' => 'education-level'],
+            ['name' => 'Внеучебные интересы личности', 'type' => 'education-level'],
+            ['name' => 'Культурно бытовые ценности', 'type' => 'education-level'],
         ]);
     }
 }
