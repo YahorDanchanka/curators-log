@@ -12,10 +12,19 @@ export function inertiaFetch(url: string, options?: VisitOptions) {
   })
 }
 
-export function onSave(promise: Promise) {
+export function onSave(promise: Promise<any>, scenario: 'create' | 'update' | 'delete' = 'update') {
+  const labels = {
+    create: 'Добавление',
+    delete: 'Удаление',
+    update: 'Сохранение',
+  }
+
   promise
     .then(() => {
-      Notify.create({ type: 'positive', message: 'Сохранение завершено.' })
+      Notify.create({
+        type: 'positive',
+        message: `${labels[scenario]} завершено.`,
+      })
     })
     .catch(() => {
       Notify.create({ type: 'negative', message: 'Ошибка сохранения.' })

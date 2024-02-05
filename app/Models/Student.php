@@ -15,7 +15,28 @@ class Student extends Model
 {
     use HasFactory, ModelInitials;
 
-    protected $fillable = ['surname', 'name', 'patronymic', 'group_id'];
+    protected $fillable = [
+        'surname',
+        'name',
+        'patronymic',
+        'sex',
+        'birthday',
+        'citizenship',
+        'home_phone',
+        'phone',
+        'educational_institution',
+        'social_conditions',
+        'hobbies',
+        'other_details',
+        'medical_certificate_date',
+        'health',
+        'apprenticeship',
+        'image_url',
+        'address_id',
+        'study_address_id',
+        'passport_id',
+        'group_id',
+    ];
 
     public function characteristics(): BelongsToMany
     {
@@ -42,6 +63,36 @@ class Student extends Model
         return $this->belongsToMany(Relative::class)->withPivot('type');
     }
 
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
+    }
+
+    public function studyAddress(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
+    }
+
+    public function passport(): BelongsTo
+    {
+        return $this->belongsTo(Passport::class);
+    }
+
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(get: fn(string|null $value) => $value ? asset("storage/$value") : null);
+    }
+
+    protected function father(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->relatives->where('sex', 'мужской')->first());
+    }
+
+    protected function mother(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->relatives->where('sex', 'женский')->first());
+    }
+
     protected function adultRelatives(): Attribute
     {
         return Attribute::make(get: fn() => $this->relatives->whereNull('birthday')->values());
@@ -50,6 +101,11 @@ class Student extends Model
     protected function minorRelatives(): Attribute
     {
         return Attribute::make(get: fn() => $this->relatives->whereNotNull('birthday')->values());
+    }
+
+    protected function age(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->asDate($this->birthday)->age);
     }
 
     /** Иногородний */

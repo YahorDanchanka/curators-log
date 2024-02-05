@@ -1,6 +1,8 @@
 import {
+  AddressModel,
   CharacteristicStudentTable,
   CharacteristicTable,
+  PassportModel,
   RelativeModel,
   StudentEmploymentTable,
   StudentTable,
@@ -12,6 +14,12 @@ export type StudentModel = StudentTable & {
   relatives?: RelativeModel[]
   adult_relatives: RelativeModel[]
   minor_relatives: RelativeModel[]
+  father?: RelativeModel
+  mother?: RelativeModel
+  address?: AddressModel
+  study_address?: AddressModel
+  passport?: PassportModel
+  age?: number
   full_name?: string
   initials?: string
   is_nonresident?: boolean
