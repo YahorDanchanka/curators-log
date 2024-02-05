@@ -68,7 +68,7 @@ const props = withDefaults(
 
 const page = usePage<{ administrativeDivisions: AdministrativeDivisionTable[] }>()
 const modelValue = defineModel<AddressFormModel>({ required: true })
-const emit = defineEmits(['emit'])
+const emit = defineEmits(['submit'])
 
 const schema = Joi.object({
   region_id: Joi.number().required(),

@@ -11,6 +11,7 @@ use App\Http\Controllers\StudentEmploymentController;
 use App\Http\Controllers\StudentRelativeController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\GroupStudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -82,5 +83,6 @@ Route::get('groups/{group}/students/{student_number}/relatives/print', [
     'print',
 ])->name('groups.students.relatives.print');
 
+Route::resource('groups.students', GroupStudentController::class);
 Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);
