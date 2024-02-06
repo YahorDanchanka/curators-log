@@ -12,8 +12,8 @@ export type StudentModel = StudentTable & {
   characteristics?: (CharacteristicTable & { pivot: CharacteristicStudentTable })[]
   employments?: StudentEmploymentTable[]
   relatives?: RelativeModel[]
-  adult_relatives: RelativeModel[]
-  minor_relatives: RelativeModel[]
+  adult_relatives?: RelativeModel[]
+  minor_relatives?: RelativeModel[]
   father?: RelativeModel
   mother?: RelativeModel
   address?: AddressModel
