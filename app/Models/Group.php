@@ -32,6 +32,11 @@ class Group extends Model
             ->orderBy('patronymic');
     }
 
+    public function interactionWithParents(): HasMany
+    {
+        return $this->hasMany(InteractionWithParent::class);
+    }
+
     public function findCourseByNumber($course_number): Course
     {
         /** @var Course $course */
@@ -50,6 +55,16 @@ class Group extends Model
             ->skip((int) $studentNumber - 1)
             ->firstOrFail();
         return $student;
+    }
+
+    protected function firstCourse(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->courses->first());
+    }
+
+    protected function lastCourse(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->courses->last());
     }
 
     protected function currentCourse(): Attribute

@@ -1,6 +1,7 @@
 export * from './group-student.service'
 export * from './GroupService'
 export * from './SocioPedagogicalCharacteristicService'
+export * from './interaction-with-parent.service'
 export * from './LeadershipService'
 export * from './plan.service'
 export * from './student-characteristic.service'

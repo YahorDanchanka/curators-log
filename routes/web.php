@@ -13,6 +13,8 @@ use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\GroupStudentController;
 use App\Http\Controllers\GroupFamilyAttendanceController;
+use App\Http\Controllers\InteractionWithParentController;
+use App\Models\InteractionWithParent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -87,10 +89,20 @@ Route::get('groups/{group}/students/{student_number}/relatives/print', [
 Route::prefix('groups/{group}')
     ->name('groups.')
     ->group(function () {
-        Route::get('/family-attendance', [GroupFamilyAttendanceController::class, 'index'])->name('family-attendances.index');
-        Route::post('/family-attendance', [GroupFamilyAttendanceController::class, 'sync'])->name('family-attendances.sync');
+        Route::get('/family-attendance', [GroupFamilyAttendanceController::class, 'index'])->name(
+            'family-attendances.index'
+        );
+
+        Route::post('/family-attendance', [GroupFamilyAttendanceController::class, 'sync'])->name(
+            'family-attendances.sync'
+        );
+
+        Route::get('/interaction-with-parents/print', [InteractionWithParentController::class, 'print'])->name(
+            'interaction-with-parents.print'
+        );
     });
 
+Route::resource('groups.interaction-with-parents', InteractionWithParentController::class)->except(['show']);
 Route::resource('groups.students', GroupStudentController::class);
 Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);
