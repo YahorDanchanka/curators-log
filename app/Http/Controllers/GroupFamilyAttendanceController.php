@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FamilyAttendanceExport;
 use App\Http\Requests\GroupFamilyAttendanceRequest;
 use App\Models\FamilyAttendance;
 use App\Models\FamilyAttendanceRow;
@@ -35,6 +36,7 @@ class GroupFamilyAttendanceController extends Controller
         return Inertia::render('family-attendance/IndexPage', [
             ...compact('group', 'familyAttendance', 'familyAttendanceRows'),
             'saving' => true,
+            'printing' => true,
         ]);
     }
 
@@ -54,5 +56,12 @@ class GroupFamilyAttendanceController extends Controller
         });
 
         return to_route('groups.family-attendances.index', ['group' => $group->id]);
+    }
+
+    public function print(Group $group)
+    {
+        return (new FamilyAttendanceExport($group))->download(
+            'Учет посещаемости родителями (другими законными представителями) проводимых мероприятий.xlsx'
+        );
     }
 }

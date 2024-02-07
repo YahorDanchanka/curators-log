@@ -97,6 +97,10 @@ Route::prefix('groups/{group}')
             'family-attendances.sync'
         );
 
+        Route::get('/family-attendance/print', [GroupFamilyAttendanceController::class, 'print'])->name(
+            'family-attendances.print'
+        );
+
         Route::get('/interaction-with-parents/print', [InteractionWithParentController::class, 'print'])->name(
             'interaction-with-parents.print'
         );

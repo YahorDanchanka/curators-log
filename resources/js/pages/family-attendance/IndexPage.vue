@@ -97,7 +97,7 @@ import {
   FamilyAttendanceTable,
   GroupModel,
 } from '@/types'
-import { inertiaFetch, onSave } from '@/helpers'
+import { downloadFile, inertiaFetch, onSave } from '@/helpers'
 
 const props = defineProps<{
   group: Required<GroupModel, 'courses' | 'students'>
@@ -204,6 +204,10 @@ function setValue(column: FamilyAttendanceFormModelColumn, studentId: BaseTable[
     columnRow!.value = 1
   }
 }
+
+document.addEventListener('print', () => {
+  downloadFile(route('groups.family-attendances.print', { group: props.group.id }))
+})
 
 document.addEventListener('save', () => {
   onSave(

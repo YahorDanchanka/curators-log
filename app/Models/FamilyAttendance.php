@@ -18,6 +18,11 @@ class FamilyAttendance extends Model
         return $this->belongsTo(Student::class);
     }
 
+    public function relative(): BelongsTo
+    {
+        return $this->belongsTo(Relative::class);
+    }
+
     public function rows(): HasMany
     {
         return $this->hasMany(FamilyAttendanceRow::class);

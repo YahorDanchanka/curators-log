@@ -16,4 +16,9 @@ class FamilyAttendanceRow extends Model
     {
         return $this->belongsTo(FamilyAttendance::class);
     }
+
+    public function course(): BelongsTo
+    {
+        return $this->belongsTo(Course::class);
+    }
 }
