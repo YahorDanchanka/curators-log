@@ -1,8 +1,11 @@
-import { CourseModel, GroupTable, StudentModel } from '@/types'
+import { CourseModel, GroupTable, InteractionWithParentTable, StudentModel } from '@/types'
 
 export type GroupModel = GroupTable & {
   name?: string | null
   courses?: CourseModel[]
   current_course?: CourseModel | null
   students?: StudentModel[]
+  interaction_with_parents?: InteractionWithParentTable[]
+  first_course?: CourseModel
+  last_course?: CourseModel
 }
