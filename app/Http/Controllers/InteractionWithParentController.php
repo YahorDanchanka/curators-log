@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InteractionWithParentRequest;
 use App\Models\Group;
 use App\Models\InteractionWithParent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class InteractionWithParentController extends Controller
 {
     public function index(Group $group)
     {
         $group->load(['interactionWithParents' => fn(HasMany $query) => $query->orderBy('date')]);
-        return Inertia::render('interaction-with-parent/IndexPage', compact('group'));
+        return Inertia::render('interaction-with-parent/IndexPage', [...compact('group'), 'printing' => true]);
     }
 
     public function create(Group $group)
@@ -49,5 +52,31 @@ class InteractionWithParentController extends Controller
     {
         $interactionWithParent->delete();
         return to_route('groups.interaction-with-parents.index', ['group' => $group->id]);
+    }
+
+    public function print(Group $group)
+    {
+        $templateProcessor = new TemplateProcessor(resource_path('documents/interaction-with-parents.docx'));
+
+        $templateProcessor->cloneRowAndSetValues(
+            'date',
+            $group
+                ->interactionWithParents()
+                ->orderBy('date')
+                ->get()
+                ->map(
+                    fn(InteractionWithParent $interactionWithParent) => [
+                        ...$interactionWithParent->getAttributes(),
+                        'date' => Carbon::parse($interactionWithParent->date)->format('d.m.Y'),
+                    ]
+                )
+                ->values()
+                ->toArray()
+        );
+
+        return response()->streamDownload(
+            fn() => $templateProcessor->saveAs('php://output'),
+            'Содержание взаимодействия с родителями.docx'
+        );
     }
 }

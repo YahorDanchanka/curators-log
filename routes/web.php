@@ -14,6 +14,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\GroupStudentController;
 use App\Http\Controllers\GroupFamilyAttendanceController;
 use App\Http\Controllers\InteractionWithParentController;
+use App\Models\InteractionWithParent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -94,6 +95,10 @@ Route::prefix('groups/{group}')
 
         Route::post('/family-attendance', [GroupFamilyAttendanceController::class, 'sync'])->name(
             'family-attendances.sync'
+        );
+
+        Route::get('/interaction-with-parents/print', [InteractionWithParentController::class, 'print'])->name(
+            'interaction-with-parents.print'
         );
     });
 

@@ -68,7 +68,7 @@
 </template>
 
 <script lang="ts" setup>
-import { formatDate, onSave } from '@/helpers'
+import { downloadFile, formatDate, onSave } from '@/helpers'
 import { InteractionWithParentService } from '@/services'
 import { GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
@@ -101,4 +101,12 @@ const columns = [
     field: 'result',
   },
 ]
+
+document.addEventListener('print', () => {
+  downloadFile(
+    route('groups.interaction-with-parents.print', {
+      group: props.group.id,
+    })
+  )
+})
 </script>
