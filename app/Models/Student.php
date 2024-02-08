@@ -83,6 +83,11 @@ class Student extends Model
         return $this->hasMany(StudentAchievement::class);
     }
 
+    public function asocialBehavior(): HasMany
+    {
+        return $this->hasMany(AsocialBehavior::class);
+    }
+
     protected function imageUrl(): Attribute
     {
         return Attribute::make(get: fn(string|null $value) => $value ? asset("storage/$value") : null);

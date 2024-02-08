@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdviceController;
+use App\Http\Controllers\AsocialBehaviorController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\SocioPedagogicalCharacteristicController;
@@ -118,5 +119,6 @@ Route::resource('groups.advice', AdviceController::class)->except(['show']);
 Route::resource('groups.students', GroupStudentController::class);
 Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
 Route::resource('groups.students.achievements', StudentAchievementController::class)->except(['index', 'show']);
+Route::resource('groups.students.asocial-behaviors', AsocialBehaviorController::class)->except(['index', 'show']);
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);
 Route::resource('groups.courses.achievements', GroupAchievementController::class)->except(['show']);

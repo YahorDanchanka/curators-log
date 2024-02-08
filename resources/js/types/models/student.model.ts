@@ -1,5 +1,6 @@
 import {
   AddressModel,
+  AsocialBehaviorTable,
   CharacteristicStudentTable,
   CharacteristicTable,
   PassportModel,
@@ -26,4 +27,5 @@ export type StudentModel = StudentTable & {
   is_nonresident?: boolean
   is_dorm?: boolean
   achievements?: StudentAchievementTable[]
+  asocial_behavior?: AsocialBehaviorTable[]
 }

@@ -1,5 +1,6 @@
 export * from './address.form-model'
 export * from './advice.form-model'
+export * from './asocial-behavior.form-model'
 export * from './course.form-model'
 export * from './education-level.form-model'
 export * from './expulsion.form-model'

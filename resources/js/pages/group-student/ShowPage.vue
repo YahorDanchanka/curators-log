@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <Head :title />
+    <Head :title="title" />
     <h1 class="text-h4 text-center q-mb-md">{{ title }}</h1>
     <div class="row items-center">
       <div class="col-1 text-center">
@@ -116,23 +116,29 @@
           "
         />
         <div>16. Факты ассоциального поведения учащегося</div>
-        <q-markup-table class="q-mb-md" separator="cell" wrap-cells>
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>Характер проявления</th>
-              <th>Меры</th>
-              <th>Результат</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" colspan="3">
-                <q-btn icon="add" color="primary" size="sm" round />
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
+        <AsocialBehaviorTable
+          class="q-mb-md"
+          :asocial-behavior="props.student.asocial_behavior"
+          @create="
+            router.get(
+              route('groups.students.asocial-behaviors.create', { group: props.group.id, student: props.studentNumber })
+            )
+          "
+          @edit="
+            (asocialBehavior) =>
+              router.get(
+                route('groups.students.asocial-behaviors.edit', {
+                  group: props.group.id,
+                  student: props.studentNumber,
+                  asocial_behavior: asocialBehavior.id,
+                })
+              )
+          "
+          @delete="
+            (asocialBehavior) =>
+              onSave(AsocialBehaviorService.delete(props.group.id, props.studentNumber, asocialBehavior.id), 'delete')
+          "
+        />
         <h3 class="text-h4 text-center q-mb-md">Рекомендации специалистов</h3>
         <q-markup-table class="q-mb-md" separator="cell" wrap-cells>
           <thead>
@@ -195,9 +201,10 @@
 
 <script setup lang="ts">
 import StudentAchievementTable from '@/components/StudentAchievementTable.vue'
+import AsocialBehaviorTable from '@/components/AsocialBehaviorTable.vue'
 import StudentCardField from '@/components/StudentCardField.vue'
 import { formatDate, onSave } from '@/helpers'
-import { StudentAchievementService } from '@/services'
+import { StudentAchievementService, AsocialBehaviorService } from '@/services'
 import { GroupModel, StudentModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
 import { Required } from 'utility-types'
@@ -205,7 +212,7 @@ import route from 'ziggy-js'
 
 const props = defineProps<{
   group: GroupModel
-  student: Required<StudentModel, 'achievements'>
+  student: Required<StudentModel, 'achievements' | 'asocial_behavior'>
   studentNumber: string
 }>()
 
