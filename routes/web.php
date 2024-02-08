@@ -7,6 +7,7 @@ use App\Http\Controllers\SocioPedagogicalCharacteristicController;
 use App\Http\Controllers\ExpulsionController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\EducationLevelController;
+use App\Http\Controllers\GroupAchievementController;
 use App\Http\Controllers\StudentCharacteristicController;
 use App\Http\Controllers\StudentEmploymentController;
 use App\Http\Controllers\StudentRelativeController;
@@ -72,6 +73,8 @@ Route::prefix('groups/{group}/courses/{course_number}')
 
         Route::get('/education-level', [EducationLevelController::class, 'index'])->name('education-level.index');
         Route::post('/education-level', [EducationLevelController::class, 'sync'])->name('education-level.sync');
+
+        Route::get('/achievements/print', [GroupAchievementController::class, 'print'])->name('achievements.print');
     });
 
 Route::controller(StudentCharacteristicController::class)
@@ -114,3 +117,4 @@ Route::resource('groups.advice', AdviceController::class)->except(['show']);
 Route::resource('groups.students', GroupStudentController::class);
 Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);
+Route::resource('groups.courses.achievements', GroupAchievementController::class)->except(['show']);
