@@ -1,5 +1,6 @@
 export * from './address.table'
 export * from './administrative-division.table'
+export * from './advice.table'
 export * from './base.table'
 export * from './characteristic.table'
 export * from './characteristic-student.table'

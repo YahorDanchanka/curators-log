@@ -1,3 +1,4 @@
+export * from './advice.service'
 export * from './group-student.service'
 export * from './GroupService'
 export * from './SocioPedagogicalCharacteristicService'

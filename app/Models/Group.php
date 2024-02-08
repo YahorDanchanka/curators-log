@@ -37,6 +37,11 @@ class Group extends Model
         return $this->hasMany(InteractionWithParent::class);
     }
 
+    public function advice(): HasMany
+    {
+        return $this->hasMany(Advice::class);
+    }
+
     public function findCourseByNumber($course_number): Course
     {
         /** @var Course $course */

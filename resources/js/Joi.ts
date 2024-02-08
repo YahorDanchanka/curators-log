@@ -9,7 +9,7 @@ export default Joi.defaults((schema) =>
       'string.empty': i18n.global.t('validation.required'),
       'string.max': i18n.global.t('validation.max.string'),
       'date.base': i18n.global.t('validation.required'),
-      'date.max': i18n.global.t('validation.max.date'),
+      'date.max': i18n.global.t('validation.max.date').replace('now', 'test'),
       'date.min': i18n.global.t('validation.min.date'),
       'number.base': i18n.global.t('validation.required'),
       'number.min': i18n.global.t('validation.min.numeric'),

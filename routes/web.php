@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdviceController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\SocioPedagogicalCharacteristicController;
@@ -104,9 +105,12 @@ Route::prefix('groups/{group}')
         Route::get('/interaction-with-parents/print', [InteractionWithParentController::class, 'print'])->name(
             'interaction-with-parents.print'
         );
+
+        Route::get('/advice/print', [AdviceController::class, 'print'])->name('advice.print');
     });
 
 Route::resource('groups.interaction-with-parents', InteractionWithParentController::class)->except(['show']);
+Route::resource('groups.advice', AdviceController::class)->except(['show']);
 Route::resource('groups.students', GroupStudentController::class);
 Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);

@@ -6,6 +6,7 @@ use App\Services\GroupCompositionService;
 use App\Services\LeadershipService;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
+use PhpOffice\PhpWord\Settings;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Settings::setOutputEscapingEnabled(true);
     }
 }
