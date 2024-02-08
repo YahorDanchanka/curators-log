@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Relative;
 use App\Models\Student;
 use App\Services\GroupStudentService;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Inertia\Inertia;
 
 class GroupStudentController extends Controller
@@ -40,7 +41,13 @@ class GroupStudentController extends Controller
     public function show(Group $group, string $studentNumber)
     {
         $student = $group->findStudentByNumber($studentNumber);
-        $student->load(['address', 'studyAddress', 'passport', 'relatives.address']);
+        $student->load([
+            'address',
+            'studyAddress',
+            'passport',
+            'relatives.address',
+            'achievements' => fn(HasMany $query) => $query->orderBy('date'),
+        ]);
         $student->append(['father', 'mother', 'minor_relatives']);
 
         $student->relatives->each(function (Relative $relative) {
@@ -51,7 +58,7 @@ class GroupStudentController extends Controller
         $student->address?->append('address');
         $student->studyAddress?->append('address');
         $student->passport?->append('passport');
-        return Inertia::render('group-student/ShowPage', compact('group', 'student'));
+        return Inertia::render('group-student/ShowPage', compact('group', 'student', 'studentNumber'));
     }
 
     public function edit(Group $group, string $studentNumber)

@@ -92,22 +92,29 @@
         <StudentCardField label="13. Увлечения" :value="student.hobbies" />
         <StudentCardField label="14. Другие сведения" :value="student.other_details" />
         <div>15. Поощрения учащегося</div>
-        <q-markup-table class="q-mb-sm" separator="cell" wrap-cells>
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>За какие достижения</th>
-              <th>Форма поощрения</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" colspan="3">
-                <q-btn icon="add" color="primary" size="sm" round />
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
+        <StudentAchievementTable
+          class="q-mb-sm"
+          :achievements="props.student.achievements"
+          @create="
+            router.get(
+              route('groups.students.achievements.create', { group: props.group.id, student: props.studentNumber })
+            )
+          "
+          @edit="
+            (achievement) =>
+              router.get(
+                route('groups.students.achievements.edit', {
+                  group: props.group.id,
+                  student: props.studentNumber,
+                  achievement: achievement.id,
+                })
+              )
+          "
+          @delete="
+            (achievement) =>
+              onSave(StudentAchievementService.delete(props.group.id, props.studentNumber, achievement.id), 'delete')
+          "
+        />
         <div>16. Факты ассоциального поведения учащегося</div>
         <q-markup-table class="q-mb-md" separator="cell" wrap-cells>
           <thead>
@@ -187,12 +194,20 @@
 </template>
 
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3'
+import StudentAchievementTable from '@/components/StudentAchievementTable.vue'
 import StudentCardField from '@/components/StudentCardField.vue'
+import { formatDate, onSave } from '@/helpers'
+import { StudentAchievementService } from '@/services'
 import { GroupModel, StudentModel } from '@/types'
-import { formatDate } from '@/helpers'
+import { Head, router } from '@inertiajs/vue3'
+import { Required } from 'utility-types'
+import route from 'ziggy-js'
 
-const props = defineProps<{ group: GroupModel; student: StudentModel }>()
+const props = defineProps<{
+  group: GroupModel
+  student: Required<StudentModel, 'achievements'>
+  studentNumber: string
+}>()
 
 const title = 'Карта персонифицированного учета'
 </script>

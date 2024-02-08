@@ -16,6 +16,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\GroupStudentController;
 use App\Http\Controllers\GroupFamilyAttendanceController;
 use App\Http\Controllers\InteractionWithParentController;
+use App\Http\Controllers\StudentAchievementController;
 use App\Models\InteractionWithParent;
 use Illuminate\Support\Facades\Route;
 
@@ -116,5 +117,6 @@ Route::resource('groups.interaction-with-parents', InteractionWithParentControll
 Route::resource('groups.advice', AdviceController::class)->except(['show']);
 Route::resource('groups.students', GroupStudentController::class);
 Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
+Route::resource('groups.students.achievements', StudentAchievementController::class)->except(['index', 'show']);
 Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);
 Route::resource('groups.courses.achievements', GroupAchievementController::class)->except(['show']);

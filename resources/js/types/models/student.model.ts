@@ -4,6 +4,7 @@ import {
   CharacteristicTable,
   PassportModel,
   RelativeModel,
+  StudentAchievementTable,
   StudentEmploymentTable,
   StudentTable,
 } from '@/types'
@@ -24,4 +25,5 @@ export type StudentModel = StudentTable & {
   initials?: string
   is_nonresident?: boolean
   is_dorm?: boolean
+  achievements?: StudentAchievementTable[]
 }

@@ -78,6 +78,11 @@ class Student extends Model
         return $this->belongsTo(Passport::class);
     }
 
+    public function achievements(): HasMany
+    {
+        return $this->hasMany(StudentAchievement::class);
+    }
+
     protected function imageUrl(): Attribute
     {
         return Attribute::make(get: fn(string|null $value) => $value ? asset("storage/$value") : null);
