@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupStudentRequest;
+use App\Models\AsocialBehavior;
+use App\Models\ExpertAdvice;
 use App\Models\Group;
+use App\Models\IndividualWork;
 use App\Models\Relative;
 use App\Models\Student;
+use App\Models\StudentAchievement;
 use App\Services\GroupStudentService;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+use PhpOffice\PhpWord\TemplateProcessor;
 use Inertia\Inertia;
 
 class GroupStudentController extends Controller
@@ -67,7 +73,10 @@ class GroupStudentController extends Controller
         $student->address?->append('address');
         $student->studyAddress?->append('address');
         $student->passport?->append('passport');
-        return Inertia::render('group-student/ShowPage', compact('group', 'student', 'studentNumber'));
+        return Inertia::render('group-student/ShowPage', [
+            ...compact('group', 'student', 'studentNumber'),
+            'printing' => true,
+        ]);
     }
 
     public function edit(Group $group, string $studentNumber)
@@ -92,5 +101,114 @@ class GroupStudentController extends Controller
     {
         $groupStudentService->delete($student);
         return to_route('groups.students.index', ['group' => $group->id]);
+    }
+
+    public function print(Group $group, string $studentNumber)
+    {
+        $student = $group->findStudentByNumber($studentNumber);
+        $templateProcessor = new TemplateProcessor(resource_path('documents/student-card.docx'));
+
+        $templateProcessor->setValues([
+            ...$student->getAttributes(),
+            'birthday' => $student->birthday ? Carbon::parse($student->birthday)->format('d.m.Y') : '',
+            'passport' => $student->passport?->passport,
+            'address' => $student->address?->address,
+            'study_address' => $student->study_address?->address,
+            'mother' => $student->mother?->full_name,
+            'father' => $student->father?->full_name,
+            'family_other' => $student->minor_relatives
+                ->map(
+                    fn(Relative $relative) => implode(', ', [
+                        $relative->full_name,
+                        Carbon::parse($relative->birthday)->format('d.m.Y'),
+                        $relative->educational_institution,
+                    ])
+                )
+                ->join(PHP_EOL),
+        ]);
+
+        $templateProcessor->setImageValue(
+            'photo',
+            $student->image_url
+                ? storage_path('app/public/' . $student->getRawOriginal('image_url'))
+                : public_path('images/avatar.png')
+        );
+
+        $templateProcessor->cloneRowAndSetValues(
+            'encouragement_date',
+            $student->achievements
+                ->map(
+                    fn(StudentAchievement $achievement) => [
+                        'encouragement_date' => Carbon::parse($achievement->date)->format('d.m.Y'),
+                        'encouragement_reason' => $achievement->reason,
+                        'encouragement_form' => $achievement->prize,
+                    ]
+                )
+                ->values()
+                ->toArray()
+        );
+
+        $templateProcessor->cloneRowAndSetValues(
+            'ab_date',
+            $student->asocialBehavior
+                ->map(
+                    fn(AsocialBehavior $associateBehavior) => [
+                        'ab_date' => Carbon::parse($associateBehavior->date)->format('d.m.Y'),
+                        'ab_action' => $associateBehavior->action,
+                        'ab_sanctions' => $associateBehavior->sanctions,
+                        'ab_result' => $associateBehavior->result,
+                    ]
+                )
+                ->values()
+                ->toArray()
+        );
+
+        $templateProcessor->cloneRowAndSetValues(
+            'ea_advice',
+            $student->expertAdvice
+                ->map(
+                    fn(ExpertAdvice $expertAdvice) => [
+                        'ea_advice' => $expertAdvice->content,
+                        'ea_result' => $expertAdvice->result,
+                    ]
+                )
+                ->values()
+                ->toArray()
+        );
+
+        $templateProcessor->cloneRowAndSetValues(
+            'iw_date',
+            $student->individualWork
+                ->where('type', 'relative')
+                ->map(
+                    fn(IndividualWork $individualWork) => [
+                        'iw_date' => Carbon::parse($individualWork->date)->format('d.m.Y'),
+                        'iw_content' => $individualWork->content,
+                        'iw_result' => $individualWork->result,
+                    ]
+                )
+                ->values()
+                ->toArray()
+        );
+
+        $templateProcessor->cloneRowAndSetValues(
+            'iws_date',
+            $student->individualWork
+                ->where('type', 'student')
+                ->map(
+                    fn(IndividualWork $individualWork) => [
+                        'iws_date' => Carbon::parse($individualWork->date)->format('d.m.Y'),
+                        'iws_content' => $individualWork->content,
+                        'iws_result' => $individualWork->result,
+                    ]
+                )
+                ->values()
+                ->toArray()
+        );
+
+        return response()->streamDownload(
+            fn() => $templateProcessor->saveAs('php://output'),
+            "Карта персонифицированного учета {$student->initials}.docx"
+        );
     }
 }
