@@ -93,6 +93,31 @@ class Student extends Model
         return $this->hasMany(ExpertAdvice::class);
     }
 
+    public function individualWork(): HasMany
+    {
+        return $this->hasMany(IndividualWork::class);
+    }
+
+    protected function studentIndividualWork(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->individualWork
+                ->where('type', 'student')
+                ->values()
+                ->toArray()
+        );
+    }
+
+    protected function relativeIndividualWork(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->individualWork
+                ->where('type', 'relative')
+                ->values()
+                ->toArray()
+        );
+    }
+
     protected function imageUrl(): Attribute
     {
         return Attribute::make(get: fn(string|null $value) => $value ? asset("storage/$value") : null);

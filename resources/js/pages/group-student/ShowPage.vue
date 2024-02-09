@@ -166,39 +166,57 @@
         <h3 class="text-h4 text-center q-mb-md">
           Индивидуальная работа с родителями (другими законными представителями)
         </h3>
-        <q-markup-table class="q-mb-md" separator="cell" wrap-cells>
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>Содержание</th>
-              <th>Результат</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" colspan="3">
-                <q-btn icon="add" color="primary" size="sm" round />
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
+        <IndividualWorkTable
+          class="q-mb-md"
+          :individual-work="props.student.relative_individual_work"
+          @create="
+            router.get(
+              route('groups.students.individual-works.create', { group: props.group.id, student: props.studentNumber })
+            )
+          "
+          @edit="
+            (individualWork) =>
+              router.get(
+                route('groups.students.individual-works.edit', {
+                  group: props.group.id,
+                  student: props.studentNumber,
+                  individual_work: individualWork.id,
+                })
+              )
+          "
+          @delete="
+            (individualWork) =>
+              onSave(IndividualWorkService.delete(props.group.id, props.studentNumber, individualWork.id), 'delete')
+          "
+        />
         <h3 class="text-h4 text-center q-mb-md">Индивидуальная работа с учащимися</h3>
-        <q-markup-table separator="cell" wrap-cells>
-          <thead>
-            <tr>
-              <th>Дата</th>
-              <th>Содержание</th>
-              <th>Результат</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-center" colspan="3">
-                <q-btn icon="add" color="primary" size="sm" round />
-              </td>
-            </tr>
-          </tbody>
-        </q-markup-table>
+        <IndividualWorkTable
+          class="q-mb-md"
+          :individual-work="props.student.student_individual_work"
+          @create="
+            router.get(
+              route('groups.students.individual-works.create', {
+                group: props.group.id,
+                student: props.studentNumber,
+                type: 'student',
+              })
+            )
+          "
+          @edit="
+            (individualWork) =>
+              router.get(
+                route('groups.students.individual-works.edit', {
+                  group: props.group.id,
+                  student: props.studentNumber,
+                  individual_work: individualWork.id,
+                })
+              )
+          "
+          @delete="
+            (individualWork) =>
+              onSave(IndividualWorkService.delete(props.group.id, props.studentNumber, individualWork.id), 'delete')
+          "
+        />
       </div>
     </div>
   </q-page>
@@ -208,9 +226,15 @@
 import StudentAchievementTable from '@/components/StudentAchievementTable.vue'
 import AsocialBehaviorTable from '@/components/AsocialBehaviorTable.vue'
 import ExpertAdviceTable from '@/components/ExpertAdviceTable.vue'
+import IndividualWorkTable from '@/components/IndividualWorkTable.vue'
 import StudentCardField from '@/components/StudentCardField.vue'
 import { formatDate, onSave } from '@/helpers'
-import { StudentAchievementService, AsocialBehaviorService, ExpertAdviceService } from '@/services'
+import {
+  StudentAchievementService,
+  AsocialBehaviorService,
+  ExpertAdviceService,
+  IndividualWorkService,
+} from '@/services'
 import { GroupModel, StudentModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
 import { Required } from 'utility-types'
@@ -218,7 +242,10 @@ import route from 'ziggy-js'
 
 const props = defineProps<{
   group: GroupModel
-  student: Required<StudentModel, 'achievements' | 'asocial_behavior' | 'expert_advice'>
+  student: Required<
+    StudentModel,
+    'achievements' | 'asocial_behavior' | 'expert_advice' | 'student_individual_work' | 'relative_individual_work'
+  >
   studentNumber: string
 }>()
 
