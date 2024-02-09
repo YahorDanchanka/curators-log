@@ -48,6 +48,7 @@ class GroupStudentController extends Controller
             'relatives.address',
             'achievements' => fn(HasMany $query) => $query->orderBy('date'),
             'asocialBehavior' => fn(HasMany $query) => $query->orderBy('date'),
+            'expertAdvice',
         ]);
         $student->append(['father', 'mother', 'minor_relatives']);
 

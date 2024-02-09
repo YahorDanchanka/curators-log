@@ -1,5 +1,5 @@
 import { inertiaFetch } from '@/helpers'
-import { AdviceFormModel, StudentFormModel } from '@/types'
+import { AdviceFormModel } from '@/types'
 
 export class AdviceService {
   static create(groupId: string | number, payload: AdviceFormModel) {

@@ -3,6 +3,7 @@ import {
   AsocialBehaviorTable,
   CharacteristicStudentTable,
   CharacteristicTable,
+  ExpertAdviceTable,
   PassportModel,
   RelativeModel,
   StudentAchievementTable,
@@ -28,4 +29,5 @@ export type StudentModel = StudentTable & {
   is_dorm?: boolean
   achievements?: StudentAchievementTable[]
   asocial_behavior?: AsocialBehaviorTable[]
+  expert_advice?: ExpertAdviceTable[]
 }
