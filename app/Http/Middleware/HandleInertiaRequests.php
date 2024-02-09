@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Enums\CharacteristicId;
 use App\Models\AdministrativeDivision;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -38,11 +39,16 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $administrativeDivisions = Cache::rememberForever(
+            'administrativeDivisions',
+            fn() => AdministrativeDivision::all()
+        );
+
         return array_merge(parent::share($request), [
             'enums' => [
                 'CharacteristicId' => CharacteristicId::array(),
             ],
-            'administrativeDivisions' => AdministrativeDivision::all(),
+            'administrativeDivisions' => $administrativeDivisions,
         ]);
     }
 }
