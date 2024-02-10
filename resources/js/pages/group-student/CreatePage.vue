@@ -1,17 +1,17 @@
 <template>
   <q-page padding>
-    <Head :title />
+    <Head :title="title" />
     <StudentForm v-model="student" @submit="onSubmit" />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { Head } from '@inertiajs/vue3'
-import { GroupModel, StudentFormModel } from '@/types'
 import StudentForm from '@/components/StudentForm.vue'
-import { GroupStudentService } from '@/services'
 import { onSave } from '@/helpers'
+import { GroupStudentService } from '@/services'
+import { GroupModel, StudentFormModel } from '@/types'
+import { Head } from '@inertiajs/vue3'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{ group: GroupModel }>()
 

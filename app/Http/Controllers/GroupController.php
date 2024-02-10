@@ -16,7 +16,7 @@ class GroupController extends Controller
 {
     public function index()
     {
-        $groups = Group::with(['courses' => fn(HasMany $query) => $query->with('curator')])
+        $groups = Group::with(['courses' => fn(HasMany $query) => $query->with(['curator']), 'specialty'])
             ->latest()
             ->get();
 

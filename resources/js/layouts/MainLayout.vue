@@ -20,7 +20,21 @@
       </q-header>
 
       <q-drawer side="left" behavior="mobile" v-model="leftDrawerOpen" bordered overlay>
-        <q-scroll-area class="fit"> </q-scroll-area>
+        <q-scroll-area class="fit">
+          <q-list class="menu-list">
+            <q-item
+              :active="route().current() === 'groups.index'"
+              clickable
+              v-ripple
+              @click="router.get(route('groups.index'))"
+            >
+              <q-item-section avatar>
+                <q-icon name="group" />
+              </q-item-section>
+              <q-item-section> Группы </q-item-section>
+            </q-item>
+          </q-list>
+        </q-scroll-area>
       </q-drawer>
 
       <q-page-container>
@@ -31,8 +45,10 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import BaseLayout from '@/layouts/BaseLayout.vue'
+import { router } from '@inertiajs/vue3'
+import { ref } from 'vue'
+import route from 'ziggy-js'
 
 const props = defineProps<{ saving?: boolean; printing?: boolean }>()
 

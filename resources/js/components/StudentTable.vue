@@ -40,6 +40,11 @@
             @click="emit('edit', props.row, props.rowIndex)"
           />
           <q-btn class="q-mr-sm" size="sm" color="negative" icon="delete" round @click="emit('delete', props.row)" />
+          <q-btn icon="more_vert" size="sm" round>
+            <q-popup-proxy>
+              <ListGenerator :list="getStudentActionList(props.row, props.rowIndex)" />
+            </q-popup-proxy>
+          </q-btn>
         </q-td>
       </q-tr>
     </template>
@@ -47,8 +52,10 @@
 </template>
 
 <script setup lang="ts">
+import ListGenerator from '@/components/ListGenerator.vue'
 import { formatDate } from '@/helpers'
-import { StudentModel } from '@/types'
+import { MenuList, StudentModel } from '@/types'
+import { sortBy } from 'lodash'
 
 const props = defineProps<{ title?: string; students: StudentModel[] }>()
 const emit = defineEmits<{
@@ -188,4 +195,16 @@ const columns = [
     field: (row: StudentModel) => row.study_address?.address,
   },
 ]
+
+function getStudentActionList(student: StudentModel, index: number): MenuList {
+  return sortBy(
+    [
+      {
+        label: 'Родственники',
+        route: route('groups.students.relatives.index', { group: student.group_id, student: index + 1 }),
+      },
+    ],
+    'label'
+  )
+}
 </script>

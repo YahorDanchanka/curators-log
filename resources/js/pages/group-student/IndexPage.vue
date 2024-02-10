@@ -1,8 +1,8 @@
 <template>
   <q-page padding>
-    <Head :title />
+    <Head :title="title" />
     <StudentTable
-      :title
+      :title="title"
       :students="props.group.students"
       @create="router.get(route('groups.students.create', { group: props.group.id }))"
       @show="
@@ -17,15 +17,16 @@
 </template>
 
 <script setup lang="ts">
+import StudentTable from '@/components/StudentTable.vue'
+import { onSave } from '@/helpers'
+import { GroupStudentService } from '@/services'
+import { GroupModel } from '@/types'
+import { Head, router } from '@inertiajs/vue3'
+import { Required } from 'utility-types'
 import { computed } from 'vue'
 import route from 'ziggy-js'
-import { Head, router } from '@inertiajs/vue3'
-import { GroupModel } from '@/types'
-import StudentTable from '@/components/StudentTable.vue'
-import { GroupStudentService } from '@/services'
-import { onSave } from '@/helpers'
 
-const props = defineProps<{ group: GroupModel }>()
+const props = defineProps<{ group: Required<GroupModel, 'name' | 'students'> }>()
 
 const title = computed(() => `Список учащихся учебной группы ${props.group.name}`)
 </script>
