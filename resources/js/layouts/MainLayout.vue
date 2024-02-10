@@ -33,6 +33,12 @@
               </q-item-section>
               <q-item-section> Группы </q-item-section>
             </q-item>
+            <q-item clickable v-ripple @click="router.post(route('auth.logout'))">
+              <q-item-section avatar>
+                <q-icon name="logout" />
+              </q-item-section>
+              <q-item-section> Выйти </q-item-section>
+            </q-item>
           </q-list>
         </q-scroll-area>
       </q-drawer>

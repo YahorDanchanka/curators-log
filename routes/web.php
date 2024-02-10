@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdviceController;
 use App\Http\Controllers\AsocialBehaviorController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\SocioPedagogicalCharacteristicController;
@@ -35,24 +36,63 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MainController::class, 'index'])->name('home');
 
-Route::resource('groups', GroupController::class)->except(['show']);
+Route::prefix('login')
+    ->controller(AuthController::class)
+    ->name('auth.')
 
-Route::resource('groups.students', GroupStudentController::class);
-Route::resource('groups.advice', AdviceController::class)->except(['show']);
-Route::resource('groups.interaction-with-parents', InteractionWithParentController::class)->except(['show']);
+    ->group(function () {
+        Route::get('/', 'login')
+            ->name('login')
+            ->middleware('guest');
 
-Route::resource('groups.courses.achievements', GroupAchievementController::class)->except(['show']);
-Route::resource('groups.courses.expulsions', ExpulsionController::class)->except(['show']);
+        Route::post('/', 'loginPost')
+            ->name('login-post')
+            ->middleware('guest');
 
-Route::resource('groups.students.achievements', StudentAchievementController::class)->except(['index', 'show']);
-Route::resource('groups.students.relatives', StudentRelativeController::class)->except(['show']);
-Route::resource('groups.students.asocial-behaviors', AsocialBehaviorController::class)->except(['index', 'show']);
-Route::resource('groups.students.expert-advice', ExpertAdviceController::class)->except(['index', 'show']);
-Route::resource('groups.students.individual-works', IndividualWorkController::class)->except(['index', 'show']);
+        Route::post('/logout', 'logout')
+            ->name('logout')
+            ->middleware('auth');
+    });
+
+Route::resource('groups', GroupController::class)
+    ->except(['show'])
+    ->middleware('auth');
+
+Route::resource('groups.students', GroupStudentController::class)->middleware('auth');
+Route::resource('groups.advice', AdviceController::class)
+    ->except(['show'])
+    ->middleware('auth');
+Route::resource('groups.interaction-with-parents', InteractionWithParentController::class)
+    ->except(['show'])
+    ->middleware('auth');
+
+Route::resource('groups.courses.achievements', GroupAchievementController::class)
+    ->except(['show'])
+    ->middleware('auth');
+Route::resource('groups.courses.expulsions', ExpulsionController::class)
+    ->except(['show'])
+    ->middleware('auth');
+
+Route::resource('groups.students.achievements', StudentAchievementController::class)
+    ->except(['index', 'show'])
+    ->middleware('auth');
+Route::resource('groups.students.relatives', StudentRelativeController::class)
+    ->except(['show'])
+    ->middleware('auth');
+Route::resource('groups.students.asocial-behaviors', AsocialBehaviorController::class)
+    ->except(['index', 'show'])
+    ->middleware('auth');
+Route::resource('groups.students.expert-advice', ExpertAdviceController::class)
+    ->except(['index', 'show'])
+    ->middleware('auth');
+Route::resource('groups.students.individual-works', IndividualWorkController::class)
+    ->except(['index', 'show'])
+    ->middleware('auth');
 
 Route::controller(StudentCharacteristicController::class)
     ->prefix('courses/{course}/students/{student}/characteristics/{characteristic}')
     ->name('courses.students.characteristics.')
+    ->middleware('auth')
     ->group(function () {
         Route::post('/attach', 'attach')->name('attach');
         Route::delete('/detach', 'detach')->name('detach');
@@ -60,6 +100,7 @@ Route::controller(StudentCharacteristicController::class)
 
 Route::prefix('groups/{group}')
     ->name('groups.')
+    ->middleware('auth')
     ->group(function () {
         Route::get('/family-attendance', [GroupFamilyAttendanceController::class, 'index'])->name(
             'family-attendances.index'

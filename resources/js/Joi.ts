@@ -7,6 +7,7 @@ export default Joi.defaults((schema) =>
     messages: {
       'any.required': i18n.global.t('validation.required'),
       'string.empty': i18n.global.t('validation.required'),
+      'string.min': i18n.global.t('validation.min.string'),
       'string.max': i18n.global.t('validation.max.string'),
       'date.base': i18n.global.t('validation.required'),
       'date.max': i18n.global.t('validation.max.date').replace('now', 'test'),
