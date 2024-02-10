@@ -110,7 +110,7 @@ class StudentEmploymentController extends Controller
         for ($i = 0; $i < max($brsmStudents->count(), $leadershipStudents->count()); $i++) {
             $brsmStudent = $brsmStudents->values()->get($i);
             $leadershipStudent = $leadershipStudents->values()->get($i);
-            $studentEmploymentRow = $leadershipStudent->id
+            $studentEmploymentRow = $leadershipStudent?->id
                 ? $studentEmploymentRows->where('student_id', $leadershipStudent->id)->first()
                 : null;
 
