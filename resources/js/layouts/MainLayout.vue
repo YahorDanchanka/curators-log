@@ -23,6 +23,17 @@
         <q-scroll-area class="fit">
           <q-list class="menu-list">
             <q-item
+              :active="route().current() === 'curators.index'"
+              clickable
+              v-ripple
+              @click="router.get(route('curators.index'))"
+            >
+              <q-item-section avatar>
+                <q-icon name="supervisor_account" />
+              </q-item-section>
+              <q-item-section> Кураторы </q-item-section>
+            </q-item>
+            <q-item
               :active="route().current() === 'groups.index'"
               clickable
               v-ripple

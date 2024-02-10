@@ -1,6 +1,7 @@
 export * from './advice.service'
 export * from './asocial-behavior.service'
 export * from './auth.service'
+export * from './curator.service'
 export * from './expert-advice.service'
 export * from './group-achievement.service'
 export * from './group-student.service'

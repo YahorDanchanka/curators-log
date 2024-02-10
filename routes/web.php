@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdviceController;
 use App\Http\Controllers\AsocialBehaviorController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CuratorController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\SocioPedagogicalCharacteristicController;
@@ -53,6 +54,10 @@ Route::prefix('login')
             ->name('logout')
             ->middleware('auth');
     });
+
+Route::resource('curators', CuratorController::class)
+    ->except(['show'])
+    ->middleware('auth');
 
 Route::resource('groups', GroupController::class)
     ->except(['show'])

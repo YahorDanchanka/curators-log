@@ -31,19 +31,21 @@ const props = withDefaults(
   defineProps<{
     withoutSubmitButton?: boolean
     component?: TComponent | string
+    schema?: any
   }>(),
   {
     component: QForm,
+    schema: () => ({
+      login: Joi.string().required().max(255),
+      password: Joi.string().required().min(8).max(255),
+    }),
   }
 )
 
 const modelValue = defineModel<AuthFormModel>({ required: true })
 const emit = defineEmits(['submit'])
 
-const schema = Joi.object({
-  login: Joi.string().required().max(255),
-  password: Joi.string().required().min(8).max(255),
-})
+const schema = Joi.object(props.schema)
 
 const validated = computed(() => schema.validate(modelValue.value))
 </script>
