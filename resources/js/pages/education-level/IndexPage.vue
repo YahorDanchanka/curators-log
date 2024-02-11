@@ -64,21 +64,21 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { uid } from 'quasar'
-import { meanBy } from 'lodash'
-import { Head } from '@inertiajs/vue3'
-import { Required } from 'utility-types'
 import CourseTitle from '@/components/CourseTitle.vue'
+import { downloadFile, inertiaFetch, onSave } from '@/helpers'
 import {
-  BaseTable,
-  CharacteristicTable,
-  CourseModel,
-  EducationLevelFormModel,
-  EducationLevelModel,
-  GroupModel,
+BaseTable,
+CharacteristicTable,
+CourseModel,
+EducationLevelFormModel,
+EducationLevelModel,
+GroupModel,
 } from '@/types'
-import { inertiaFetch, onSave } from '@/helpers'
+import { Head } from '@inertiajs/vue3'
+import { meanBy } from 'lodash'
+import { uid } from 'quasar'
+import { Required } from 'utility-types'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{
   group: GroupModel
@@ -160,6 +160,15 @@ document.addEventListener('save', () => {
         },
       }
     )
+  )
+})
+
+document.addEventListener('print', () => {
+  downloadFile(
+    route('groups.courses.education-level.print', {
+      group: props.group.id,
+      course_number: props.course.number,
+    })
   )
 })
 </script>

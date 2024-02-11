@@ -161,6 +161,9 @@ Route::prefix('groups/{group}')
                 Route::get('/education-level', [EducationLevelController::class, 'index'])->name(
                     'education-level.index'
                 );
+                Route::get('/education-level/print', [EducationLevelController::class, 'print'])->name(
+                    'education-level.print'
+                );
                 Route::post('/education-level', [EducationLevelController::class, 'sync'])->name(
                     'education-level.sync'
                 );

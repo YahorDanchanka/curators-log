@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EducationLevelExport;
 use App\Http\Requests\EducationLevelRequest;
 use App\Models\Characteristic;
 use App\Models\CharacteristicStudent;
+use App\Models\Course;
 use App\Models\EducationLevel;
 use App\Models\Group;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EducationLevelController extends Controller
 {
@@ -21,13 +25,12 @@ class EducationLevelController extends Controller
             'students' => fn(HasMany $query) => $query->select(['id', 'surname', 'name', 'patronymic', 'group_id']),
         ]);
         $group->students->each(fn(Student $student) => $student->append('initials'));
-        $characteristics = Characteristic::where('type', 'education-level')->get();
-        $educationLevels = EducationLevel::with('characteristicStudent')
-            ->whereRelation('characteristicStudent', 'course_id', $course->id)
-            ->get();
+        $characteristics = $this->getCharacteristics();
+        $educationLevels = $this->getEducationLevels($course->id);
         return Inertia::render('education-level/IndexPage', [
             ...compact('group', 'course', 'characteristics', 'educationLevels'),
             'saving' => true,
+            'printing' => true,
         ]);
     }
 
@@ -56,5 +59,30 @@ class EducationLevelController extends Controller
             'group' => $group->id,
             'course_number' => $courseNumber,
         ]);
+    }
+
+    public function print(Group $group, string $courseNumber)
+    {
+        $course = $group->findCourseByNumber($courseNumber);
+        return Excel::download(
+            new EducationLevelExport(
+                $group->students,
+                $this->getCharacteristics(),
+                $this->getEducationLevels($course->id)
+            ),
+            'Результаты изучения уровня воспитанности учащихся.xlsx'
+        );
+    }
+
+    protected function getCharacteristics(): Collection
+    {
+        return Characteristic::where('type', 'education-level')->get();
+    }
+
+    protected function getEducationLevels($courseId): Collection
+    {
+        return EducationLevel::with('characteristicStudent')
+            ->whereRelation('characteristicStudent', 'course_id', $courseId)
+            ->get();
     }
 }
