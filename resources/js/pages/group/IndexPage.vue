@@ -206,7 +206,7 @@ function getCourseActionList(course: CourseModel): MenuList {
       },
       {
         label: 'Достижения учебной группы',
-        route: route('groups.courses.achievements.index', { group, course }),
+        route: route('groups.courses.achievements.index', { group, course: course_number }),
       },
       {
         label: 'Занятость учащихся общественно полезной деятельностью',
@@ -214,7 +214,7 @@ function getCourseActionList(course: CourseModel): MenuList {
       },
       {
         label: 'Отчисления за период обучения',
-        route: route('groups.courses.expulsions.index', { group, course }),
+        route: route('groups.courses.expulsions.index', { group, course: course_number }),
       },
       {
         label: 'Результаты изучения уровня воспитанности учащихся',
