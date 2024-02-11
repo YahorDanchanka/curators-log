@@ -66,7 +66,7 @@ import { computed, ref } from 'vue'
 import { Head } from '@inertiajs/vue3'
 import { CharacteristicStudentTable, CharacteristicTable, CourseModel, GroupModel, StudentModel } from '@/types'
 import { SocioPedagogicalCharacteristicService } from '@/services'
-import { onSave } from '@/helpers'
+import { onSave, downloadFile } from '@/helpers'
 
 const props = defineProps<{
   group: GroupModel
@@ -104,6 +104,15 @@ function attachOrDetachCharacteristic(student: StudentModel, characteristic: Cha
 
 document.addEventListener('save', () => {
   onSave(SocioPedagogicalCharacteristicService.sync(props.group.id, props.course.number, attachedCharacteristics.value))
+})
+
+document.addEventListener('print', () => {
+  downloadFile(
+    route('groups.courses.socio-pedagogical-characteristic.print', {
+      group: props.group.id,
+      course_number: props.course.number,
+    })
+  )
 })
 </script>
 

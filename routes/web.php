@@ -180,5 +180,9 @@ Route::prefix('groups/{group}')
                     SocioPedagogicalCharacteristicController::class,
                     'sync',
                 ])->name('socio-pedagogical-characteristic.sync');
+                Route::get('/socio-pedagogical-characteristic/print', [
+                    SocioPedagogicalCharacteristicController::class,
+                    'print',
+                ])->name('socio-pedagogical-characteristic.print');
             });
     });
