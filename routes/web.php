@@ -11,6 +11,8 @@ use App\Http\Controllers\ExpulsionController;
 use App\Http\Controllers\LeadershipController;
 use App\Http\Controllers\EducationLevelController;
 use App\Http\Controllers\ExpertAdviceController;
+use App\Http\Controllers\GradeController;
+use App\Http\Controllers\GradeReportController;
 use App\Http\Controllers\GroupAchievementController;
 use App\Http\Controllers\StudentCharacteristicController;
 use App\Http\Controllers\StudentEmploymentController;
@@ -77,6 +79,7 @@ Route::resource('groups.courses.achievements', GroupAchievementController::class
 Route::resource('groups.courses.expulsions', ExpulsionController::class)
     ->except(['show'])
     ->middleware('auth');
+Route::resource('groups.courses.grade-reports', GradeReportController::class)->middleware('auth');
 
 Route::resource('groups.students.achievements', StudentAchievementController::class)
     ->except(['index', 'show'])
@@ -101,6 +104,14 @@ Route::controller(StudentCharacteristicController::class)
     ->group(function () {
         Route::post('/attach', 'attach')->name('attach');
         Route::delete('/detach', 'detach')->name('detach');
+    });
+
+Route::controller(GradeController::class)
+    ->prefix('grade-reports/{grade_report}')
+    ->name('grade-reports.grades.')
+    ->group(function () {
+        Route::post('/sync', 'sync')->name('sync');
+        Route::get('/summary', 'summary')->name('summary');
     });
 
 Route::prefix('groups/{group}')
@@ -184,5 +195,9 @@ Route::prefix('groups/{group}')
                     SocioPedagogicalCharacteristicController::class,
                     'print',
                 ])->name('socio-pedagogical-characteristic.print');
+
+                Route::get('/grade-reports/{grade_report}/print', [GradeReportController::class, 'print'])->name(
+                    'grade-reports.print'
+                );
             });
     });

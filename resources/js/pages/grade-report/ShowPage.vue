@@ -1,0 +1,79 @@
+<template>
+  <q-page padding>
+    <Head :title="props.gradeReport.name" />
+    <!-- <q-btn-dropdown class="q-mb-md" color="primary" label="Загрузить итоговые оценки из">
+      <q-list>
+        <q-item
+          v-for="gradeReport in props.course.grade_reports"
+          :key="gradeReport.id"
+          clickable
+          v-close-popup
+          @click="loadSummaryGrades(gradeReport)"
+        >
+          <q-item-section>
+            <q-item-label>{{ gradeReport.name }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-btn-dropdown> -->
+    <GradeTable v-model="gradeTableState" :students="props.group.students" @save="onGradeTableSave" />
+  </q-page>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { Head } from '@inertiajs/vue3'
+import axios from 'axios'
+import route from 'ziggy-js'
+import { mapValues } from 'lodash'
+import type { GradeReportModel, GradeReportTable, GroupModel, GradeSummaryResponse, CourseModel } from '@/types'
+import { GradeDTO, GradeRowDTO, GradeSubjectDTO, GradeTableDTO } from '@/dto'
+import GradeTable from '@/components/GradeTable.vue'
+import { Required } from 'utility-types'
+import { downloadFile } from '@/helpers'
+
+const props = defineProps<{
+  group: Required<GroupModel, 'students'>
+  course: Required<CourseModel, 'grade_reports'>
+  gradeReport: GradeReportModel
+}>()
+
+const gradeTableState = ref(
+  props.gradeReport.grade?.body
+    ? GradeTableDTO.fromJSON(JSON.parse(props.gradeReport.grade?.body))
+    : new GradeTableDTO()
+)
+
+async function loadSummaryGrades(gradeReport: Pick<GradeReportTable, 'id'>) {
+  const response = await axios.get<GradeSummaryResponse>(
+    route('grade-reports.grades.summary', { group: props.group.id, grade_report: gradeReport.id })
+  )
+
+  /** Add summary grades */
+  response.data.forEach((subject) => {
+    gradeTableState.value.addSubject(
+      new GradeSubjectDTO(
+        subject.name,
+        mapValues(subject.rows, (grade) => new GradeRowDTO([new GradeDTO('default', grade)]))
+      )
+    )
+  })
+}
+
+function onGradeTableSave() {
+  axios.post(
+    route('grade-reports.grades.sync', { group: props.group.id, grade_report: props.gradeReport.id }),
+    gradeTableState.value
+  )
+}
+
+document.addEventListener('print', () => {
+  downloadFile(
+    route('groups.courses.grade-reports.print', {
+      group: props.group.id,
+      course_number: props.course.number,
+      grade_report: props.gradeReport.id,
+    })
+  )
+})
+</script>

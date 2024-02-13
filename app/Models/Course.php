@@ -54,6 +54,11 @@ class Course extends Model
         return $this->hasMany(GroupAchievement::class);
     }
 
+    public function gradeReports(): HasMany
+    {
+        return $this->hasMany(GradeReport::class);
+    }
+
     protected function groupName(): Attribute
     {
         return Attribute::make(

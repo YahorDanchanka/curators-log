@@ -1,4 +1,12 @@
-import { CourseTable, CuratorModel, ExpulsionTable, GroupAchievementTable, PlanTable, ReportTable } from '@/types'
+import {
+  CourseTable,
+  CuratorModel,
+  ExpulsionTable,
+  GradeReportTable,
+  GroupAchievementTable,
+  PlanTable,
+  ReportTable,
+} from '@/types'
 
 export type CourseModel = CourseTable & {
   group_name?: string
@@ -7,4 +15,5 @@ export type CourseModel = CourseTable & {
   plans?: PlanTable[]
   reports?: ReportTable[]
   achievements?: GroupAchievementTable[]
+  grade_reports?: GradeReportTable[]
 }
