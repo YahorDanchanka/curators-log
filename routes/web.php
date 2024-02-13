@@ -23,6 +23,7 @@ use App\Http\Controllers\GroupStudentController;
 use App\Http\Controllers\GroupFamilyAttendanceController;
 use App\Http\Controllers\IndividualWorkController;
 use App\Http\Controllers\InteractionWithParentController;
+use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\StudentAchievementController;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,10 @@ Route::prefix('login')
     });
 
 Route::resource('curators', CuratorController::class)
+    ->except(['show'])
+    ->middleware('auth');
+
+Route::resource('specialties', SpecialtyController::class)
     ->except(['show'])
     ->middleware('auth');
 

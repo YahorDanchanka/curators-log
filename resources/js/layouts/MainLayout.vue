@@ -21,36 +21,7 @@
 
       <q-drawer side="left" behavior="mobile" v-model="leftDrawerOpen" bordered overlay>
         <q-scroll-area class="fit">
-          <q-list class="menu-list">
-            <q-item
-              :active="route().current() === 'curators.index'"
-              clickable
-              v-ripple
-              @click="router.get(route('curators.index'))"
-            >
-              <q-item-section avatar>
-                <q-icon name="supervisor_account" />
-              </q-item-section>
-              <q-item-section> Кураторы </q-item-section>
-            </q-item>
-            <q-item
-              :active="route().current() === 'groups.index'"
-              clickable
-              v-ripple
-              @click="router.get(route('groups.index'))"
-            >
-              <q-item-section avatar>
-                <q-icon name="group" />
-              </q-item-section>
-              <q-item-section> Группы </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple @click="router.post(route('auth.logout'))">
-              <q-item-section avatar>
-                <q-icon name="logout" />
-              </q-item-section>
-              <q-item-section> Выйти </q-item-section>
-            </q-item>
-          </q-list>
+          <ListGenerator class="menu-list" :list="menuList" />
         </q-scroll-area>
       </q-drawer>
 
@@ -62,7 +33,9 @@
 </template>
 
 <script lang="ts" setup>
+import ListGenerator from '@/components/ListGenerator.vue'
 import BaseLayout from '@/layouts/BaseLayout.vue'
+import { MenuList } from '@/types'
 import { router } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import route from 'ziggy-js'
@@ -78,4 +51,25 @@ function emitEvent(type: string) {
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
+
+const menuList = ref<MenuList>([
+  {
+    route: route('specialties.index'),
+    label: 'Специальности',
+    icon: 'school',
+  },
+  {
+    route: route('curators.index'),
+    label: 'Кураторы',
+    icon: 'supervisor_account',
+  },
+  { route: route('groups.index'), label: 'Группы', icon: 'groups' },
+  {
+    label: 'Выйти',
+    icon: 'logout',
+    onClick() {
+      router.post(route('auth.logout'))
+    },
+  },
+])
 </script>
