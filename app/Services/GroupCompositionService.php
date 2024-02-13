@@ -21,6 +21,19 @@ class GroupCompositionService
         ];
     }
 
+    public static function getCharacteristicIds1(): array
+    {
+        return [
+            CharacteristicId::EDUCATIONAL_SECTOR_ID->value,
+            CharacteristicId::INFORMATION_IDEOLOGICAL_SECTOR_ID->value,
+            CharacteristicId::SPORT_SECTOR_ID->value,
+            CharacteristicId::LABOR_SECTOR_ID->value,
+            CharacteristicId::CULTURAL_MASS_SECTOR_ID->value,
+            CharacteristicId::LAW_SECTOR_ID->value,
+            CharacteristicId::EDITORIAL_SECTOR_ID->value,
+        ];
+    }
+
     public function save(Course $course, array $groupComposition)
     {
         DB::transaction(function () use ($course, $groupComposition) {

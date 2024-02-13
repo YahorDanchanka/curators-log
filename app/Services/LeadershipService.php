@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\CharacteristicId;
 use App\Models\Course;
+use App\Models\Student;
 
 class LeadershipService
 {
@@ -27,6 +28,26 @@ class LeadershipService
         $this->set($course, CharacteristicId::UNION_ORGANIZER_ID, $studentId);
     }
 
+    public function getLeader(Course $course): ?Student
+    {
+        return $this->get($course, CharacteristicId::LEADER_ID);
+    }
+
+    public function getDeputyLeader(Course $course): ?Student
+    {
+        return $this->get($course, CharacteristicId::DEPUTY_LEADER_ID);
+    }
+
+    public function getBrsmSecretary(Course $course): ?Student
+    {
+        return $this->get($course, CharacteristicId::BRSM_SECRETARY_ID);
+    }
+
+    public function getUnionOrganizer(Course $course): ?Student
+    {
+        return $this->get($course, CharacteristicId::UNION_ORGANIZER_ID);
+    }
+
     protected function set(Course $course, CharacteristicId $characteristicId, $studentId = null)
     {
         $query = $course->characteristics()->where('characteristic_id', $characteristicId->value);
@@ -43,5 +64,13 @@ class LeadershipService
         } else {
             $query->delete();
         }
+    }
+
+    protected function get(Course $course, CharacteristicId $characteristicId): ?Student
+    {
+        return $course
+            ->characteristics()
+            ->where('characteristic_id', $characteristicId->value)
+            ->first()?->student;
     }
 }

@@ -112,7 +112,7 @@ import { computed, reactive } from 'vue'
 import { Head } from '@inertiajs/vue3'
 import { BaseTable, CharacteristicTable, CourseModel, GroupModel, LeadershipFormModel } from '@/types'
 import CourseTitle from '@/components/CourseTitle.vue'
-import { onSave } from '@/helpers'
+import { downloadFile, onSave } from '@/helpers'
 import { LeadershipService } from '@/services'
 import { StudentRepository } from '@/repositories'
 
@@ -156,5 +156,9 @@ function addGroupCompositionRow(characteristicId: BaseTable['id']) {
 
 document.addEventListener('save', () => {
   onSave(LeadershipService.sync(props.group.id, props.course.number, modelValue))
+})
+
+document.addEventListener('print', () => {
+  downloadFile(route('groups.courses.leadership.print', { group: props.group.id, course_number: props.course.number }))
 })
 </script>
