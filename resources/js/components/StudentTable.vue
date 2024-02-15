@@ -1,5 +1,5 @@
 <template>
-  <q-table :rows="props.students" :columns="columns" :rows-per-page-options="[0]">
+  <AppTable id="student-table" :rows="props.students" :columns="columns" :rows-per-page-options="[0]">
     <template v-slot:top="data">
       <div v-if="title" class="q-table__title">{{ title }}</div>
       <q-space />
@@ -48,10 +48,11 @@
         </q-td>
       </q-tr>
     </template>
-  </q-table>
+  </AppTable>
 </template>
 
 <script setup lang="ts">
+import AppTable from '@/components/AppTable.vue'
 import ListGenerator from '@/components/ListGenerator.vue'
 import { formatDate } from '@/helpers'
 import { MenuList, StudentModel } from '@/types'
