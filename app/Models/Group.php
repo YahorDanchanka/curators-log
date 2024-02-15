@@ -86,7 +86,7 @@ class Group extends Model
         return Attribute::make(
             get: fn() => $this->current_course
                 ? $this->specialty->prefix . '-' . $this->current_course->number . $this->number
-                : null
+                : $this->specialty->prefix . '-' . $this->last_course->number . $this->number
         );
     }
 }

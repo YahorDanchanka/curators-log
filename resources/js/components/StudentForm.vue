@@ -5,28 +5,28 @@
         class="form__control"
         label="Фамилия"
         v-model="modelValue.surname"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'surname')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'surname')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Имя"
         v-model="modelValue.name"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'name')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'name')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Отчество"
         v-model="modelValue.patronymic"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'patronymic')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'patronymic')?.message]"
         hide-bottom-space
       />
       <q-select
         class="form__control"
         label="Пол"
         v-model="modelValue.sex"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'sex')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'sex')?.message]"
         :options="['мужской', 'женский']"
         hide-bottom-space
       />
@@ -35,28 +35,28 @@
         class="form__control"
         label="Дата рождения"
         v-model="modelValue.birthday"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'birthday')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'birthday')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Гражданство"
         v-model="modelValue.citizenship"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'citizenship')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'citizenship')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Домашний телефон"
         v-model="modelValue.home_phone"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'home_phone')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'home_phone')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Телефон"
         v-model="modelValue.phone"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'phone')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'phone')?.message]"
         hide-bottom-space
       />
       <q-input
@@ -64,7 +64,7 @@
         label="Учреждение образования"
         v-model="modelValue.educational_institution"
         :rules="[
-          () => validated.error?.details.find((item) => item.context.key === 'educational_institution')?.message,
+          () => validated.error?.details.find((item: any) => item.context.key === 'educational_institution')?.message,
         ]"
         hide-bottom-space
       />
@@ -72,21 +72,21 @@
         class="form__control"
         label="Отношения учащегося с членами семьи, попечителем и др."
         v-model="modelValue.social_conditions"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'social_conditions')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'social_conditions')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Увлечения"
         v-model="modelValue.hobbies"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'hobbies')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'hobbies')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Другая информация"
         v-model="modelValue.other_details"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'other_details')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'other_details')?.message]"
         hide-bottom-space
       />
       <q-input
@@ -94,7 +94,7 @@
         label="Дата справки"
         v-model="modelValue.medical_certificate_date"
         :rules="[
-          () => validated.error?.details.find((item) => item.context.key === 'medical_certificate_date')?.message,
+          () => validated.error?.details.find((item: any) => item.context.key === 'medical_certificate_date')?.message,
         ]"
         hide-bottom-space
       />
@@ -102,14 +102,14 @@
         class="form__control"
         label="Группа здоровья"
         v-model="modelValue.health"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'health')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'health')?.message]"
         hide-bottom-space
       />
       <q-select
         class="form__control"
         label="Основа"
         v-model="modelValue.apprenticeship"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'apprenticeship')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'apprenticeship')?.message]"
         :options="['Бюджет', 'Внебюджет']"
         hide-bottom-space
       />
@@ -162,7 +162,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue'
+import { Component as TComponent, computed, reactive, watch } from 'vue'
 import { QForm, useQuasar } from 'quasar'
 import Joi from '@/Joi'
 import { StudentFormModel } from '@/types'
@@ -172,7 +172,7 @@ import PassportForm from '@/components/PassportForm.vue'
 const props = withDefaults(
   defineProps<{
     withoutSubmitButton?: boolean
-    component?: object | string
+    component?: TComponent | string
   }>(),
   {
     component: QForm,
