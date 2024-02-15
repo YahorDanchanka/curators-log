@@ -17,6 +17,7 @@ export interface StudentFormModel {
   health?: string | null
   apprenticeship?: string | null
   image?: File | null
+  image_url?: string | null
   address?: AddressFormModel | null
   study_address?: AddressFormModel | null
   study_address_id?: number | null

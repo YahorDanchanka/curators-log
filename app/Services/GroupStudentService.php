@@ -121,6 +121,12 @@ class GroupStudentService
             return $request->image->store('images', 'public');
         }
 
-        return $student?->getRawOriginal('image_url');
+        $removeImage = $request->has('image') && $request->get('image') === null;
+
+        if ($removeImage) {
+            $this->removeImage($student);
+        }
+
+        return $removeImage ? null : $student?->getRawOriginal('image_url');
     }
 }
