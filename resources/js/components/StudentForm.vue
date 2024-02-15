@@ -38,10 +38,11 @@
         :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'birthday')?.message]"
         hide-bottom-space
       />
-      <q-input
+      <AutocompleteInput
         class="form__control"
         label="Гражданство"
         v-model="modelValue.citizenship"
+        :options="['Республика Беларусь', 'Российская Федерация', 'Украина']"
         :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'citizenship')?.message]"
         hide-bottom-space
       />
@@ -90,6 +91,7 @@
         hide-bottom-space
       />
       <q-input
+        type="date"
         class="form__control"
         label="Дата справки"
         v-model="modelValue.medical_certificate_date"
@@ -98,10 +100,11 @@
         ]"
         hide-bottom-space
       />
-      <q-input
+      <AutocompleteInput
         class="form__control"
         label="Группа здоровья"
         v-model="modelValue.health"
+        :options="['Основная', 'Подготовительная', 'Специальная']"
         :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'health')?.message]"
         hide-bottom-space
       />
@@ -120,7 +123,36 @@
         max-file-size="1048576"
         @rejected="onPhotoUploadRejected"
         @added="onUploaded"
-      />
+        @removed="onRemoved"
+      >
+        <template v-slot:header="scope">
+          <div class="row no-wrap items-center q-pa-sm q-gutter-xs">
+            <q-spinner v-if="scope.isUploading" class="q-uploader__spinner" />
+
+            <div class="col">
+              <div class="q-uploader__title">Изображение</div>
+              <div class="q-uploader__subtitle">{{ scope.uploadSizeLabel }}</div>
+            </div>
+
+            <q-btn
+              v-if="modelValue.image !== null && modelValue.image_url"
+              type="a"
+              icon="hide_image"
+              @click="removeImage(scope)"
+              round
+              dense
+              flat
+            >
+              <q-tooltip>Удалить установленное изображение</q-tooltip>
+            </q-btn>
+
+            <q-btn v-if="scope.canAddFiles" type="a" icon="add_box" @click="scope.pickFiles" round dense flat>
+              <q-uploader-add-trigger />
+              <q-tooltip>Выбрать</q-tooltip>
+            </q-btn>
+          </div>
+        </template>
+      </q-uploader>
       <q-expansion-item class="form__control" label="Домашний адрес" v-model="showedForms.addressForm">
         <AddressForm v-if="modelValue.address" component="div" v-model="modelValue.address" without-submit-button />
       </q-expansion-item>
@@ -163,11 +195,12 @@
 
 <script setup lang="ts">
 import { Component as TComponent, computed, reactive, watch } from 'vue'
-import { QForm, useQuasar } from 'quasar'
+import { QForm, QUploader, useQuasar } from 'quasar'
 import Joi from '@/Joi'
 import { StudentFormModel } from '@/types'
 import AddressForm from '@/components/AddressForm.vue'
 import PassportForm from '@/components/PassportForm.vue'
+import AutocompleteInput from '@/components/AutocompleteInput.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -215,10 +248,19 @@ const isOtherStudyAddress = computed(
 
 const validated = computed(() => schema.validate(modelValue.value))
 
-function onUploaded(files: File[]) {
+function onUploaded(files: readonly any[]) {
   if (files[0]) {
     modelValue.value.image = files[0]
   }
+}
+
+function onRemoved() {
+  delete modelValue.value.image
+}
+
+function removeImage(scope: QUploader) {
+  scope.removeQueuedFiles()
+  modelValue.value.image = null
 }
 
 function setDormitory(value: boolean) {

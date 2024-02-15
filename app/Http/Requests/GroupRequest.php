@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Curator;
-use App\Models\Group;
+use App\Models\Specialty;
 use App\Validators\ValidateGroupDateOrder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -19,7 +19,7 @@ class GroupRequest extends FormRequest
     {
         return [
             'number' => 'required|numeric|min:1|max:255',
-            'specialty_id' => ['required', 'numeric', Rule::exists(Group::class, 'id')],
+            'specialty_id' => ['required', 'numeric', Rule::exists(Specialty::class, 'id')],
             'courses' => 'required|array|min:1|max:4',
             'courses.*.number' => 'required|numeric',
             'courses.*.start_education' => 'required|date',
