@@ -201,6 +201,10 @@ Route::prefix('groups/{group}')
                     SocioPedagogicalCharacteristicController::class,
                     'print',
                 ])->name('socio-pedagogical-characteristic.print');
+                Route::get('/socio-pedagogical-characteristic/print-word', [
+                    SocioPedagogicalCharacteristicController::class,
+                    'printWord',
+                ])->name('socio-pedagogical-characteristic.print-word');
 
                 Route::get('/grade-reports/{grade_report}/print', [GradeReportController::class, 'print'])->name(
                     'grade-reports.print'

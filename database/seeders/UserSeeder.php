@@ -19,8 +19,8 @@ class UserSeeder extends Seeder
 
         User::insert([
             ['login' => env('ADMIN_LOGIN'), 'password' => Hash::make(env('ADMIN_PASSWORD'))],
-            // ['login' => 'kudelich', 'password' => '$2y$12$tDqJnHrkE.dSatYKHfwu9uzr381MaFxbOkHTDoPJ7D02mfX.31.5y'],
-            // ['login' => 'serikova', 'password' => '$2y$12$tDqJnHrkE.dSatYKHfwu9uzr381MaFxbOkHTDoPJ7D02mfX.31.5y'],
+            ['login' => 'kudelich', 'password' => '$2y$12$tDqJnHrkE.dSatYKHfwu9uzr381MaFxbOkHTDoPJ7D02mfX.31.5y'],
+            ['login' => 'serikova', 'password' => '$2y$12$tDqJnHrkE.dSatYKHfwu9uzr381MaFxbOkHTDoPJ7D02mfX.31.5y'],
         ]);
     }
 }
