@@ -6,7 +6,7 @@ export interface MenuItem {
 }
 
 export type MenuItemWithRoute = MenuItem & { route: string }
-export type MenuItemWithHandler = MenuItem & { onClick: (item: MenuItemWithHandler) => void }
+export type MenuItemWithHandler = MenuItem & { onClick: () => void }
 export type MenuItemWithSubmenu = MenuItem & { items: MenuList }
 export type MenuList = (MenuItemWithRoute | MenuItemWithHandler | MenuItemWithSubmenu)[]
 

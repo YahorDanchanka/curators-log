@@ -40,16 +40,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [MainController::class, 'index'])->name('home');
 
-Route::prefix('login')
-    ->controller(AuthController::class)
+Route::controller(AuthController::class)
     ->name('auth.')
-
     ->group(function () {
-        Route::get('/', 'login')
+        Route::get('/login', 'login')
             ->name('login')
             ->middleware('guest');
 
-        Route::post('/', 'loginPost')
+        Route::post('/login', 'loginPost')
             ->name('login-post')
             ->middleware('guest');
 

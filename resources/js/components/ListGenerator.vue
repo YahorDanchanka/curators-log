@@ -22,7 +22,7 @@
             ? item.download
               ? downloadFile(item.route)
               : router.visit(item.route)
-            : item.onClick
+            : item.onClick()
         "
       >
         <q-item-section v-if="item.icon" avatar>
