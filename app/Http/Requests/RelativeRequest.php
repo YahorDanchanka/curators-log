@@ -29,6 +29,7 @@ class RelativeRequest extends FormRequest
             'address.type' => 'required_with:address',
             'address.residence' => 'required_with:address',
             'address.street' => 'required_with:address',
+            'address.apartment_number' => 'required_with:address',
             'address.region_id' => ['required_with:address', Rule::exists(AdministrativeDivision::class, 'id')],
             'address.district_id' => ['required_with:address', Rule::exists(AdministrativeDivision::class, 'id')],
             'type' => 'nullable',

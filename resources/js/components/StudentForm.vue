@@ -201,6 +201,7 @@ import { StudentFormModel } from '@/types'
 import AddressForm from '@/components/AddressForm.vue'
 import PassportForm from '@/components/PassportForm.vue'
 import AutocompleteInput from '@/components/AutocompleteInput.vue'
+import { cloneDeep, isEqual, pick } from 'lodash'
 
 const props = withDefaults(
   defineProps<{
@@ -215,6 +216,23 @@ const props = withDefaults(
 const $q = useQuasar()
 const modelValue = defineModel<StudentFormModel>({ required: true })
 const emit = defineEmits(['submit'])
+
+const studyAddress = {
+  type: 'Город',
+  residence: '',
+  street: '',
+  apartment_number: '',
+  region_id: 40,
+  district_id: 44,
+}
+
+const dormitoryObject = {
+  type: 'Город',
+  residence: 'Гомель',
+  street: 'Речицкая 4',
+  region_id: 40,
+  district_id: 44,
+}
 
 const schema = Joi.object({
   surname: Joi.string().required().max(255),
@@ -234,13 +252,20 @@ const schema = Joi.object({
   apprenticeship: Joi.string().allow(null, '').max(255),
 })
 
-const isDormitory = computed(() => !!modelValue.value.study_address_id && modelValue.value.study_address_id === 1)
-
 const showedForms = reactive({
   addressForm: !!modelValue.value.address,
-  studyAddress: !isDormitory.value && !!modelValue.value.study_address,
+  studyAddress: !!modelValue.value.study_address,
   passportForm: !!modelValue.value.passport,
 })
+
+const isDormitory = computed(
+  () =>
+    !!modelValue.value.study_address &&
+    isEqual(
+      pick(modelValue.value.study_address, ['type', 'residence', 'street', 'region_id', 'district_id']),
+      dormitoryObject
+    )
+)
 
 const isOtherStudyAddress = computed(
   () => !isDormitory.value && !!modelValue.value.study_address && typeof modelValue.value.study_address === 'object'
@@ -263,22 +288,22 @@ function removeImage(scope: QUploader) {
   modelValue.value.image = null
 }
 
-function setDormitory(value: boolean) {
-  modelValue.value.study_address_id = value ? 1 : undefined
-  modelValue.value.study_address = undefined
+function setDormitory() {
+  if (isDormitory.value) {
+    modelValue.value.study_address = cloneDeep(studyAddress)
+    return
+  }
+
+  modelValue.value.study_address = cloneDeep({
+    ...dormitoryObject,
+    apartment_number: '',
+  })
+
+  showedForms.studyAddress = true
 }
 
 function setStudyAddress(value: boolean) {
-  modelValue.value.study_address_id = undefined
-  modelValue.value.study_address = value
-    ? {
-        type: 'Город',
-        residence: '',
-        street: '',
-        region_id: 40,
-        district_id: 44,
-      }
-    : undefined
+  modelValue.value.study_address = value ? cloneDeep(studyAddress) : undefined
 }
 
 function onPhotoUploadRejected() {
@@ -292,13 +317,7 @@ watch(
   () => showedForms.addressForm,
   () => {
     if (showedForms.addressForm) {
-      modelValue.value.address = {
-        type: 'Город',
-        residence: '',
-        street: '',
-        region_id: 40,
-        district_id: 44,
-      }
+      modelValue.value.address = cloneDeep(studyAddress)
     } else {
       delete modelValue.value.address
     }
@@ -309,7 +328,9 @@ watch(
   () => showedForms.studyAddress,
   () => {
     if (showedForms.studyAddress) {
-      setStudyAddress(true)
+      if (!isDormitory.value) {
+        setStudyAddress(true)
+      }
     } else {
       delete modelValue.value.study_address
     }

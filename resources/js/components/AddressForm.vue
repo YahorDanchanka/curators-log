@@ -6,7 +6,7 @@
         label="Область"
         v-model="modelValue.region_id"
         :options="regionOptions"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'region_id')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'region_id')?.message]"
         emit-value
         map-options
         hide-bottom-space
@@ -16,7 +16,7 @@
         label="Район"
         v-model="modelValue.district_id"
         :options="districtOptions"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'district_id')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'district_id')?.message]"
         emit-value
         map-options
         hide-bottom-space
@@ -26,21 +26,28 @@
         label="Тип места жительства"
         v-model="modelValue.type"
         :options="['Город', 'Деревня', 'Посёлок', 'Хутор', 'Агрогородок', 'Городской поселок']"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'type')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'type')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Населенный пункт"
         v-model="modelValue.residence"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'residence')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'residence')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Улица"
         v-model="modelValue.street"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'street')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'street')?.message]"
+        hide-bottom-space
+      />
+      <q-input
+        class="form__control"
+        label="Номер квартиры / комнаты"
+        v-model="modelValue.apartment_number"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'apartment_number')?.message]"
         hide-bottom-space
       />
     </div>
@@ -49,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, watch, Component as TComponent } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { QForm } from 'quasar'
 import Joi from '@/Joi'
@@ -59,7 +66,7 @@ import { AdministrativeDivisionRepository } from '@/repositories'
 const props = withDefaults(
   defineProps<{
     withoutSubmitButton?: boolean
-    component?: object | string
+    component?: TComponent | string
   }>(),
   {
     component: QForm,
@@ -76,6 +83,7 @@ const schema = Joi.object({
   type: Joi.string().required().max(255),
   residence: Joi.string().required().max(255),
   street: Joi.string().required().max(255),
+  apartment_number: Joi.string().required().max(255),
 })
 
 const validated = computed(() => schema.validate(modelValue.value))

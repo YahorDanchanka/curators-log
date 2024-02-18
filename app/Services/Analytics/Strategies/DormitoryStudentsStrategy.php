@@ -11,13 +11,20 @@ class DormitoryStudentsStrategy implements AnalyticsStrategyInterface
 {
     public function query(?Course $course = null): Builder
     {
-        $condition = ['study_address_id' => 1];
         $group = $course ? $course->group : null;
         return $group
             ? $group
                 ->students()
                 ->getQuery()
-                ->where($condition)
-            : Student::where($condition);
+                ->whereRelation('studyAddress', 'type', 'Город')
+                ->whereRelation('studyAddress', 'residence', 'Гомель')
+                ->whereRelation('studyAddress', 'street', 'Речицкая 4')
+                ->whereRelation('studyAddress', 'region_id', 40)
+                ->whereRelation('studyAddress', 'district_id', 44)
+            : Student::whereRelation('studyAddress', 'type', 'Город')
+                ->whereRelation('studyAddress', 'residence', 'Гомель')
+                ->whereRelation('studyAddress', 'street', 'Речицкая 4')
+                ->whereRelation('studyAddress', 'region_id', 40)
+                ->whereRelation('studyAddress', 'district_id', 44);
     }
 }

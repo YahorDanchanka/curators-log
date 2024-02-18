@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->string('type');
             $table->string('residence');
             $table->string('street');
+            $table->string('apartment_number');
             $table->unsignedBigInteger('region_id');
             $table
                 ->foreign('region_id')

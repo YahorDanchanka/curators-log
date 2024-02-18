@@ -20,6 +20,5 @@ export interface StudentFormModel {
   image_url?: string | null
   address?: AddressFormModel | null
   study_address?: AddressFormModel | null
-  study_address_id?: number | null
   passport?: PassportFormModel | null
 }

@@ -5,21 +5,21 @@
         class="form__control"
         label="Фамилия"
         v-model="modelValue.surname"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'surname')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'surname')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Имя"
         v-model="modelValue.name"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'name')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'name')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Отчество"
         v-model="modelValue.patronymic"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'patronymic')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'patronymic')?.message]"
         hide-bottom-space
       />
       <q-select
@@ -27,7 +27,7 @@
         label="Пол"
         v-model="modelValue.sex"
         :options="['мужской', 'женский']"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'sex')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'sex')?.message]"
         emit-value
         map-options
         hide-bottom-space
@@ -50,7 +50,7 @@
           'опекун',
           'приемный родитель',
         ]"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'type')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'type')?.message]"
         emit-value
         map-options
         hide-bottom-space
@@ -59,21 +59,21 @@
         class="form__control"
         label="Место работы"
         v-model="modelValue.job"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'job')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'job')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Должность"
         v-model="modelValue.position"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'position')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'position')?.message]"
         hide-bottom-space
       />
       <q-input
         class="form__control"
         label="Телефон"
         v-model="modelValue.phone"
-        :rules="[() => validated.error?.details.find((item) => item.context.key === 'phone')?.message]"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'phone')?.message]"
         hide-bottom-space
       />
       <AddressForm
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, Component as TComponent } from 'vue'
 import { QForm } from 'quasar'
 import Joi from '@/Joi'
 import { RelativeFormModel } from '@/types'
@@ -98,7 +98,7 @@ import AddressForm from '@/components/AddressForm.vue'
 const props = withDefaults(
   defineProps<{
     withoutSubmitButton?: boolean
-    component?: object | string
+    component?: TComponent | string
   }>(),
   {
     component: QForm,
@@ -131,7 +131,4 @@ const validated = computed(() => schema.validate(modelValue.value))
 
   :deep(.form__body)
     grid-template-columns: repeat(2, minmax(0, 1fr))
-
-    .form__control:last-child
-      grid-column: span 2
 </style>

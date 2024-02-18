@@ -40,6 +40,7 @@ const relative = reactive<RelativeFormModel>({
           type: 'Город',
           residence: '',
           street: '',
+          apartment_number: '',
           region_id: 40,
           district_id: 44,
         }

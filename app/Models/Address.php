@@ -11,7 +11,7 @@ class Address extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['type', 'residence', 'street', 'region_id', 'district_id'];
+    protected $fillable = ['type', 'residence', 'street', 'apartment_number', 'region_id', 'district_id'];
 
     public function region(): BelongsTo
     {
@@ -29,7 +29,7 @@ class Address extends Model
             get: fn(
                 $value,
                 $attributes
-            ) => "{$this->region->name} область, {$this->district->name} район, {$this->type} {$this->residence}, ул. {$this->street}"
+            ) => "{$this->region->name} область, {$this->district->name} район, {$this->type} {$this->residence}, ул. {$this->street}, кв. {$this->apartment_number}"
         );
     }
 }

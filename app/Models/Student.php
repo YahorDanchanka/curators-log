@@ -157,6 +157,13 @@ class Student extends Model
     /** Проживающий в общежитии */
     protected function isDorm(): Attribute
     {
-        return Attribute::make(get: fn() => false);
+        return Attribute::make(
+            get: fn() => $this->studyAddress &&
+                $this->studyAddress->type === 'Город' &&
+                $this->studyAddress->residence === 'Гомель' &&
+                $this->studyAddress->street === 'Речицкая 4' &&
+                $this->studyAddress->region_id === 40 &&
+                $this->studyAddress->district_id === 44
+        );
     }
 }
