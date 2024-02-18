@@ -20,6 +20,6 @@ trait ModelInitials
 
     protected function fullName(): Attribute
     {
-        return Attribute::make(get: fn() => $this->surname . ' ' . $this->name . ' ' . $this->patronymic);
+        return Attribute::make(get: fn() => trim($this->surname . ' ' . $this->name . ' ' . $this->patronymic));
     }
 }

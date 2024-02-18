@@ -125,12 +125,12 @@ class Student extends Model
 
     protected function father(): Attribute
     {
-        return Attribute::make(get: fn() => $this->relatives->where('sex', 'мужской')->first());
+        return Attribute::make(get: fn() => $this->adult_relatives->where('sex', 'мужской')->first());
     }
 
     protected function mother(): Attribute
     {
-        return Attribute::make(get: fn() => $this->relatives->where('sex', 'женский')->first());
+        return Attribute::make(get: fn() => $this->adult_relatives->where('sex', 'женский')->first());
     }
 
     protected function adultRelatives(): Attribute

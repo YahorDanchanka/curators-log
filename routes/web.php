@@ -23,6 +23,7 @@ use App\Http\Controllers\GroupStudentController;
 use App\Http\Controllers\GroupFamilyAttendanceController;
 use App\Http\Controllers\IndividualWorkController;
 use App\Http\Controllers\InteractionWithParentController;
+use App\Http\Controllers\PrintSocialPassport;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\StudentAchievementController;
 use Illuminate\Support\Facades\Route;
@@ -207,5 +208,7 @@ Route::prefix('groups/{group}')
                 Route::get('/grade-reports/{grade_report}/print', [GradeReportController::class, 'print'])->name(
                     'grade-reports.print'
                 );
+
+                Route::get('/social-passport/print', PrintSocialPassport::class)->name('social-passport.print');
             });
     });

@@ -228,6 +228,11 @@ function getCourseActionList(course: CourseModel): MenuList {
         label: 'Ведомости успеваемости',
         route: route('groups.courses.grade-reports.index', { group, course: course_number }),
       },
+      {
+        label: 'Социальный паспорт',
+        route: route('groups.courses.social-passport.print', { group, course_number }),
+        download: true,
+      },
     ],
     'label'
   )
