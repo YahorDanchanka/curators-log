@@ -151,7 +151,15 @@ class Student extends Model
     /** Иногородний */
     protected function isNonresident(): Attribute
     {
-        return Attribute::make(get: fn() => false);
+        return Attribute::make(
+            get: fn() => $this->address &&
+                !(
+                    $this->address->type === 'Город' &&
+                    $this->address->residence === 'Гомель' &&
+                    $this->address->region_id === 40 &&
+                    $this->address->district_id === 44
+                )
+        );
     }
 
     /** Проживающий в общежитии */

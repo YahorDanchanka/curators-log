@@ -16,7 +16,13 @@ class NonresidentStudentsStrategy implements AnalyticsStrategyInterface
             ? $group
                 ->students()
                 ->getQuery()
-                ->whereNotNull('study_address_id')
-            : Student::whereNotNull('study_address_id');
+                ->whereRelation('address', 'type', 'Город')
+                ->whereRelation('address', 'residence', 'Гомель')
+                ->whereRelation('address', 'region_id', 40)
+                ->whereRelation('address', 'district_id', 44)
+            : Student::whereRelation('address', 'type', 'Город')
+                ->whereRelation('address', 'residence', 'Гомель')
+                ->whereRelation('address', 'region_id', 40)
+                ->whereRelation('address', 'district_id', 44);
     }
 }
