@@ -29,8 +29,11 @@ use App\Services\Analytics\Strategies\SdsFamiliesStrategy;
 use App\Services\Analytics\Strategies\TotalStudentsStrategy;
 use App\Services\Analytics\Strategies\WithoutParentalSupportAdultStudentsStrategy;
 use App\Services\Analytics\Strategies\WithoutParentalSupportStudentsStrategy;
+use App\Services\StudentCharacteristicService;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -75,6 +78,7 @@ class SocioPedagogicalCharacteristicController extends Controller
             ...compact('group', 'course', 'characteristics'),
             'saving' => true,
             'printing' => true,
+            'loading' => $course->number > 1,
         ]);
     }
 
@@ -170,6 +174,29 @@ class SocioPedagogicalCharacteristicController extends Controller
             fn() => $templateProcessor->saveAs('php://output'),
             "Социально-педагогическая характеристика {$course->groupName}.docx"
         );
+    }
+
+    public function loadPrevCourse(
+        Group $group,
+        string $courseNumber,
+        StudentCharacteristicService $studentCharacteristicService
+    ) {
+        $course = $group->findCourseByNumber($courseNumber);
+        $prevCourse = $group->findPrevCourse($courseNumber);
+
+        try {
+            $studentCharacteristicService->copyCharacteristicsByCourse(
+                $prevCourse,
+                $course,
+                fn(Builder $query) => $query->where('type', 'socio-pedagogical')
+            );
+        } catch (UniqueConstraintViolationException $exception) {
+        }
+
+        return to_route('groups.courses.socio-pedagogical-characteristic.index', [
+            'group' => $group->id,
+            'course_number' => $course->number,
+        ]);
     }
 
     protected function getCharacteristics(): Collection

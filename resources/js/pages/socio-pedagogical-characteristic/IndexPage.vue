@@ -63,7 +63,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import { CharacteristicStudentTable, CharacteristicTable, CourseModel, GroupModel, StudentModel } from '@/types'
 import { SocioPedagogicalCharacteristicService } from '@/services'
 import { onSave, downloadFile } from '@/helpers'
@@ -101,6 +101,15 @@ function attachOrDetachCharacteristic(student: StudentModel, characteristic: Cha
     attachedCharacteristics.value.push({ student_id: student.id, characteristic_id: characteristic.id })
   }
 }
+
+document.addEventListener('sync', () => {
+  router.get(
+    route('groups.courses.socio-pedagogical-characteristic.load-prev-course', {
+      group: props.group.id,
+      course_number: props.course.number,
+    })
+  )
+})
 
 document.addEventListener('save', () => {
   onSave(SocioPedagogicalCharacteristicService.sync(props.group.id, props.course.number, attachedCharacteristics.value))

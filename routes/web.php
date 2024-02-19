@@ -186,9 +186,10 @@ Route::prefix('groups/{group}')
                 Route::post('/education-level', [EducationLevelController::class, 'sync'])->name(
                     'education-level.sync'
                 );
-                Route::get('/education-level/load-prev-course', [EducationLevelController::class, 'loadPrevCourse'])->name(
-                    'education-level.load-prev-course'
-                );
+                Route::get('/education-level/load-prev-course', [
+                    EducationLevelController::class,
+                    'loadPrevCourse',
+                ])->name('education-level.load-prev-course');
 
                 Route::get('/achievements/print', [GroupAchievementController::class, 'print'])->name(
                     'achievements.print'
@@ -210,6 +211,10 @@ Route::prefix('groups/{group}')
                     SocioPedagogicalCharacteristicController::class,
                     'printWord',
                 ])->name('socio-pedagogical-characteristic.print-word');
+                Route::get('/socio-pedagogical-characteristic/load-prev-course', [
+                    SocioPedagogicalCharacteristicController::class,
+                    'loadPrevCourse',
+                ])->name('socio-pedagogical-characteristic.load-prev-course');
 
                 Route::get('/grade-reports/{grade_report}/print', [GradeReportController::class, 'print'])->name(
                     'grade-reports.print'
