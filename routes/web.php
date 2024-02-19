@@ -186,6 +186,9 @@ Route::prefix('groups/{group}')
                 Route::post('/education-level', [EducationLevelController::class, 'sync'])->name(
                     'education-level.sync'
                 );
+                Route::get('/education-level/load-prev-course', [EducationLevelController::class, 'loadPrevCourse'])->name(
+                    'education-level.load-prev-course'
+                );
 
                 Route::get('/achievements/print', [GroupAchievementController::class, 'print'])->name(
                     'achievements.print'

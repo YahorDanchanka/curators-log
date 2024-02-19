@@ -67,14 +67,14 @@
 import CourseTitle from '@/components/CourseTitle.vue'
 import { downloadFile, inertiaFetch, onSave } from '@/helpers'
 import {
-BaseTable,
-CharacteristicTable,
-CourseModel,
-EducationLevelFormModel,
-EducationLevelModel,
-GroupModel,
+  BaseTable,
+  CharacteristicTable,
+  CourseModel,
+  EducationLevelFormModel,
+  EducationLevelModel,
+  GroupModel,
 } from '@/types'
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import { meanBy } from 'lodash'
 import { uid } from 'quasar'
 import { Required } from 'utility-types'
@@ -148,6 +148,12 @@ function updateRow(studentId: BaseTable['id'], characteristicId: BaseTable['id']
     })
   }
 }
+
+document.addEventListener('sync', () => {
+  router.get(
+    route('groups.courses.education-level.load-prev-course', { group: props.group.id, course_number: props.course.number })
+  )
+})
 
 document.addEventListener('save', () => {
   onSave(

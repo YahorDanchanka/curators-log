@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Course;
 use App\Models\Student;
-use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 class StudentCharacteristicService
