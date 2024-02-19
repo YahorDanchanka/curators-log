@@ -53,6 +53,18 @@ class Group extends Model
         return $course;
     }
 
+    public function findPrevCourse($courseNumber): ?Course
+    {
+        /** @var Course $course */
+        $course = $this->courses->where('number', (int) $courseNumber - 1)->first();
+
+        if (!$course) {
+            abort(404);
+        }
+
+        return $course;
+    }
+
     public function findStudentByNumber($studentNumber): Student
     {
         /** @var Student $student */

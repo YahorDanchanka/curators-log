@@ -151,6 +151,9 @@ Route::prefix('groups/{group}')
                 Route::get('/leadership', [LeadershipController::class, 'index'])->name('leadership.index');
                 Route::post('/leadership', [LeadershipController::class, 'sync'])->name('leadership.sync');
                 Route::get('/leadership/print', [LeadershipController::class, 'print'])->name('leadership.print');
+                Route::get('/leadership/load-prev-course', [LeadershipController::class, 'loadPrevCourse'])->name(
+                    'leadership.load-prev-course'
+                );
 
                 Route::get('/student-employment', [StudentEmploymentController::class, 'index'])->name(
                     'student-employment.index'

@@ -109,7 +109,7 @@
 
 <script lang="ts" setup>
 import { computed, reactive } from 'vue'
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 import { BaseTable, CharacteristicTable, CourseModel, GroupModel, LeadershipFormModel } from '@/types'
 import CourseTitle from '@/components/CourseTitle.vue'
 import { downloadFile, onSave } from '@/helpers'
@@ -153,6 +153,12 @@ function addGroupCompositionRow(characteristicId: BaseTable['id']) {
     course_id: props.course.id,
   })
 }
+
+document.addEventListener('sync', () => {
+  router.get(
+    route('groups.courses.leadership.load-prev-course', { group: props.group.id, course_number: props.course.number })
+  )
+})
 
 document.addEventListener('save', () => {
   onSave(LeadershipService.sync(props.group.id, props.course.number, modelValue))

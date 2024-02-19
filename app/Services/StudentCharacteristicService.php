@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Course;
 use App\Models\Student;
+use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 
 class StudentCharacteristicService
 {
@@ -37,5 +40,17 @@ class StudentCharacteristicService
             ->where('characteristic_id', $characteristicId)
             ->wherePivot('course_id', $courseId)
             ->exists();
+    }
+
+    public function copyCharacteristicsByCourse(Course $from, Course $to, callable $function)
+    {
+        $query = $function(
+            DB::table('characteristic_student')
+                ->join('characteristics', 'characteristics.id', '=', 'characteristic_student.characteristic_id')
+                ->select(DB::raw("student_id, characteristic_id, {$to->id}"))
+                ->where('course_id', $from->id)
+        );
+
+        DB::table('characteristic_student')->insertUsing(['student_id', 'characteristic_id', 'course_id'], $query);
     }
 }

@@ -8,9 +8,11 @@ use App\Models\Group;
 use App\Models\Student;
 use App\Services\GroupCompositionService;
 use App\Services\LeadershipService;
-use Illuminate\Database\Eloquent\Builder;
+use App\Services\StudentCharacteristicService;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Inertia\Inertia;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\Element\Table;
@@ -46,6 +48,7 @@ class LeadershipController extends Controller
             ...compact('group', 'course', 'groupCompositionCharacteristics'),
             'saving' => true,
             'printing' => true,
+            'loading' => $course->number > 1,
         ]);
     }
 
@@ -135,5 +138,30 @@ class LeadershipController extends Controller
             fn() => $templateProcessor->saveAs('php://output'),
             "Актив учебной группы {$course->groupName}.docx"
         );
+    }
+
+    public function loadPrevCourse(
+        Group $group,
+        string $courseNumber,
+        StudentCharacteristicService $studentCharacteristicService
+    ) {
+        $course = $group->findCourseByNumber($courseNumber);
+        $prevCourse = $group->findPrevCourse($courseNumber);
+
+        try {
+            $studentCharacteristicService->copyCharacteristicsByCourse(
+                $prevCourse,
+                $course,
+                fn(Builder $query) => $query->orWhere(
+                    fn($query1) => $query1->where('type', 'leadership')->where('type', 'group-composition')
+                )
+            );
+        } catch (UniqueConstraintViolationException $exception) {
+        }
+
+        return to_route('groups.courses.leadership.index', [
+            'group' => $group->id,
+            'course_number' => $course->number,
+        ]);
     }
 }
