@@ -1,6 +1,17 @@
 <template>
   <q-page padding>
     <Head :title="`Родственники ${props.student.initials}`" />
+    <q-breadcrumbs class="q-mb-md">
+      <q-breadcrumbs-el class="cursor-pointer" label="Группы" @click="router.get(route('groups.index'))" />
+      <q-breadcrumbs-el :label="props.group.name!" style="color: black" />
+      <q-breadcrumbs-el
+        class="cursor-pointer"
+        label="Список учащихся"
+        @click="router.get(route('groups.students.index', { group: props.group.id }))"
+      />
+      <q-breadcrumbs-el :label="props.student.full_name" style="color: black" />
+      <q-breadcrumbs-el label="Родственники" />
+    </q-breadcrumbs>
     <AdultRelativeTable
       class="q-mb-md"
       :relatives="props.student.adult_relatives"

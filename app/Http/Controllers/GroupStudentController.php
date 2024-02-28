@@ -47,6 +47,7 @@ class GroupStudentController extends Controller
     public function show(Group $group, string $studentNumber)
     {
         $student = $group->findStudentByNumber($studentNumber);
+
         $student->load([
             'address',
             'studyAddress',
@@ -57,12 +58,15 @@ class GroupStudentController extends Controller
             'expertAdvice',
             'individualWork',
         ]);
+
+        $group->append('name');
         $student->append([
             'father',
             'mother',
             'minor_relatives',
             'student_individual_work',
             'relative_individual_work',
+            'full_name',
         ]);
 
         $student->relatives->each(function (Relative $relative) {
@@ -83,6 +87,7 @@ class GroupStudentController extends Controller
     {
         $student = $group->findStudentByNumber($studentNumber);
         $student->load(['address', 'studyAddress', 'passport']);
+        $group->append('name');
         $student->append('initials');
         return Inertia::render('group-student/EditPage', compact('group', 'studentNumber', 'student'));
     }

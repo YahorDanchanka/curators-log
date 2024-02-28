@@ -1,6 +1,11 @@
 <template>
   <q-page padding>
     <Head :title="title" />
+    <q-breadcrumbs class="q-mb-md">
+      <q-breadcrumbs-el class="cursor-pointer" label="Группы" @click="router.get(route('groups.index'))" />
+      <q-breadcrumbs-el :label="props.group.name!" style="color: black" />
+      <q-breadcrumbs-el label="Список учащихся" />
+    </q-breadcrumbs>
     <StudentTable
       :title="title"
       :students="props.group.students"

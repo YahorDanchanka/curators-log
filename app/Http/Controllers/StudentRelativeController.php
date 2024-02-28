@@ -16,8 +16,9 @@ class StudentRelativeController extends Controller
     public function index(Group $group, string $studentNumber)
     {
         $student = $group->findStudentByNumber($studentNumber);
+        $group->append('name');
         $student->load('relatives');
-        $student->append(['initials', 'adult_relatives', 'minor_relatives']);
+        $student->append(['initials', 'adult_relatives', 'minor_relatives', 'full_name']);
         $student->relatives->each(fn(Relative $relative) => $relative->address?->append('address'));
         return Inertia::render('student-relative/IndexPage', [
             ...compact('group', 'student', 'studentNumber'),
@@ -29,7 +30,8 @@ class StudentRelativeController extends Controller
     {
         $student = $group->findStudentByNumber($studentNumber);
         $type = $request->get('type', 'adult');
-        $student->append(['initials']);
+        $group->append('name');
+        $student->append(['initials', 'full_name']);
         return Inertia::render('student-relative/CreatePage', compact('group', 'student', 'studentNumber', 'type'));
     }
 
@@ -50,6 +52,8 @@ class StudentRelativeController extends Controller
     public function edit(Request $request, Group $group, string $studentNumber, $relativeId)
     {
         $student = $group->findStudentByNumber($studentNumber);
+        $group->append('name');
+        $student->append('full_name');
         $relative = $student->relatives()->findOrFail($relativeId);
         $relative->load('address');
         $relative->append('initials');

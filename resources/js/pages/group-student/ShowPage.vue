@@ -1,6 +1,17 @@
 <template>
   <q-page padding>
     <Head :title="title" />
+    <q-breadcrumbs class="q-mb-md">
+      <q-breadcrumbs-el class="cursor-pointer" label="Группы" @click="router.get(route('groups.index'))" />
+      <q-breadcrumbs-el :label="props.group.name!" style="color: black" />
+      <q-breadcrumbs-el
+        class="cursor-pointer"
+        label="Список учащихся"
+        @click="router.get(route('groups.students.index', { group: props.group.id }))"
+      />
+      <q-breadcrumbs-el :label="student.full_name" style="color: black" />
+      <q-breadcrumbs-el label="Карта персонифицированного учета" />
+    </q-breadcrumbs>
     <h1 class="text-h4 text-center q-mb-md">{{ title }}</h1>
     <div class="row items-center">
       <div class="col-1 text-center">
