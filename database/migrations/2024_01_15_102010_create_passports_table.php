@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('series');
             $table->string('number');
+            $table->string('id_number');
             $table->string('district_department');
             $table->date('issue_date');
             $table->timestamps();

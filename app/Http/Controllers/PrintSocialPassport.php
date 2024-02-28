@@ -67,6 +67,7 @@ class PrintSocialPassport extends Controller
                 'passport' => implode(
                     ', ',
                     array_filter([
+                        $student->passport?->id_number,
                         $student->passport?->series . $student->passport?->number,
                         $student->passport?->district_department,
                         $student->passport?->issue_date

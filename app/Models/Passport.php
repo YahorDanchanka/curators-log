@@ -10,16 +10,12 @@ class Passport extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['series', 'number', 'district_department', 'issue_date'];
+    protected $fillable = ['series', 'number', 'id_number', 'district_department', 'issue_date'];
 
     protected function passport(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->series .
-                $this->number .
-                ' выдано ' .
-                $this->district_department .
-                ' РОВД от ' .
+            get: fn() => "$this->id_number, $this->series$this->number выдано $this->district_department РОВД от " .
                 $this->asDate($this->issue_date)->format('d.m.Y')
         );
     }

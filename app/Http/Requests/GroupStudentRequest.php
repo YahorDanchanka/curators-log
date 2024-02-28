@@ -59,6 +59,7 @@ class GroupStudentRequest extends FormRequest
             'passport' => 'nullable|array',
             'passport.series' => 'required_with:passport',
             'passport.number' => 'required_with:passport',
+            'passport.id_number' => 'required_with:passport',
             'passport.district_department' => 'required_with:passport',
             'passport.issue_date' => 'required_with:passport|date',
         ];
