@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title="props.gradeReport.name" />
     <!-- <q-btn-dropdown class="q-mb-md" color="primary" label="Загрузить итоговые оценки из">
       <q-list>
@@ -17,20 +17,21 @@
       </q-list>
     </q-btn-dropdown> -->
     <GradeTable v-model="gradeTableState" :students="props.group.students" @save="onGradeTableSave" />
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import GradeTable from '@/components/GradeTable.vue'
+import ThePage from '@/components/ThePage.vue'
+import { GradeDTO, GradeRowDTO, GradeSubjectDTO, GradeTableDTO } from '@/dto'
+import { downloadFile } from '@/helpers'
+import type { CourseModel, GradeReportModel, GradeReportTable, GradeSummaryResponse, GroupModel } from '@/types'
 import { Head } from '@inertiajs/vue3'
 import axios from 'axios'
-import route from 'ziggy-js'
 import { mapValues } from 'lodash'
-import type { GradeReportModel, GradeReportTable, GroupModel, GradeSummaryResponse, CourseModel } from '@/types'
-import { GradeDTO, GradeRowDTO, GradeSubjectDTO, GradeTableDTO } from '@/dto'
-import GradeTable from '@/components/GradeTable.vue'
 import { Required } from 'utility-types'
-import { downloadFile } from '@/helpers'
+import { ref } from 'vue'
+import route from 'ziggy-js'
 
 const props = defineProps<{
   group: Required<GroupModel, 'students'>

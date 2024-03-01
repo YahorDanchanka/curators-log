@@ -18,6 +18,7 @@ class StudentEmploymentController extends Controller
     public function index(Group $group, string $course_number)
     {
         $course = $group->findCourseByNumber($course_number);
+        $course->append('group_name');
 
         $group->load([
             'students' => fn(HasMany $query) => $query->select('id', 'surname', 'name', 'patronymic', 'group_id'),

@@ -21,6 +21,7 @@ class EducationLevelController extends Controller
     public function index(Group $group, string $courseNumber)
     {
         $course = $group->findCourseByNumber($courseNumber);
+        $course->append('group_name');
         $group->load([
             'students' => fn(HasMany $query) => $query->select(['id', 'surname', 'name', 'patronymic', 'group_id']),
         ]);

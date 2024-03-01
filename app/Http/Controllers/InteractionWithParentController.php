@@ -15,6 +15,7 @@ class InteractionWithParentController extends Controller
 {
     public function index(Group $group)
     {
+        $group->append('name');
         $group->load(['interactionWithParents' => fn(HasMany $query) => $query->orderBy('date')]);
         return Inertia::render('interaction-with-parent/IndexPage', [...compact('group'), 'printing' => true]);
     }
@@ -22,7 +23,7 @@ class InteractionWithParentController extends Controller
     public function create(Group $group)
     {
         $group->load('courses');
-        $group->append(['first_course', 'last_course']);
+        $group->append(['first_course', 'last_course', 'name']);
         return Inertia::render('interaction-with-parent/CreatePage', compact('group'));
     }
 
@@ -35,7 +36,7 @@ class InteractionWithParentController extends Controller
     public function edit(Group $group, InteractionWithParent $interactionWithParent)
     {
         $group->load('courses');
-        $group->append(['first_course', 'last_course']);
+        $group->append(['first_course', 'last_course', 'name']);
         return Inertia::render('interaction-with-parent/EditPage', compact('group', 'interactionWithParent'));
     }
 

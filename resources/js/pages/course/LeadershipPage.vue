@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title="title" />
     <CourseTitle :title :course-number="props.course.number" />
     <q-select
@@ -104,10 +104,11 @@
         </template>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
+import ThePage from '@/components/ThePage.vue'
 import { computed, reactive } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 import { BaseTable, CharacteristicTable, CourseModel, GroupModel, LeadershipFormModel } from '@/types'

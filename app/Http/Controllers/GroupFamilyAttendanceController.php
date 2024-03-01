@@ -23,6 +23,8 @@ class GroupFamilyAttendanceController extends Controller
             'students.relatives',
         ]);
 
+        $group->append('name');
+
         $group->students->each(function (Student $student) {
             $student->append(['initials', 'adult_relatives']);
             $student->relatives->each(fn(Relative $relative) => $relative->append('initials'));

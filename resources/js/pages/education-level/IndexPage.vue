@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title />
     <CourseTitle :title :course-number="props.course.number" />
     <q-markup-table class="education-level-table" separator="cell" wrap-cells>
@@ -60,7 +60,7 @@
         </tr>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
@@ -79,6 +79,7 @@ import { meanBy } from 'lodash'
 import { uid } from 'quasar'
 import { Required } from 'utility-types'
 import { computed, ref } from 'vue'
+import ThePage from '@/components/ThePage.vue'
 
 const props = defineProps<{
   group: GroupModel

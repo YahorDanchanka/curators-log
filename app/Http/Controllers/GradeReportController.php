@@ -30,6 +30,7 @@ class GradeReportController extends Controller
     public function create(Group $group, string $courseNumber)
     {
         $course = $group->findCourseByNumber($courseNumber);
+        $course->append('group_name');
         return Inertia::render('grade-report/CreatePage', compact('group', 'course'));
     }
 
@@ -43,6 +44,7 @@ class GradeReportController extends Controller
     public function show(Group $group, string $courseNumber, GradeReport $gradeReport)
     {
         $course = $group->findCourseByNumber($courseNumber);
+        $course->append('group_name');
 
         $course->load([
             'gradeReports' => fn($query) => $query
@@ -64,6 +66,7 @@ class GradeReportController extends Controller
     public function edit(Group $group, string $courseNumber, GradeReport $gradeReport)
     {
         $course = $group->findCourseByNumber($courseNumber);
+        $course->append('group_name');
         return Inertia::render('grade-report/EditPage', compact('group', 'course', 'gradeReport'));
     }
 

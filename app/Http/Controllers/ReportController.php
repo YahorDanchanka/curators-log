@@ -21,6 +21,7 @@ class ReportController extends Controller
     public function index(Group $group, string $courseNumber)
     {
         $course = $group->findCourseByNumber($courseNumber);
+        $course->append('group_name');
 
         $groupedReports = $course->reports
             ->sortBy(function (Report $report) use ($course) {
@@ -45,6 +46,7 @@ class ReportController extends Controller
     {
         $course = $group->findCourseByNumber($courseNumber);
         $course->load(['reports' => fn(HasMany $query) => $query->where('month', $month)]);
+        $course->append('group_name');
         return Inertia::render('report/ShowPage', [...compact('group', 'course', 'month'), 'saving' => true]);
     }
 

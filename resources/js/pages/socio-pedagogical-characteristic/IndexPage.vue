@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title="title" />
     <h1 class="course-title text-h4 q-mb-md">
       <span class="course-title__header">{{ title }}</span>
@@ -58,7 +58,7 @@
         </tr>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
@@ -67,6 +67,7 @@ import { Head, router } from '@inertiajs/vue3'
 import { CharacteristicStudentTable, CharacteristicTable, CourseModel, GroupModel, StudentModel } from '@/types'
 import { SocioPedagogicalCharacteristicService } from '@/services'
 import { onSave, downloadFile } from '@/helpers'
+import ThePage from '@/components/ThePage.vue'
 
 const props = defineProps<{
   group: GroupModel

@@ -14,12 +14,14 @@ class ExpulsionController extends Controller
     public function index(Group $group, string $course_number)
     {
         $course = $this->getFormData($group, $course_number)['course'];
+        $course->append('group_name');
         return Inertia::render('expulsion/IndexPage', compact('group', 'course'));
     }
 
     public function create(Group $group, string $course_number)
     {
         $course = $this->getFormData($group, $course_number)['course'];
+        $course->append('group_name');
         return Inertia::render('expulsion/CreatePage', compact('group', 'course'));
     }
 
@@ -38,6 +40,7 @@ class ExpulsionController extends Controller
     public function edit(Group $group, string $course_number, Expulsion $expulsion)
     {
         $course = $this->getFormData($group, $course_number)['course'];
+        $course->append('group_name');
         return Inertia::render('expulsion/EditPage', compact('group', 'course', 'expulsion'));
     }
 

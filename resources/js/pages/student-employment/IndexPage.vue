@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title="title" />
     <CourseTitle :title :course-number="props.course.number" />
     <q-markup-table separator="cell" wrap-cells>
@@ -120,18 +120,19 @@
         </tr>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, toRaw } from 'vue'
-import { Head, router } from '@inertiajs/vue3'
-import route from 'ziggy-js'
-import { CourseModel, GroupModel, IEnum, StudentModel } from '@/types'
 import CourseTitle from '@/components/CourseTitle.vue'
+import ThePage from '@/components/ThePage.vue'
+import { downloadFile, onSave } from '@/helpers'
 import { StudentRepository } from '@/repositories'
 import { StudentCharacteristicService, StudentEmploymentService } from '@/services'
-import { downloadFile, onSave } from '@/helpers'
+import { CourseModel, GroupModel, IEnum, StudentModel } from '@/types'
+import { Head, router } from '@inertiajs/vue3'
+import { computed, reactive, ref, toRaw } from 'vue'
+import route from 'ziggy-js'
 
 const props = defineProps<{
   group: GroupModel

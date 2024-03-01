@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title="`Достижения учебной группы ${props.course.group_name}`" />
     <GroupAchievementForm
       v-model="modelValue"
@@ -10,11 +10,12 @@
         )
       "
     />
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
 import GroupAchievementForm from '@/components/GroupAchievementForm.vue'
+import ThePage from '@/components/ThePage.vue'
 import { onSave } from '@/helpers'
 import { GroupAchievementService } from '@/services'
 import { CourseModel, GroupAchievementFormModel, GroupAchievementTable, GroupModel } from '@/types'

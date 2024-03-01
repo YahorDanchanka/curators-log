@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Замечания и предложения по организации идеологической и воспитательной работы" />
     <h1 class="text-h4 q-mb-md text-center">
       Замечания и предложения<br />по организации идеологической и воспитательной работы
@@ -62,7 +62,7 @@
         </q-tr>
       </template>
     </q-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
@@ -72,6 +72,7 @@ import { GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
 import { Required } from 'utility-types'
 import route from 'ziggy-js'
+import ThePage from '@/components/ThePage.vue'
 
 const props = defineProps<{ group: Required<GroupModel, 'advice'> }>()
 

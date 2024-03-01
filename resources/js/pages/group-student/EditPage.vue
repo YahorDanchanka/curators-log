@@ -1,28 +1,18 @@
 <template>
-  <q-page padding>
-    <Head :title />
-    <q-breadcrumbs class="q-mb-md">
-      <q-breadcrumbs-el class="cursor-pointer" label="Группы" @click="router.get(route('groups.index'))" />
-      <q-breadcrumbs-el :label="props.group.name!" style="color: black" />
-      <q-breadcrumbs-el
-        class="cursor-pointer"
-        label="Список учащихся"
-        @click="router.get(route('groups.students.index', { group: props.group.id }))"
-      />
-      <q-breadcrumbs-el label="Редактирование" />
-    </q-breadcrumbs>
+  <ThePage padding>
+    <Head :title="title" />
     <StudentForm v-model="student" @submit="onSubmit" />
-  </q-page>
+  </ThePage>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { Head, router } from '@inertiajs/vue3'
-import { GroupModel, StudentFormModel, StudentModel } from '@/types'
 import StudentForm from '@/components/StudentForm.vue'
-import { GroupStudentService } from '@/services'
+import ThePage from '@/components/ThePage.vue'
 import { onSave } from '@/helpers'
-import route from 'ziggy-js'
+import { GroupStudentService } from '@/services'
+import { GroupModel, StudentFormModel, StudentModel } from '@/types'
+import { Head } from '@inertiajs/vue3'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{ group: GroupModel; studentNumber: string; student: StudentModel }>()
 

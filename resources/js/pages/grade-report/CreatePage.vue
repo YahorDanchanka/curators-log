@@ -1,12 +1,13 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Создать ведомость успеваемости" />
     <GradeReportForm v-model="gradeReport" @submit="onSubmit" />
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
 import GradeReportForm from '@/components/GradeReportForm.vue'
+import ThePage from '@/components/ThePage.vue'
 import { inertiaFetch, onSave } from '@/helpers'
 import type { CourseModel, GradeReportFormModel, GroupModel } from '@/types'
 import { Head } from '@inertiajs/vue3'

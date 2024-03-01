@@ -14,12 +14,14 @@ class AdviceController extends Controller
 {
     public function index(Group $group)
     {
+        $group->append('name');
         $group->load(['advice' => fn(HasMany $query) => $query->orderBy('date')]);
         return Inertia::render('advice/IndexPage', [...compact('group'), 'printing' => true]);
     }
 
     public function create(Group $group)
     {
+        $group->append('name');
         return Inertia::render('advice/CreatePage', compact('group'));
     }
 
@@ -31,6 +33,7 @@ class AdviceController extends Controller
 
     public function edit(Group $group, Advice $advice)
     {
+        $group->append('name');
         return Inertia::render('advice/EditPage', compact('group', 'advice'));
     }
 

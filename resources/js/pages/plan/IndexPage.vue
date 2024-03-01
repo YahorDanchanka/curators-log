@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="План воспитательной и идеологической работы" />
     <div class="text-bold text-right">{{ props.course.number }} курс обучения</div>
     <h1 class="text-h4 text-center q-mb-md">
@@ -69,7 +69,7 @@
         </template>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script setup lang="ts">
@@ -79,6 +79,7 @@ import { Head } from '@inertiajs/vue3'
 import { CourseModel, GroupModel } from '@/types'
 import { PlanService } from '@/services'
 import { downloadFile, formatDate, onSave } from '@/helpers'
+import ThePage from '@/components/ThePage.vue'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel; month: string }>()
 

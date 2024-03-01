@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title="title" />
     <AppTable
       id="grade-report-table"
@@ -95,10 +95,11 @@
         </q-tr>
       </template>
     </AppTable>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
+import ThePage from '@/components/ThePage.vue'
 import AppTable from '@/components/AppTable.vue'
 import { inertiaFetch, onSave } from '@/helpers'
 import { CourseModel, GroupModel } from '@/types'

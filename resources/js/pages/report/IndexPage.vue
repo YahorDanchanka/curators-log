@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Отчет о выполнении плана воспитательной и идеологической работы" />
     <div class="text-bold text-right">{{ props.course.number }} курс обучения</div>
     <h1 class="text-h4 text-center q-mb-md">
@@ -61,16 +61,17 @@
         </tbody>
       </q-markup-table>
     </template>
-  </q-page>
+  </ThePage>
 </template>
 
 <script setup lang="ts">
-import { groupBy } from 'lodash'
-import { Head, router } from '@inertiajs/vue3'
-import route from 'ziggy-js'
-import { date as quasarDate } from 'quasar'
-import { CourseModel, GroupModel, ReportTable } from '@/types'
+import ThePage from '@/components/ThePage.vue'
 import { downloadFile } from '@/helpers'
+import { CourseModel, GroupModel, ReportTable } from '@/types'
+import { Head, router } from '@inertiajs/vue3'
+import { groupBy } from 'lodash'
+import { date as quasarDate } from 'quasar'
+import route from 'ziggy-js'
 
 const props = defineProps<{
   group: GroupModel

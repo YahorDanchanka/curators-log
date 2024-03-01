@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Учет посещаемости родителями (другими законными представителями) проводимых мероприятий" />
     <h1 class="text-h4 text-center q-mb-md">
       Учет посещаемости родителями<br />
@@ -78,15 +78,12 @@
         </tr>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
-import { Head, router } from '@inertiajs/vue3'
-import { groupBy } from 'lodash'
-import { uid } from 'quasar'
-import { Required } from 'utility-types'
+import ThePage from '@/components/ThePage.vue'
+import { downloadFile, inertiaFetch, onSave } from '@/helpers'
 import {
   BaseTable,
   FamilyAttendanceFormModel,
@@ -97,7 +94,11 @@ import {
   FamilyAttendanceTable,
   GroupModel,
 } from '@/types'
-import { downloadFile, inertiaFetch, onSave } from '@/helpers'
+import { Head } from '@inertiajs/vue3'
+import { groupBy } from 'lodash'
+import { uid } from 'quasar'
+import { Required } from 'utility-types'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{
   group: Required<GroupModel, 'courses' | 'students'>

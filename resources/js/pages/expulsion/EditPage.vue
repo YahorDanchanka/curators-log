@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Отчислить учащегося" />
     <ExpulsionForm
       v-model="expulsion"
@@ -7,15 +7,16 @@
       :course="props.course"
       @submit="ExpulsionService.update(props.group.id, props.course.number, props.expulsion.id, expulsion)"
     />
-  </q-page>
+  </ThePage>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { Head } from '@inertiajs/vue3'
 import ExpulsionForm from '@/components/ExpulsionForm.vue'
-import { CourseModel, ExpulsionFormModel, ExpulsionTable, GroupModel } from '@/types'
+import ThePage from '@/components/ThePage.vue'
 import { ExpulsionService } from '@/services/ExpulsionService'
+import { CourseModel, ExpulsionFormModel, ExpulsionTable, GroupModel } from '@/types'
+import { Head } from '@inertiajs/vue3'
+import { reactive } from 'vue'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel; expulsion: ExpulsionTable }>()
 

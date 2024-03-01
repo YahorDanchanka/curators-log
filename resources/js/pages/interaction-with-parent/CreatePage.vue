@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Содержание взаимодействия с родителями (другими законными представителями) учащихся" />
     <InteractionWithParentForm
       v-model="modelValue"
@@ -7,11 +7,12 @@
       :max-date="new Date(props.group.last_course.end_education)"
       @submit="onSave(InteractionWithParentService.create(props.group.id, modelValue), 'create')"
     />
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
 import InteractionWithParentForm from '@/components/InteractionWithParentForm.vue'
+import ThePage from '@/components/ThePage.vue'
 import { onSave } from '@/helpers'
 import { InteractionWithParentService } from '@/services'
 import { GroupModel, InteractionWithParentFormModel } from '@/types'

@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title="`Достижения учебной группы ${props.course.group_name}`" />
     <CourseTitle title="Достижения учебной группы" :course-number="props.course.number" />
     <q-markup-table separator="cell" wrap-cells>
@@ -92,11 +92,12 @@
         </tr>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
 import CourseTitle from '@/components/CourseTitle.vue'
+import ThePage from '@/components/ThePage.vue'
 import { downloadFile, onSave } from '@/helpers'
 import { GroupAchievementService } from '@/services'
 import { CourseModel, GroupModel } from '@/types'

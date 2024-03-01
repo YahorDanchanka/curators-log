@@ -1,15 +1,16 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Замечания и предложения по организации идеологической и воспитательной работы" />
     <AdviceForm
       v-model="modelValue"
       @submit="onSave(AdviceService.update(props.group.id, props.advice.id, modelValue), 'update')"
     />
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
 import AdviceForm from '@/components/AdviceForm.vue'
+import ThePage from '@/components/ThePage.vue'
 import { onSave } from '@/helpers'
 import { AdviceService } from '@/services'
 import { AdviceFormModel, AdviceTable, GroupModel } from '@/types'

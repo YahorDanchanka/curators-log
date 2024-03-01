@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Содержание взаимодействия с родителями (другими законными представителями) учащихся" />
     <h1 class="text-h4 q-mb-md text-center">
       Содержание взаимодействия с родителями<br />
@@ -64,10 +64,11 @@
         </q-tr>
       </template>
     </q-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
+import ThePage from '@/components/ThePage.vue'
 import { downloadFile, formatDate, onSave } from '@/helpers'
 import { InteractionWithParentService } from '@/services'
 import { GroupModel } from '@/types'

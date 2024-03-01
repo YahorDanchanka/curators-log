@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head title="Отчет о выполнении плана воспитательной и идеологической работы" />
     <div class="text-bold text-right">{{ props.course.number }} курс обучения</div>
     <h1 class="text-h4 text-center q-mb-md">
@@ -8,15 +8,16 @@
       мероприятий
     </h1>
     <ReportForm v-model="reports" :date="date" @load-plan="loadPlan" />
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { Head, router } from '@inertiajs/vue3'
-import { CourseModel, GroupModel, ReportFormModel } from '@/types'
-import { inertiaFetch, onSave } from '@/helpers'
 import ReportForm from '@/components/ReportForm.vue'
+import ThePage from '@/components/ThePage.vue'
+import { inertiaFetch, onSave } from '@/helpers'
+import { CourseModel, GroupModel, ReportFormModel } from '@/types'
+import { Head, router } from '@inertiajs/vue3'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel; month: string }>()
 

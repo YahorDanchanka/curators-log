@@ -1,5 +1,5 @@
 <template>
-  <q-page padding>
+  <ThePage padding>
     <Head :title="title" />
     <h1 class="course-title text-h4 q-mb-md">
       <span class="course-title__header"
@@ -69,14 +69,15 @@
         </tr>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </ThePage>
 </template>
 
 <script lang="ts" setup>
+import ThePage from '@/components/ThePage.vue'
+import { ExpulsionService } from '@/services/ExpulsionService'
+import { BaseTable, CourseModel, GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
 import route from 'ziggy-js'
-import { BaseTable, CourseModel, GroupModel } from '@/types'
-import { ExpulsionService } from '@/services/ExpulsionService'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel }>()
 
