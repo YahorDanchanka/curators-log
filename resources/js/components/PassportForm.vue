@@ -1,7 +1,7 @@
 <template>
   <component class="passport-form form" :is="props.component" greedy @submit.prevent="emit('submit')">
     <div class="form__body">
-      <q-select
+      <AutocompleteInput
         class="form__control"
         label="Серия паспорта"
         v-model="modelValue.series"
@@ -45,10 +45,11 @@
 </template>
 
 <script setup lang="ts">
-import { Component as TComponent, computed } from 'vue'
-import { QForm } from 'quasar'
 import Joi from '@/Joi'
+import AutocompleteInput from '@/components/AutocompleteInput.vue'
 import { PassportFormModel } from '@/types'
+import { QForm } from 'quasar'
+import { Component as TComponent, computed } from 'vue'
 
 const props = withDefaults(
   defineProps<{
