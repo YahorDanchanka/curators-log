@@ -1,5 +1,11 @@
 <template>
-  <AppTable id="student-table" :rows="props.students" :columns="columns" :rows-per-page-options="[0]">
+  <AppTable
+    class="student-table"
+    id="student-table"
+    :rows="props.students"
+    :columns="columns"
+    :rows-per-page-options="[0]"
+  >
     <template v-slot:top="data">
       <div v-if="title" class="q-table__title">{{ title }}</div>
       <q-space />
@@ -67,6 +73,13 @@ const emit = defineEmits<{
 }>()
 
 const columns = [
+  {
+    name: 'number',
+    label: '№',
+    align: 'left',
+    sortable: true,
+    field: (row: StudentModel) => props.students.findIndex((student) => student === row) + 1,
+  },
   {
     name: 'surname',
     label: 'Фамилия',
@@ -209,3 +222,18 @@ function getStudentActionList(student: StudentModel, index: number): MenuList {
   )
 }
 </script>
+
+<style lang="sass" scoped>
+.student-table
+  thead tr:first-child th:first-child
+    background-color: white
+
+  td:first-child
+    background-color: white
+
+  th:first-child,
+  td:first-child
+    position: sticky
+    left: 0
+    z-index: 1
+</style>
