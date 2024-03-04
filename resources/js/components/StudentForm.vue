@@ -104,7 +104,7 @@
         class="form__control"
         label="Группа здоровья"
         v-model="modelValue.health"
-        :options="['Основная', 'Подготовительная', 'Специальная']"
+        :options="['Основная', 'Подготовительная', 'Специальная медицинская']"
         :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'health')?.message]"
         hide-bottom-space
       />
