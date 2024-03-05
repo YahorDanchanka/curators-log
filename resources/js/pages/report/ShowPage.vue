@@ -7,7 +7,7 @@
       о выполнении плана воспитательной и идеологической работы куратора учебной группы, проведении внеплановых
       мероприятий
     </h1>
-    <ReportForm v-model="reports" :date="date" @load-plan="loadPlan" />
+    <ReportForm class="q-mb-md" v-model="reports" :date="date" @load-plan="loadPlan" />
   </ThePage>
 </template>
 

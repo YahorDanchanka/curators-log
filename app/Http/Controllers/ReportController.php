@@ -12,7 +12,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use PhpOffice\PhpWord\Element\Text;
 use PhpOffice\PhpWord\Element\TextBreak;
+use PhpOffice\PhpWord\Element\TextRun;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\TemplateProcessor;
 
@@ -93,6 +95,11 @@ class ReportController extends Controller
                     Converter::cmToTwip(11.75),
                     Converter::cmToTwip(2.25)
                 ))->getTable()
+            );
+
+            $templateProcessor->setValue(
+                'hours#' . ($index + 1),
+                round($reports->map(fn($report) => $report->hours_per_week + $report->hours_saturday ?? 0)->sum(), 2)
             );
 
             $templateProcessor->setComplexBlock('table_after#' . ($index + 1), new TextBreak());

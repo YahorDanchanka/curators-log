@@ -29,7 +29,8 @@
               <div class="report-table__cell">
                 <q-input
                   type="number"
-                  step="0.1"
+                  step="0.5"
+                  min="0.5"
                   :model-value="element.hours_per_week"
                   @update:model-value="(val: string) => (element.hours_per_week = parseFloat(val) ? parseFloat(val) : null)"
                 />
@@ -37,7 +38,8 @@
               <div class="report-table__cell">
                 <q-input
                   type="number"
-                  step="0.1"
+                  step="0.5"
+                  min="0.5"
                   :model-value="element.hours_saturday"
                   @update:model-value="(val: string) => (element.hours_saturday = parseFloat(val) ? parseFloat(val) : null)"
                 />
@@ -57,6 +59,9 @@
         </draggable>
       </template>
     </div>
+    <footer class="report-table__footer">
+      <p>Количество часов: {{ totalHours.toFixed(2) }}</p>
+    </footer>
   </div>
 </template>
 
@@ -64,9 +69,9 @@
 import { computed, ref, watch } from 'vue'
 import { uid } from 'quasar'
 import draggable from 'vuedraggable'
-import { cloneDeep, groupBy } from 'lodash'
+import { cloneDeep, groupBy, sum } from 'lodash'
 import { date as quasarDate } from 'quasar'
-import { ReportFormModel, ReportFormModelItem } from '@/types'
+import { Month, ReportFormModel, ReportFormModelItem } from '@/types'
 
 const props = defineProps<{ date: Date; disable?: boolean }>()
 const reports = defineModel<ReportFormModel>({ required: true })
@@ -82,13 +87,17 @@ const groupedReportsByWeek = ref<{ [key: string]: ReportFormModel }>({
 
 const numericMonth = computed(() => quasarDate.formatDate(props.date, 'MM'))
 
+const totalHours = computed(() =>
+  sum(reports.value.map((report) => report.hours_per_week + (report.hours_saturday ?? 0)))
+)
+
 function addReport(week: ReportFormModelItem['week']) {
   groupedReportsByWeek.value[week].push({
     id: uid(),
     content: '',
     hours_per_week: 1,
     hours_saturday: null,
-    month: '9',
+    month: <Month>quasarDate.formatDate(props.date, 'M'),
     week,
   })
 }

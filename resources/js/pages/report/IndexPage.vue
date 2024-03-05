@@ -8,7 +8,7 @@
       мероприятий
     </h1>
     <template v-for="(reports, month) in props.groupedReports">
-      <q-markup-table class="q-mb-md" separator="cell" wrap-cells>
+      <q-markup-table class="q-mb-xs" separator="cell" wrap-cells>
         <thead>
           <tr>
             <th rowspan="2" style="width: 100px">
@@ -60,6 +60,7 @@
           </template>
         </tbody>
       </q-markup-table>
+      <p>Количество часов: {{ getTotalHours(reports).toFixed(2) }}</p>
     </template>
   </ThePage>
 </template>
@@ -67,9 +68,9 @@
 <script setup lang="ts">
 import ThePage from '@/components/ThePage.vue'
 import { downloadFile } from '@/helpers'
-import { CourseModel, GroupModel, ReportTable } from '@/types'
+import { CourseModel, GroupModel, ReportFormModel, ReportTable } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
-import { groupBy } from 'lodash'
+import { groupBy, sum } from 'lodash'
 import { date as quasarDate } from 'quasar'
 import route from 'ziggy-js'
 
@@ -83,6 +84,10 @@ function getDate(month: number) {
   const instance = new Date(month >= 9 && month <= 12 ? props.course.start_education : props.course.end_education)
   instance.setMonth(month - 1)
   return instance
+}
+
+function getTotalHours(reports: ReportFormModel) {
+  return sum(reports.map((report) => report.hours_per_week + (report.hours_saturday ?? 0)))
 }
 
 document.addEventListener('print', () => {
