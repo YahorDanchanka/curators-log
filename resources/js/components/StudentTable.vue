@@ -206,7 +206,7 @@ const columns = [
     label: 'Место проживания в период обучения',
     align: 'left',
     sortable: true,
-    field: (row: StudentModel) => row.study_address?.address,
+    field: (row: StudentModel) => row.study_address?.address ?? row.address?.address,
   },
 ]
 

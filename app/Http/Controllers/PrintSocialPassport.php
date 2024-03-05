@@ -63,7 +63,7 @@ class PrintSocialPassport extends Controller
                     ', ',
                     array_filter([$student->address?->address, $student->relatives->first()?->phone])
                 ),
-                'study_address' => $student->studyAddress?->address,
+                'study_address' => $student->studyAddress?->address ?? $student->address?->address,
                 'passport' => implode(
                     ', ',
                     array_filter([
