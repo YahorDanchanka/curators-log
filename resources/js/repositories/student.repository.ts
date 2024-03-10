@@ -23,9 +23,7 @@ export class StudentRepository {
 
   getLeadershipStudents() {
     return this.students.filter((student) =>
-      student.characteristics?.some((characteristic) =>
-        [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29].includes(characteristic.id)
-      )
+      student.characteristics?.some((characteristic) => characteristic.id === 46)
     )
   }
 }

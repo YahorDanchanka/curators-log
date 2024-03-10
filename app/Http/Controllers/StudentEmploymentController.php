@@ -36,8 +36,9 @@ class StudentEmploymentController extends Controller
                     CharacteristicId::CULTURAL_MASS_SECTOR_ID,
                     CharacteristicId::LAW_SECTOR_ID,
                     CharacteristicId::EDITORIAL_SECTOR_ID,
+                    CharacteristicId::GROUP_UNION_MEMBER_ID
                 ])
-                ->wherePivot('course_id', $course_number),
+                ->wherePivot('course_id', $course->id),
             'students.employments' => fn(HasMany $query) => $query->where('course_id', $course->id),
         ]);
 

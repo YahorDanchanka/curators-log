@@ -8,6 +8,7 @@ export class StudentEmploymentService {
   constructor(public data: StudentEmploymentRow[]) {}
 
   load(studentRepository: StudentRepository) {
+    console.log(studentRepository.getLeadershipStudents())
     this.data = studentRepository.getLeadershipStudents().map((student) => {
       const employment = student.employments?.at(0)
 

@@ -62,4 +62,6 @@ enum CharacteristicId: int
     case EXTRA_INTEREST_ID = 44;
     /** Культурно бытовые ценности */
     case CULTURAL_VALUE_ID = 45;
+    /** Член ученического профкома */
+    case GROUP_UNION_MEMBER_ID = 46;
 }

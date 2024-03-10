@@ -84,7 +84,7 @@ class CharacteristicSeeder extends Seeder
             ['name' => 'Отношение к ценностям', 'type' => 'education-level'],
             ['name' => 'Внеучебные интересы личности', 'type' => 'education-level'],
             ['name' => 'Культурно бытовые ценности', 'type' => 'education-level'],
-            ['name' => 'Член ученического профкома', 'type' => 'other-characteristic'],
+            ['name' => 'Член ученического профкома', 'type' => 'student-employment'],
         ]);
     }
 }

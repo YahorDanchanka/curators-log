@@ -45,18 +45,38 @@
           <th rowspan="2">
             Учащиеся, члены<br />
             ученического профкома<br />
-            <a
-              href="#"
-              @click="
-                router.get(
-                  route('groups.courses.leadership.index', {
-                    group: props.group.id,
-                    course_number: props.course.number,
-                  })
-                )
-              "
-              >редактировать</a
-            >
+            <a href="#">
+              добавить
+              <q-popup-proxy>
+                <div class="row items-center q-col-gutter-sm q-pa-sm bg-white" style="min-width: 300px">
+                  <div class="col">
+                    <q-select
+                      label="Учащийся"
+                      option-value="id"
+                      option-label="full_name"
+                      v-model="selectedStudent"
+                      :options="props.group.students"
+                      clearable
+                      emit-value
+                      map-options
+                    />
+                  </div>
+                  <div class="col-auto">
+                    <q-btn
+                      label="Выбрать"
+                      color="primary"
+                      :disable="selectedStudent === null"
+                      v-close-popup
+                      @click="
+                        selectedStudent
+                          ? StudentCharacteristicService.attach(selectedStudent, 46, props.course.id)
+                          : null
+                      "
+                    />
+                  </div>
+                </div>
+              </q-popup-proxy>
+            </a>
           </th>
           <th colspan="2">
             Занятость учащихся<br />
@@ -81,7 +101,16 @@
               (удалить)
             </a>
           </td>
-          <td>{{ leadershipStudents[index]?.initials }}</td>
+          <td>
+            {{ leadershipStudents[index]?.initials }}
+            <a
+              v-if="leadershipStudents[index]?.id"
+              href="#"
+              @click.prevent="StudentCharacteristicService.detach(leadershipStudents[index].id, 46, props.course.id)"
+            >
+              (удалить)
+            </a>
+          </td>
           <td class="cell_no-padding">
             <input
               v-if="
@@ -130,8 +159,8 @@ import { downloadFile, onSave } from '@/helpers'
 import { StudentRepository } from '@/repositories'
 import { StudentCharacteristicService, StudentEmploymentService } from '@/services'
 import { CourseModel, GroupModel, IEnum, StudentModel } from '@/types'
-import { Head, router } from '@inertiajs/vue3'
-import { computed, reactive, ref, toRaw } from 'vue'
+import { Head } from '@inertiajs/vue3'
+import { computed, reactive, ref, toRaw, watch } from 'vue'
 import route from 'ziggy-js'
 
 const props = defineProps<{
@@ -151,8 +180,6 @@ const studentRepository = computed(() => new StudentRepository(toRaw(props.group
 const brsmStudents = computed<StudentModel[]>(() => studentRepository.value.getBRSMStudents())
 const leadershipStudents = computed<StudentModel[]>(() => studentRepository.value.getLeadershipStudents())
 
-studentEmploymentService.load(studentRepository.value)
-
 document.addEventListener('save', () => {
   onSave(studentEmploymentService.save(props.group.id, props.course.number))
 })
@@ -162,4 +189,12 @@ document.addEventListener('print', () => {
     route('groups.courses.student-employment.print', { group: props.group.id, course_number: props.course.number })
   )
 })
+
+watch(
+  studentRepository,
+  () => {
+    studentEmploymentService.load(studentRepository.value)
+  },
+  { immediate: true }
+)
 </script>
