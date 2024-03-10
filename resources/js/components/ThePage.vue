@@ -164,5 +164,9 @@ router.on('navigate', () => {
   addBreadcrumbsByRoute('groups.courses.socio-pedagogical-characteristic', {
     label: 'Социально-педагогическая характеристика',
   })
+
+  addBreadcrumbsByRoute('groups.courses.other-characteristic', {
+    label: 'Прочие характеристики',
+  })
 })
 </script>

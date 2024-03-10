@@ -23,6 +23,7 @@ use App\Http\Controllers\GroupStudentController;
 use App\Http\Controllers\GroupFamilyAttendanceController;
 use App\Http\Controllers\IndividualWorkController;
 use App\Http\Controllers\InteractionWithParentController;
+use App\Http\Controllers\OtherCharacteristicController;
 use App\Http\Controllers\PrintSocialPassport;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\StudentAchievementController;
@@ -221,5 +222,12 @@ Route::prefix('groups/{group}')
                 );
 
                 Route::get('/social-passport/print', PrintSocialPassport::class)->name('social-passport.print');
+
+                Route::get('/other-characteristic', [OtherCharacteristicController::class, 'index'])->name(
+                    'other-characteristic.index'
+                );
+                Route::post('/other-characteristic', [OtherCharacteristicController::class, 'sync'])->name(
+                    'other-characteristic.sync'
+                );
             });
     });
