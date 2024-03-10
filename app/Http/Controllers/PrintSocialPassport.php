@@ -96,7 +96,9 @@ class PrintSocialPassport extends Controller
                         $student->characteristics->contains('id', 10) ? 'Н' : null,
                         $student->characteristics->contains('id', 14) ? 'РН' : null,
                         $student->characteristics->contains('id', 11) ? 'Ч' : null,
-                        $student->minor_relatives->count() > 0 ? 'Д' : null,
+                        $student->characteristics->contains('id', CharacteristicId::STUDENT_HAS_CHILDREN->value)
+                            ? 'Д'
+                            : null,
                     ])
                 ),
                 'student_characteristic' => implode(
@@ -105,7 +107,7 @@ class PrintSocialPassport extends Controller
                         $student->characteristics->contains('id', 15) ? 'СОП' : null,
                         $student->characteristics->contains('id', 17) ? 'ИПУ' : null,
                         $student->characteristics->contains('id', 13) ? 'И' : null,
-                        $student->characteristics->contains('id', CharacteristicId::BRSM_ID) ? 'БРСМ' : null,
+                        $student->characteristics->contains('id', CharacteristicId::BRSM_ID->value) ? 'БРСМ' : null,
                     ])
                 ),
             ]
