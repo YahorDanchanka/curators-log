@@ -106,6 +106,15 @@ services:
             - 8080:8080
         networks:
             - sail
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8081:80
+        environment:
+            - PMA_ARBITRARY=1
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
