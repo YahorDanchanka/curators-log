@@ -5,13 +5,13 @@
         type="number"
         label="Номер"
         min="1"
-        max="255"
+        max="9"
         v-model.number="modelValue.number"
         :rules="[() => validated.error?.details.find((item) => item.context.key === 'number')?.message]"
         hide-bottom-space
       >
         <template #hint>
-          ПО-1<strong>{{ modelValue.number }}</strong>
+          Результат: {{ specialty?.prefix ?? 'ПО' }}-1<strong>{{ modelValue.number }}</strong>
         </template>
       </q-input>
       <q-select
@@ -62,7 +62,7 @@ import CourseForm from '@/components/CourseForm.vue'
 import { difference } from '@/helpers'
 
 const props = defineProps<{
-  specialties: Pick<SpecialtyTable, 'id' | 'name'>[]
+  specialties: Pick<SpecialtyTable, 'id' | 'name' | 'prefix'>[]
   curators: Pick<CuratorModel, 'id' | 'full_name'>[]
 }>()
 const modelValue = defineModel<GroupFormModel>({ required: true })
@@ -70,13 +70,19 @@ const emit = defineEmits(['submit'])
 const $q = useQuasar()
 
 const schema = Joi.object({
-  number: Joi.number().integer().required().min(1).max(255),
+  number: Joi.number().integer().required().min(1).max(9),
   specialty_id: Joi.number().integer().required(),
 })
 
 const validated = computed(() => schema.validate(modelValue.value))
 const usedCourseNumbers = computed(() => [...new Set(modelValue.value.courses.map((course) => course.number))])
 const unusedCourseNumbers = computed(() => difference([1, 2, 3, 4], usedCourseNumbers.value))
+
+const specialty = computed(() =>
+  modelValue.value.specialty_id
+    ? props.specialties.find((specialty) => specialty.id === modelValue.value.specialty_id)
+    : null
+)
 
 function addCourse() {
   if (modelValue.value.courses.length >= 4) {

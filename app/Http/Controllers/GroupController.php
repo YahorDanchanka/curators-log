@@ -67,7 +67,7 @@ class GroupController extends Controller
 
     protected function getFormData(): array
     {
-        $specialties = Specialty::select(['id', 'name'])->get();
+        $specialties = Specialty::select(['id', 'name', 'prefix'])->get();
         $curators = Curator::select(['id', 'surname', 'name', 'patronymic'])
             ->orderBy('surname')
             ->orderBy('name')
