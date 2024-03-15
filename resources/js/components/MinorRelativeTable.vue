@@ -29,6 +29,7 @@
 
 <script setup lang="ts">
 import { RelativeModel } from '@/types'
+import { QTableColumn } from 'quasar'
 
 const props = defineProps<{ relatives: RelativeModel[] }>()
 const emit = defineEmits<{
@@ -37,7 +38,7 @@ const emit = defineEmits<{
   (e: 'delete', id: RelativeModel): void
 }>()
 
-const columns = [
+const columns: QTableColumn[] = [
   {
     name: 'surname',
     label: 'Фамилия',
@@ -72,6 +73,13 @@ const columns = [
     align: 'left',
     sortable: true,
     field: (row: RelativeModel) => row.birthday,
+  },
+  {
+    name: 'age',
+    label: 'Возраст',
+    align: 'left',
+    sortable: true,
+    field: 'age',
   },
   {
     name: 'educational_institution',

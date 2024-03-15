@@ -19,7 +19,12 @@ class StudentRelativeController extends Controller
         $group->append('name');
         $student->load('relatives');
         $student->append(['initials', 'adult_relatives', 'minor_relatives', 'full_name']);
-        $student->relatives->each(fn(Relative $relative) => $relative->address?->append('address'));
+
+        $student->relatives->each(function (Relative $relative) {
+            $relative->append('age');
+            $relative->address?->append('address');
+        });
+
         return Inertia::render('student-relative/IndexPage', [
             ...compact('group', 'student', 'studentNumber'),
             'printing' => true,
