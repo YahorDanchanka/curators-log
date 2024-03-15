@@ -110,6 +110,13 @@ const groupColumns: QTableColumn[] = [
     sortable: true,
     field: 'name',
   },
+  {
+    name: 'education_period',
+    label: 'Срок обучения',
+    align: 'left',
+    sortable: true,
+    field: 'education_period',
+  },
 ]
 
 const courseColumns: QTableColumn[] = [

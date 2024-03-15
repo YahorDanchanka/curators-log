@@ -101,4 +101,25 @@ class Group extends Model
                 : $this->specialty->prefix . '-' . $this->last_course->number . $this->number
         );
     }
+
+    protected function startEducationDate(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->courses->first()?->start_education);
+    }
+
+    protected function endEducationDate(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->courses->last()?->end_education);
+    }
+
+    protected function educationPeriod(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->start_education_date && $this->end_education_date
+                ? $this->asDate($this->start_education_date)->format('d.m.Y') .
+                    ' - ' .
+                    $this->asDate($this->end_education_date)->format('d.m.Y')
+                : null
+        );
+    }
 }

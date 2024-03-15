@@ -17,11 +17,11 @@ class GroupController extends Controller
     public function index()
     {
         $groups = Group::with(['courses' => fn(HasMany $query) => $query->with(['curator']), 'specialty'])
-            ->latest()
+            ->orderByRaw('(SELECT start_education FROM courses WHERE courses.group_id = groups.id LIMIT 1) DESC')
             ->get();
 
         $groups->each(function (Group $group) {
-            $group->append('current_course', 'name');
+            $group->append('current_course', 'name', 'education_period');
             $group->courses->each(fn(Course $course) => $course->curator->append('full_name'));
         });
 

@@ -2,6 +2,7 @@ import { AdviceTable, CourseModel, GroupTable, InteractionWithParentTable, Stude
 
 export type GroupModel = GroupTable & {
   name?: string | null
+  education_period?: string | null
   courses?: CourseModel[]
   current_course?: CourseModel | null
   students?: StudentModel[]
