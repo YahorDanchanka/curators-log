@@ -1,5 +1,5 @@
 <template>
-  <q-table :rows="props.individualWork" :columns="columns" :rows-per-page-options="[0]">
+  <q-table :rows="props.individualWork" :columns="columns" :rows-per-page-options="[0]" wrap-cells>
     <template v-slot:header="props">
       <q-tr :props="props">
         <q-th v-for="col in props.cols" :key="col.name" :props="props">

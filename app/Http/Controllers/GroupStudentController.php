@@ -56,7 +56,7 @@ class GroupStudentController extends Controller
             'achievements' => fn(HasMany $query) => $query->orderBy('date'),
             'asocialBehavior' => fn(HasMany $query) => $query->orderBy('date'),
             'expertAdvice',
-            'individualWork',
+            'individualWork' => fn(HasMany $query) => $query->orderBy('date'),
         ]);
 
         $group->append('name');
