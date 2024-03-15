@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import ReportForm from '@/components/ReportForm.vue'
 import ThePage from '@/components/ThePage.vue'
-import { inertiaFetch, onSave } from '@/helpers'
+import { downloadFile, inertiaFetch, onSave } from '@/helpers'
 import { CourseModel, GroupModel, ReportFormModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
@@ -40,6 +40,16 @@ function loadPlan() {
     })
   )
 }
+
+document.addEventListener('print', () => {
+  downloadFile(
+    route('groups.courses.reports.print-single', {
+      group: props.group.id,
+      course_number: props.course.number,
+      month: props.month,
+    })
+  )
+})
 
 document.addEventListener('save', () => {
   onSave(

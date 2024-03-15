@@ -12,9 +12,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use PhpOffice\PhpWord\Element\Text;
 use PhpOffice\PhpWord\Element\TextBreak;
-use PhpOffice\PhpWord\Element\TextRun;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\TemplateProcessor;
 
@@ -49,7 +47,54 @@ class ReportController extends Controller
         $course = $group->findCourseByNumber($courseNumber);
         $course->load(['reports' => fn(HasMany $query) => $query->where('month', $month)]);
         $course->append('group_name');
-        return Inertia::render('report/ShowPage', [...compact('group', 'course', 'month'), 'saving' => true]);
+        return Inertia::render('report/ShowPage', [
+            ...compact('group', 'course', 'month'),
+            'saving' => true,
+            'printing' => true,
+        ]);
+    }
+
+    public function printSingle(Group $group, string $courseNumber, string $month)
+    {
+        $course = $group->findCourseByNumber($courseNumber);
+        $course->load(['reports' => fn(HasMany $query) => $query->where('month', $month)]);
+
+        $templateProcessor = new TemplateProcessor(resource_path('documents/report.docx'));
+        $templateProcessor->setValues(['course' => $courseNumber]);
+        $templateProcessor->cloneBlock('tables', 1, true, true);
+
+        $numericMonth = (int) $month;
+        $date = Carbon::createFromFormat(
+            'Y-m-d',
+            $numericMonth >= 9 && $numericMonth <= 12 ? $course->start_education : $course->end_education
+        );
+        $date->setMonth($numericMonth);
+
+        $templateProcessor->setComplexBlock(
+            'table#1',
+            (new ReportTable(
+                $course->reports,
+                $date,
+                Converter::cmToTwip(2.24),
+                Converter::cmToTwip(11.75),
+                Converter::cmToTwip(2.25)
+            ))->getTable()
+        );
+
+        $templateProcessor->setValue(
+            'hours#1',
+            round(
+                $course->reports->map(fn($report) => $report->hours_per_week + $report->hours_saturday ?? 0)->sum(),
+                2
+            )
+        );
+
+        $templateProcessor->setComplexBlock('table_after#1', new TextBreak());
+
+        return response()->streamDownload(
+            fn() => $templateProcessor->saveAs('php://output'),
+            "Отчет {$course->groupName} за {$date->monthName}.docx"
+        );
     }
 
     public function print(Group $group, string $courseNumber)
