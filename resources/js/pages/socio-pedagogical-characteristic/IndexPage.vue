@@ -58,6 +58,16 @@
         </tr>
       </tbody>
     </q-markup-table>
+    <q-dialog v-model="isPrintMenuVisible">
+      <q-card style="width: 100%">
+        <q-card-actions vertical>
+          <q-btn-group>
+            <q-btn color="primary" label="Стандартная форма" @click="printExcel" />
+            <q-btn color="primary" label="Отчетная" @click="printWord" />
+          </q-btn-group>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </ThePage>
 </template>
 
@@ -74,6 +84,8 @@ const props = defineProps<{
   course: CourseModel
   characteristics: CharacteristicTable[]
 }>()
+
+const isPrintMenuVisible = ref(false)
 
 const title = computed(() => `Социально-педагогическая характеристика учебной группы № ${props.course.group_name}`)
 
@@ -103,6 +115,24 @@ function attachOrDetachCharacteristic(student: StudentModel, characteristic: Cha
   }
 }
 
+function printExcel() {
+  downloadFile(
+    route('groups.courses.socio-pedagogical-characteristic.print', {
+      group: props.group.id,
+      course_number: props.course.number,
+    })
+  )
+}
+
+function printWord() {
+  downloadFile(
+    route('groups.courses.socio-pedagogical-characteristic.print-word', {
+      group: props.group.id,
+      course_number: props.course.number,
+    })
+  )
+}
+
 document.addEventListener('sync', () => {
   router.get(
     route('groups.courses.socio-pedagogical-characteristic.load-prev-course', {
@@ -117,12 +147,7 @@ document.addEventListener('save', () => {
 })
 
 document.addEventListener('print', () => {
-  downloadFile(
-    route('groups.courses.socio-pedagogical-characteristic.print', {
-      group: props.group.id,
-      course_number: props.course.number,
-    })
-  )
+  isPrintMenuVisible.value = true
 })
 </script>
 
