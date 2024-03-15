@@ -38,7 +38,8 @@ class GroupStudentRequest extends FormRequest
             'address.type' => 'required_with:address',
             'address.residence' => 'required_with:address',
             'address.street' => 'required_with:address',
-            'address.apartment_number' => 'required_with:address',
+            'address.house_number' => 'nullable',
+            'address.apartment_number' => 'nullable',
             'address.region_id' => ['required_with:address', Rule::exists(AdministrativeDivision::class, 'id')],
             'address.district_id' => ['required_with:address', Rule::exists(AdministrativeDivision::class, 'id')],
 
@@ -46,7 +47,8 @@ class GroupStudentRequest extends FormRequest
             'study_address.type' => 'required_with:study_address',
             'study_address.residence' => 'required_with:study_address',
             'study_address.street' => 'required_with:study_address',
-            'study_address.apartment_number' => 'required_with:study_address',
+            'study_address.house_number' => 'nullable',
+            'study_address.apartment_number' => 'nullable',
             'study_address.region_id' => [
                 'required_with:study_address',
                 Rule::exists(AdministrativeDivision::class, 'id'),

@@ -45,6 +45,13 @@
       />
       <q-input
         class="form__control"
+        label="Номер дома"
+        v-model="modelValue.house_number"
+        :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'house_number')?.message]"
+        hide-bottom-space
+      />
+      <q-input
+        class="form__control"
         label="Номер квартиры / комнаты"
         v-model="modelValue.apartment_number"
         :rules="[() => validated.error?.details.find((item: any) => item.context.key === 'apartment_number')?.message]"
@@ -83,7 +90,8 @@ const schema = Joi.object({
   type: Joi.string().required().max(255),
   residence: Joi.string().required().max(255),
   street: Joi.string().required().max(255),
-  apartment_number: Joi.string().required().max(255),
+  house_number: Joi.string().allow(null, '').max(255),
+  apartment_number: Joi.string().allow(null, '').max(255),
 })
 
 const validated = computed(() => schema.validate(modelValue.value))

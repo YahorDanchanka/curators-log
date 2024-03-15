@@ -12,7 +12,8 @@ return new class extends Migration {
             $table->string('type');
             $table->string('residence');
             $table->string('street');
-            $table->string('apartment_number');
+            $table->string('house_number')->nullable();
+            $table->string('apartment_number')->nullable();
             $table->unsignedBigInteger('region_id');
             $table
                 ->foreign('region_id')
