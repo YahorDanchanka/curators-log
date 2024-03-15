@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Curator;
 use App\Models\Specialty;
+use App\Validators\ValidateGroupCoursesPeriod;
 use App\Validators\ValidateGroupDateOrder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -30,6 +31,6 @@ class GroupRequest extends FormRequest
 
     public function after()
     {
-        return [new ValidateGroupDateOrder()];
+        return [new ValidateGroupDateOrder(), new ValidateGroupCoursesPeriod()];
     }
 }
