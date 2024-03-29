@@ -49,12 +49,7 @@
             <span
               v-if="firstSemesterAchievements[i]"
               class="link"
-              @click="
-                onSave(
-                  GroupAchievementService.delete(props.group.id, props.course.number, firstSemesterAchievements[i].id),
-                  'delete'
-                )
-              "
+              @click="onDeleteConfirm(firstSemesterAchievements[i].id)"
             >
               (удалить)
             </span>
@@ -79,12 +74,7 @@
             <span
               v-if="secondSemesterAchievements[i]"
               class="link"
-              @click="
-                onSave(
-                  GroupAchievementService.delete(props.group.id, props.course.number, secondSemesterAchievements[i].id),
-                  'delete'
-                )
-              "
+              @click="onDeleteConfirm(firstSemesterAchievements[i].id)"
             >
               (удалить)
             </span>
@@ -102,11 +92,15 @@ import { downloadFile, onSave } from '@/helpers'
 import { GroupAchievementService } from '@/services'
 import { CourseModel, GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
 import { Required } from 'utility-types'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
 
 const props = defineProps<{ group: GroupModel; course: Required<CourseModel, 'achievements'> }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const firstSemesterAchievements = computed(() =>
   props.course.achievements.filter((achievement) => achievement.semester === '1')
@@ -124,4 +118,14 @@ document.addEventListener('print', () => {
     })
   )
 })
+
+function onDeleteConfirm(achievementId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    onSave(GroupAchievementService.delete(props.group.id, props.course.number, achievementId), 'delete')
+  })
+}
 </script>

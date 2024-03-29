@@ -58,7 +58,7 @@
               />
             </td>
             <td class="text-center">
-              <q-btn icon="delete" color="negative" size="sm" round @click="planService.removePlan(plan.id)" />
+              <q-btn icon="delete" color="negative" size="sm" round @click="onDeleteConfirm(plan.id)" />
             </td>
           </tr>
           <tr>
@@ -73,15 +73,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-import { date, date as quasarDate } from 'quasar'
-import { Head } from '@inertiajs/vue3'
-import { CourseModel, GroupModel } from '@/types'
-import { PlanService } from '@/services'
-import { downloadFile, formatDate, onSave } from '@/helpers'
 import ThePage from '@/components/ThePage.vue'
+import { downloadFile, formatDate, onSave } from '@/helpers'
+import { PlanService } from '@/services'
+import { CourseModel, GroupModel } from '@/types'
+import { Head } from '@inertiajs/vue3'
+import { date, date as quasarDate, useQuasar } from 'quasar'
+import { computed, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel; month: string }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const planService = reactive(new PlanService([]))
 planService.load(props.course.plans || [])
@@ -110,4 +113,14 @@ document.addEventListener('print', () => {
     })
   )
 })
+
+function onDeleteConfirm(planId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    planService.removePlan(planId)
+  })
+}
 </script>

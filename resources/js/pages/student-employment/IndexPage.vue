@@ -93,11 +93,7 @@
           <td>{{ index + 1 }}</td>
           <td>
             {{ brsmStudents[index]?.initials }}
-            <a
-              v-if="brsmStudents[index]?.id"
-              href="#"
-              @click.prevent="StudentCharacteristicService.detach(brsmStudents[index].id, 30, props.course.id)"
-            >
+            <a v-if="brsmStudents[index]?.id" href="#" @click.prevent="onDeleteConfirm(brsmStudents[index].id, 30)">
               (удалить)
             </a>
           </td>
@@ -106,7 +102,7 @@
             <a
               v-if="leadershipStudents[index]?.id"
               href="#"
-              @click.prevent="StudentCharacteristicService.detach(leadershipStudents[index].id, 46, props.course.id)"
+              @click.prevent="onDeleteConfirm(leadershipStudents[index].id, 46)"
             >
               (удалить)
             </a>
@@ -160,7 +156,9 @@ import { StudentRepository } from '@/repositories'
 import { StudentCharacteristicService, StudentEmploymentService } from '@/services'
 import { CourseModel, GroupModel, IEnum, StudentModel } from '@/types'
 import { Head } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
 import { computed, reactive, ref, toRaw, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
 
 const props = defineProps<{
@@ -170,6 +168,8 @@ const props = defineProps<{
     CharacteristicId: IEnum
   }
 }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const title = 'Занятость учащихся общественно полезной деятельностью'
 
@@ -197,4 +197,14 @@ watch(
   },
   { immediate: true }
 )
+
+function onDeleteConfirm(studentId: string | number, characteristicId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    StudentCharacteristicService.detach(studentId, characteristicId, props.course.id)
+  })
+}
 </script>

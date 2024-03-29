@@ -58,7 +58,7 @@
               color="negative"
               icon="delete"
               round
-              @click="onSave(InteractionWithParentService.delete(group.id, props.row.id), 'delete')"
+              @click="onDeleteConfirm(props.row.id)"
             />
           </q-td>
         </q-tr>
@@ -73,10 +73,14 @@ import { downloadFile, formatDate, onSave } from '@/helpers'
 import { InteractionWithParentService } from '@/services'
 import { GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
 import { Required } from 'utility-types'
+import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
 
 const props = defineProps<{ group: Required<GroupModel, 'interaction_with_parents'> }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const columns = [
   {
@@ -110,4 +114,14 @@ document.addEventListener('print', () => {
     })
   )
 })
+
+function onDeleteConfirm(interactionWithParentId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    onSave(InteractionWithParentService.delete(props.group.id, interactionWithParentId), 'delete')
+  })
+}
 </script>

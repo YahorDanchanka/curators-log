@@ -17,27 +17,31 @@
       :relatives="props.student.adult_relatives"
       @create="onCreate"
       @edit="onEdit"
-      @delete="onDelete"
+      @delete="onDeleteConfirm"
     />
     <MinorRelativeTable
       :relatives="props.student.minor_relatives"
       @create="onCreate('minor')"
       @edit="(relative) => onEdit(relative, 'minor')"
-      @delete="onDelete"
+      @delete="onDeleteConfirm"
     />
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { Head, router } from '@inertiajs/vue3'
-import route from 'ziggy-js'
-import { GroupModel, RelativeModel, StudentModel } from '@/types'
 import AdultRelativeTable from '@/components/AdultRelativeTable.vue'
 import MinorRelativeTable from '@/components/MinorRelativeTable.vue'
-import { StudentRelativeService } from '@/services'
 import { downloadFile } from '@/helpers'
+import { StudentRelativeService } from '@/services'
+import { GroupModel, RelativeModel, StudentModel } from '@/types'
+import { Head, router } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
+import route from 'ziggy-js'
 
 const props = defineProps<{ group: GroupModel; student: StudentModel; studentNumber: string }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 function onCreate(type: string = 'adult') {
   router.get(route('groups.students.relatives.create', { group: props.group.id, student: props.studentNumber, type }))
@@ -54,11 +58,17 @@ function onEdit(relative: RelativeModel, type: string = 'adult') {
   )
 }
 
-function onDelete(relative: RelativeModel) {
-  StudentRelativeService.delete(props.group.id, props.studentNumber, relative.id)
-}
-
 document.addEventListener('print', () => {
   downloadFile(route('groups.students.relatives.print', { group: props.group.id, student_number: props.studentNumber }))
 })
+
+function onDeleteConfirm(relative: RelativeModel) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    StudentRelativeService.delete(props.group.id, props.studentNumber, relative.id)
+  })
+}
 </script>

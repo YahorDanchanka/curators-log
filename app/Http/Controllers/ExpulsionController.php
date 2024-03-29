@@ -60,7 +60,7 @@ class ExpulsionController extends Controller
         $expulsion->delete();
         return to_route('groups.courses.expulsions.index', [
             'group' => $group->id,
-            'course' => $course->id,
+            'course' => $course->number,
         ]);
     }
 

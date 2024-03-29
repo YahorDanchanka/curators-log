@@ -72,25 +72,7 @@
                 )
               "
             />
-            <q-btn
-              size="sm"
-              color="negative"
-              icon="delete"
-              round
-              @click="
-                onSave(
-                  inertiaFetch(
-                    route('groups.courses.grade-reports.destroy', {
-                      group: group.id,
-                      course: course.number,
-                      grade_report: props.row.id,
-                    }),
-                    { method: 'delete' }
-                  ),
-                  'delete'
-                )
-              "
-            />
+            <q-btn size="sm" color="negative" icon="delete" round @click="onDeleteConfirm(props.row.id)" />
           </q-td>
         </q-tr>
       </template>
@@ -104,12 +86,15 @@ import AppTable from '@/components/AppTable.vue'
 import { inertiaFetch, onSave } from '@/helpers'
 import { CourseModel, GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
-import { QTableColumn } from 'quasar'
+import { QTableColumn, useQuasar } from 'quasar'
 import { Required } from 'utility-types'
 import { computed } from 'vue'
 import route from 'ziggy-js'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ group: GroupModel; course: Required<CourseModel, 'grade_reports'> }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const title = computed(() => `Ведомости успеваемости группы ${props.course.group_name}`)
 
@@ -122,4 +107,24 @@ const columns: QTableColumn[] = [
     field: 'name',
   },
 ]
+
+function onDeleteConfirm(gradeReportId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    onSave(
+      inertiaFetch(
+        route('groups.courses.grade-reports.destroy', {
+          group: props.group.id,
+          course: props.course.number,
+          grade_report: gradeReportId,
+        }),
+        { method: 'delete' }
+      ),
+      'delete'
+    )
+  })
+}
 </script>

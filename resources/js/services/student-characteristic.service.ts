@@ -13,7 +13,7 @@ export class StudentCharacteristicService {
     )
   }
 
-  static detach(studentId: BaseTable['id'], characteristicId: BaseTable['id'], courseId: BaseTable['id']) {
+  static detach(studentId: string | number, characteristicId: string | number, courseId: string | number) {
     return inertiaFetch(
       route('courses.students.characteristics.detach', {
         course: courseId,

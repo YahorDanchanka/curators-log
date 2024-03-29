@@ -47,7 +47,7 @@
               color="negative"
               size="sm"
               round
-              @click="GroupService.delete(props.row.id)"
+              @click="onDeleteConfirm(props.row.id)"
             />
             <q-btn icon="more_vert" size="sm" round>
               <q-popup-proxy>
@@ -96,11 +96,14 @@ import { GroupService } from '@/services'
 import { CourseModel, GroupModel, MenuList } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
 import { sortBy } from 'lodash'
-import { QTableColumn } from 'quasar'
-import route from 'ziggy-js'
+import { QTableColumn, useQuasar } from 'quasar'
 import quasarLangRu from 'quasar/lang/ru'
+import { useI18n } from 'vue-i18n'
+import route from 'ziggy-js'
 
 const props = defineProps<{ groups: GroupModel[] }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const groupColumns: QTableColumn[] = [
   {
@@ -243,5 +246,15 @@ function getCourseActionList(course: CourseModel): MenuList {
     ],
     'label'
   )
+}
+
+function onDeleteConfirm(groupId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    GroupService.delete(groupId)
+  })
 }
 </script>

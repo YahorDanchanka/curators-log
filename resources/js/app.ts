@@ -1,6 +1,6 @@
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
-import { Quasar, Notify } from 'quasar'
+import { Quasar, Notify, Dialog } from 'quasar'
 import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
 import quasarLangRu from 'quasar/lang/ru'
@@ -18,7 +18,7 @@ createInertiaApp({
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
       .use(plugin)
-      .use(Quasar, { lang: quasarLangRu, plugins: { Notify } })
+      .use(Quasar, { lang: quasarLangRu, plugins: { Notify, Dialog } })
       .use(i18n)
       .mount(el)
   },

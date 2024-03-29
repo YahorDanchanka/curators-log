@@ -11,7 +11,7 @@
       @edit="
         (student, index) => router.get(route('groups.students.edit', { group: props.group.id, student: index + 1 }))
       "
-      @delete="(student) => onSave(GroupStudentService.delete(props.group.id, student.id), 'delete')"
+      @delete="(student) => onDeleteConfirm(student.id)"
     />
   </ThePage>
 </template>
@@ -23,11 +23,25 @@ import { onSave } from '@/helpers'
 import { GroupStudentService } from '@/services'
 import { GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
 import { Required } from 'utility-types'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
 
 const props = defineProps<{ group: Required<GroupModel, 'name' | 'students'> }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const title = computed(() => `Список учащихся учебной группы ${props.group.name}`)
+
+function onDeleteConfirm(studentId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    onSave(GroupStudentService.delete(props.group.id, studentId), 'delete')
+  })
+}
 </script>

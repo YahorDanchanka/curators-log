@@ -45,7 +45,7 @@
                 />
               </div>
               <div class="report-table__cell">
-                <q-btn icon="delete" color="negative" size="sm" round @click="deleteReport(element, week)" />
+                <q-btn icon="delete" color="negative" size="sm" round @click="onDeleteConfirm(element, week)" />
               </div>
             </div>
           </template>
@@ -66,16 +66,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { uid } from 'quasar'
-import draggable from 'vuedraggable'
-import { cloneDeep, groupBy, sum } from 'lodash'
-import { date as quasarDate } from 'quasar'
 import { Month, ReportFormModel, ReportFormModelItem } from '@/types'
+import { cloneDeep, groupBy, sum } from 'lodash'
+import { date as quasarDate, uid, useQuasar } from 'quasar'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import draggable from 'vuedraggable'
 
 const props = defineProps<{ date: Date; disable?: boolean }>()
 const reports = defineModel<ReportFormModel>({ required: true })
 const emit = defineEmits(['loadPlan'])
+const $q = useQuasar()
+const { t } = useI18n()
 
 const groupedReportsByWeek = ref<{ [key: string]: ReportFormModel }>({
   '1': [],
@@ -123,6 +125,16 @@ watch(
   },
   { deep: true }
 )
+
+function onDeleteConfirm(element: any, week: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    deleteReport(element, week.toString())
+  })
+}
 </script>
 
 <style scoped lang="sass">

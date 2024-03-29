@@ -56,7 +56,7 @@
               color="negative"
               icon="delete"
               round
-              @click="onSave(AdviceService.delete(group.id, props.row.id), 'delete')"
+              @click="onDeleteConfirm(props.row.id)"
             />
           </q-td>
         </q-tr>
@@ -66,15 +66,19 @@
 </template>
 
 <script lang="ts" setup>
+import ThePage from '@/components/ThePage.vue'
 import { downloadFile, formatDate, onSave } from '@/helpers'
 import { AdviceService } from '@/services'
 import { GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
 import { Required } from 'utility-types'
+import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
-import ThePage from '@/components/ThePage.vue'
 
 const props = defineProps<{ group: Required<GroupModel, 'advice'> }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const columns = [
   {
@@ -122,4 +126,14 @@ document.addEventListener('print', () => {
     })
   )
 })
+
+function onDeleteConfirm(adviceId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    onSave(AdviceService.delete(props.group.id, adviceId), 'delete')
+  })
+}
 </script>

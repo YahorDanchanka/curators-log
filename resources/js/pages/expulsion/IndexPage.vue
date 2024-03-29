@@ -63,7 +63,7 @@
               icon="delete"
               size="sm"
               round
-              @click="ExpulsionService.delete(props.group.id, props.course.number, expulsion.id)"
+              @click="onDeleteConfirm(expulsion.id)"
             />
           </td>
         </tr>
@@ -77,13 +77,27 @@ import ThePage from '@/components/ThePage.vue'
 import { ExpulsionService } from '@/services/ExpulsionService'
 import { BaseTable, CourseModel, GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel }>()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const title = 'Отчисления за период обучения'
 
 function findStudent(id: BaseTable['id']) {
   return props.group.students!.find((student) => student.id === id)
+}
+
+function onDeleteConfirm(expulsionId: string | number) {
+  $q.dialog({
+    title: t('messages.confirmDelete.title'),
+    message: t('messages.confirmDelete.description'),
+    cancel: true,
+  }).onOk(() => {
+    ExpulsionService.delete(props.group.id, props.course.number, expulsionId)
+  })
 }
 </script>
