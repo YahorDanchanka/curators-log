@@ -229,7 +229,8 @@ const studyAddress = {
 const dormitoryObject = {
   type: 'Город',
   residence: 'Гомель',
-  street: 'Речицкая 4',
+  street: 'Речицкая',
+  house_number: '4',
   region_id: 40,
   district_id: 44,
 }
@@ -262,7 +263,7 @@ const isDormitory = computed(
   () =>
     !!modelValue.value.study_address &&
     isEqual(
-      pick(modelValue.value.study_address, ['type', 'residence', 'street', 'region_id', 'district_id']),
+      pick(modelValue.value.study_address, ['type', 'residence', 'street', 'house_number', 'region_id', 'district_id']),
       dormitoryObject
     )
 )
