@@ -6,9 +6,13 @@
         <th>Фамилия, имя, отчество</th>
       </slot>
       <th v-for="characteristic in props.characteristics" :key="characteristic.id">{{ characteristic.name }}</th>
+      <slot name="thead_beforeend" />
     </thead>
     <tbody>
-      <slot v-for="(student, studentIndex) in props.students" v-bind="student">
+      <slot
+        v-for="(student, studentIndex) in props.students"
+        v-bind="{ student, studentIndex, attachOrDetachCharacteristic, findAttachedCharacteristic }"
+      >
         <tr>
           <td>{{ studentIndex + 1 }}</td>
           <td>{{ student.initials }}</td>
@@ -23,17 +27,20 @@
         </tr>
       </slot>
       <tr>
-        <th colspan="2">Всего</th>
+        <slot name="summary_afterbegin">
+          <th colspan="2">Всего</th>
+        </slot>
         <th v-for="characteristic in props.characteristics" :key="characteristic.id">
           {{ getAttachedCharacteristicCount(characteristic) || '' }}
         </th>
+        <slot name="summary_beforeend"></slot>
       </tr>
     </tbody>
   </q-markup-table>
 </template>
 
 <script lang="ts" setup>
-import { AttachedCharacteristic, CharacteristicTable, StudentModel } from '@/types';
+import { AttachedCharacteristic, CharacteristicTable, StudentModel } from '@/types'
 
 const attachedCharacteristics = defineModel<AttachedCharacteristic[]>({ required: true })
 const props = defineProps<{ characteristics: CharacteristicTable[]; students: StudentModel[] }>()

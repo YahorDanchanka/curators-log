@@ -5,34 +5,25 @@
       <span class="course-title__header">{{ title }}</span>
       <strong class="course-title__course">{{ props.course.number }} курс обучения</strong>
     </h1>
-    <q-markup-table class="characteristic-table" separator="cell" wrap-cells>
-      <thead>
+    <StudentCharacteristicTable
+      v-model="attachedCharacteristics"
+      :characteristics="props.characteristics"
+      :students="props.group.students"
+    >
+      <template #thead_afterbegin>
+        <th class="cell_autowidth">№<br />п/п</th>
+        <th style="min-width: 200px">Фамилия, имя, отчество</th>
+        <th>Дата рождения</th>
+      </template>
+      <template #thead_beforeend>
+        <th>Иногородние учащиеся</th>
+        <th>Учащиеся, проживающие в общежитии</th>
+      </template>
+      <template v-slot="{ student, studentIndex, attachOrDetachCharacteristic, findAttachedCharacteristic }">
         <tr>
-          <th>
-            <span class="text_vertical">№ п/п</span>
-          </th>
-          <th style="min-width: 200px">
-            <div>Фамилия, имя, отчество</div>
-          </th>
-          <th style="min-width: 100px">
-            <div>Дата рождения</div>
-          </th>
-          <th v-for="characteristic in props.characteristics" :key="characteristic.id">
-            <div class="characteristic-table__characteristic text_vertical">{{ characteristic.name }}</div>
-          </th>
-          <th>
-            <div class="characteristic-table__characteristic text_vertical">Иногородние учащиеся</div>
-          </th>
-          <th>
-            <div class="characteristic-table__characteristic text_vertical">Учащиеся, проживающие в общежитии</div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(student, studentIndex) in props.group.students">
           <td>{{ studentIndex + 1 }}</td>
           <td>{{ student.initials }}</td>
-          <td>{{ student.birthday }}</td>
+          <td>{{ formatDate(student.birthday!) }}</td>
           <td
             class="text-center"
             v-for="characteristic in props.characteristics"
@@ -44,20 +35,15 @@
           <td class="text-center" disabled>{{ student.is_nonresident ? '+' : '' }}</td>
           <td class="text-center" disabled>{{ student.is_dorm ? '+' : '' }}</td>
         </tr>
-        <tr>
-          <th colspan="3">Всего</th>
-          <th v-for="characteristic in props.characteristics" :key="characteristic.id">
-            {{
-              attachedCharacteristics.filter(
-                (attachedCharacteristic) => attachedCharacteristic.characteristic_id === characteristic.id
-              ).length || ''
-            }}
-          </th>
-          <th>{{ props.group.students.filter((student) => student.is_nonresident).length || '' }}</th>
-          <th>{{ props.group.students.filter((student) => student.is_dorm).length || '' }}</th>
-        </tr>
-      </tbody>
-    </q-markup-table>
+      </template>
+      <template #summary_afterbegin>
+        <th colspan="3">Всего</th>
+      </template>
+      <template #summary_beforeend>
+        <th>{{ props.group.students.filter((student) => student.is_nonresident).length || '' }}</th>
+        <th>{{ props.group.students.filter((student) => student.is_dorm).length || '' }}</th>
+      </template>
+    </StudentCharacteristicTable>
     <q-dialog v-model="isPrintMenuVisible">
       <q-card style="width: 100%">
         <q-card-actions vertical>
@@ -72,15 +58,17 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { Head, router } from '@inertiajs/vue3'
-import { CharacteristicStudentTable, CharacteristicTable, CourseModel, GroupModel, StudentModel } from '@/types'
-import { SocioPedagogicalCharacteristicService } from '@/services'
-import { onSave, downloadFile } from '@/helpers'
+import StudentCharacteristicTable from '@/components/StudentCharacteristicTable.vue'
 import ThePage from '@/components/ThePage.vue'
+import { downloadFile, formatDate, onSave } from '@/helpers'
+import { SocioPedagogicalCharacteristicService } from '@/services'
+import { CharacteristicStudentTable, CharacteristicTable, CourseModel, GroupModel } from '@/types'
+import { Head, router } from '@inertiajs/vue3'
+import { Required } from 'utility-types'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{
-  group: GroupModel
+  group: Required<GroupModel, 'students'>
   course: CourseModel
   characteristics: CharacteristicTable[]
 }>()
@@ -92,28 +80,6 @@ const title = computed(() => `Социально-педагогическая х
 const attachedCharacteristics = ref<CharacteristicStudentTable[]>(
   props.group.students!.map((student) => student.characteristics!.map((characteristic) => characteristic.pivot)).flat()
 )
-
-function getAttachedCharacteristicComparator(student: StudentModel, characteristic: CharacteristicTable) {
-  return (c: AttachedCharacteristic) => c.student_id === student.id && c.characteristic_id === characteristic.id
-}
-
-function findAttachedCharacteristic(student: StudentModel, characteristic: CharacteristicTable) {
-  return attachedCharacteristics.value.find(getAttachedCharacteristicComparator(student, characteristic))
-}
-
-function attachOrDetachCharacteristic(student: StudentModel, characteristic: CharacteristicTable) {
-  const attachedCharacteristicIndex = attachedCharacteristics.value.findIndex(
-    getAttachedCharacteristicComparator(student, characteristic)
-  )
-
-  if (attachedCharacteristicIndex !== -1) {
-    /** Detach */
-    attachedCharacteristics.value.splice(attachedCharacteristicIndex, 1)
-  } else {
-    /** Attach */
-    attachedCharacteristics.value.push({ student_id: student.id, characteristic_id: characteristic.id })
-  }
-}
 
 function printExcel() {
   downloadFile(
@@ -150,10 +116,3 @@ document.addEventListener('print', () => {
   isPrintMenuVisible.value = true
 })
 </script>
-
-<style lang="sass" scoped>
-.characteristic-table__characteristic
-  max-height: 150px
-  text-align: left
-  height: 100%
-</style>
