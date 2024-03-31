@@ -1,7 +1,8 @@
 <template>
-  <ThePage padding>
+  <ThePage class="page_flex" padding use-height>
     <Head :title="title" />
     <StudentTable
+      class="page__table"
       :title="title"
       :students="props.group.students"
       @create="router.get(route('groups.students.create', { group: props.group.id }))"

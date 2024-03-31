@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page :style-fn="props.useHeight ? styleFunction : undefined">
     <q-breadcrumbs class="q-mb-md">
       <q-breadcrumbs-el
         v-for="breadcrumb in breadcrumbs"
@@ -26,6 +26,7 @@ const page = usePage<{
   studentNumber?: number
   gradeReport?: GradeReportModel
 }>()
+const props = defineProps<{ useHeight?: boolean }>()
 
 const groupName = computed(() => page.props.course?.group_name ?? page.props.group?.name ?? '?')
 
@@ -33,6 +34,10 @@ const breadcrumbs = reactive<IBreadcrumbs>([
   { label: 'Группы', url: route('groups.index') },
   { label: groupName.value },
 ])
+
+function styleFunction(offset: number) {
+  return { height: offset ? `calc(100vh - ${offset}px)` : '100vh' }
+}
 
 function isRouteSame(url: string) {
   return url === window.location.href

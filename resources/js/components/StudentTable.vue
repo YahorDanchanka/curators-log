@@ -225,15 +225,31 @@ function getStudentActionList(student: StudentModel, index: number): MenuList {
 
 <style lang="sass" scoped>
 .student-table
-  thead tr:first-child th:first-child
-    background-color: white
-
   td:first-child
     background-color: white
 
-  th:first-child,
+  tr th
+    position: sticky
+    z-index: 2
+    background: white
+
+  thead tr:last-child th
+    top: 48px
+    z-index: 3
+
+  thead tr:first-child th
+    top: 0
+    z-index: 1
+  tr:first-child th:first-child
+    z-index: 3
+
   td:first-child
+    z-index: 1
+
+  td:first-child, th:first-child
     position: sticky
     left: 0
-    z-index: 1
+
+  tbody
+    scroll-margin-top: 48px
 </style>
