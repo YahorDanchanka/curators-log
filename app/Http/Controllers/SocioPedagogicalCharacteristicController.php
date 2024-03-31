@@ -16,6 +16,7 @@ use App\Services\Analytics\Strategies\DisabledStudentsStrategy;
 use App\Services\Analytics\Strategies\DormitoryStudentsStrategy;
 use App\Services\Analytics\Strategies\FemaleStudentsStrategy;
 use App\Services\Analytics\Strategies\ForeignStudentsStrategy;
+use App\Services\Analytics\Strategies\HobbyStudentsStrategy;
 use App\Services\Analytics\Strategies\LargeFamiliesStrategy;
 use App\Services\Analytics\Strategies\LeadershipStudentsStrategy;
 use App\Services\Analytics\Strategies\MaleStudentsStrategy;
@@ -23,9 +24,11 @@ use App\Services\Analytics\Strategies\MinorStudentsStrategy;
 use App\Services\Analytics\Strategies\NonresidentStudentsStrategy;
 use App\Services\Analytics\Strategies\OffBudgetStudentsStrategy;
 use App\Services\Analytics\Strategies\OneParentFamiliesStrategy;
+use App\Services\Analytics\Strategies\OPFRStudentsStrategy;
 use App\Services\Analytics\Strategies\OrphanAdultStudentsStrategy;
 use App\Services\Analytics\Strategies\OrphanStudentsStrategy;
 use App\Services\Analytics\Strategies\SdsFamiliesStrategy;
+use App\Services\Analytics\Strategies\StudyUnionStudentsStrategy;
 use App\Services\Analytics\Strategies\TotalStudentsStrategy;
 use App\Services\Analytics\Strategies\WithoutParentalSupportAdultStudentsStrategy;
 use App\Services\Analytics\Strategies\WithoutParentalSupportStudentsStrategy;
@@ -129,6 +132,8 @@ class SocioPedagogicalCharacteristicController extends Controller
         $course = $group->findCourseByNumber($course_number);
         $templateProcessor = new TemplateProcessor(resource_path('documents/social-pedagogical-characteristics.docx'));
 
+        $hobbyStudentCount = $analyticsService->count(new HobbyStudentsStrategy(), $course);
+
         $templateProcessor->setValues([
             'group' => $course->groupName,
             'specialty' => $group->specialty->name,
@@ -146,28 +151,28 @@ class SocioPedagogicalCharacteristicController extends Controller
             '9' => $analyticsService->count(new ForeignStudentsStrategy(), $course),
             '10' => $analyticsService->count(new OneParentFamiliesStrategy(), $course),
             '11' => $analyticsService->count(new LargeFamiliesStrategy(), $course),
-            '12' => 'x',
-            '13' => 'x',
-            '14' => 'x',
-            '15' => 'x',
-            '16' => 'x',
-            '17' => 'x',
-            '18' => 'x',
-            '19' => 'x',
-            '20' => 'x',
+            '12' => '',
+            '13' => '',
+            '14' => '',
+            '15' => '',
+            '16' => '',
+            '17' => '',
+            '18' => '',
+            '19' => '',
+            '20' => '',
             '21' => $analyticsService->count(new SdsFamiliesStrategy(), $course),
-            '22' => 'x',
+            '22' => '',
             '23' => $analyticsService->count(new OrphanStudentsStrategy(), $course),
             '24' => $analyticsService->count(new OrphanAdultStudentsStrategy(), $course),
             '25' => $analyticsService->count(new WithoutParentalSupportStudentsStrategy(), $course),
             '26' => $analyticsService->count(new WithoutParentalSupportAdultStudentsStrategy(), $course),
             '27' => $analyticsService->count(new BrsmStudentsStrategy(), $course),
-            '28' => 'x',
-            '29' => $analyticsService->count(new LeadershipStudentsStrategy(), $course),
+            '28' => $analyticsService->count(new StudyUnionStudentsStrategy(), $course),
+            '29' => '',
             '30' => $analyticsService->count(new DisabledStudentsStrategy(), $course),
-            '31' => 'x',
-            '32' => 'x',
-            '33' => 'x',
+            '31' => $analyticsService->count(new OPFRStudentsStrategy(), $course),
+            '32' => $hobbyStudentCount,
+            '33' => $group->students()->count() - $hobbyStudentCount,
         ]);
 
         return response()->streamDownload(

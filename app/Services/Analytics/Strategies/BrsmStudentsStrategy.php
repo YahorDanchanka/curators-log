@@ -16,7 +16,10 @@ class BrsmStudentsStrategy implements AnalyticsStrategyInterface
             ? $group
                 ->students()
                 ->getQuery()
-                ->whereRelation('characteristics', 'characteristic_id', 30)
+                ->whereHas(
+                    'characteristics',
+                    fn(Builder $query) => $query->where('characteristic_id', 30)->where('course_id', $course->id)
+                )
             : Student::whereRelation('characteristics', 'characteristic_id', 30);
     }
 }

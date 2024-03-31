@@ -16,7 +16,10 @@ class SdsFamiliesStrategy implements AnalyticsStrategyInterface
             ? $group
                 ->students()
                 ->getQuery()
-                ->whereRelation('characteristics', 'characteristic_id', 15)
+                ->whereHas(
+                    'characteristics',
+                    fn(Builder $query) => $query->where('characteristic_id', 15)->where('course_id', $course->id)
+                )
             : Student::whereRelation('characteristics', 'characteristic_id', 15);
     }
 }

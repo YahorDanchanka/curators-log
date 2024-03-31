@@ -7,7 +7,7 @@ use App\Models\Student;
 use App\Services\Analytics\AnalyticsStrategyInterface;
 use Illuminate\Database\Eloquent\Builder;
 
-class OneParentFamiliesStrategy implements AnalyticsStrategyInterface
+class HobbyStudentsStrategy implements AnalyticsStrategyInterface
 {
     public function query(?Course $course = null): Builder
     {
@@ -16,12 +16,7 @@ class OneParentFamiliesStrategy implements AnalyticsStrategyInterface
             ? $group
                 ->students()
                 ->getQuery()
-                ->whereHas(
-                    'characteristics',
-                    fn(Builder $query) => $query
-                        ->where('characteristic_id', 10)
-                        ->where('course_id', $course->id)
-                )
-            : Student::whereRelation('characteristics', 'characteristic_id', 10);
+                ->whereHas('employments', fn($query) => $query->where('course_id', $course->id))
+            : Student::has('employments');
     }
 }

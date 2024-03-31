@@ -16,7 +16,10 @@ class LargeFamiliesStrategy implements AnalyticsStrategyInterface
             ? $group
                 ->students()
                 ->getQuery()
-                ->whereRelation('characteristics', 'characteristic_id', 9)
+                ->whereHas(
+                    'characteristics',
+                    fn(Builder $query) => $query->where('characteristic_id', 9)->where('course_id', $course->id)
+                )
             : Student::whereRelation('characteristics', 'characteristic_id', 9);
     }
 }

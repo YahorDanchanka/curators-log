@@ -16,7 +16,10 @@ class WithoutParentalSupportStudentsStrategy implements AnalyticsStrategyInterfa
             ? $group
                 ->students()
                 ->getQuery()
-                ->whereRelation('characteristics', 'characteristic_id', 2)
+                ->whereHas(
+                    'characteristics',
+                    fn(Builder $query) => $query->where('characteristic_id', 2)->where('course_id', $course->id)
+                )
             : Student::whereRelation('characteristics', 'characteristic_id', 2);
     }
 }
