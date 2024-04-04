@@ -16,10 +16,10 @@ class Plan extends Model
     {
         return Attribute::make(
             get: fn() => $this->end_date
-                ? $this->asDate($this->start_date)->format('Y.m.d') .
+                ? $this->asDate($this->start_date)->format('d.m.Y') .
                     ' - ' .
-                    $this->asDate($this->end_date)->format('Y.m.d')
-                : $this->asDate($this->start_date)->format('Y.m.d')
+                    $this->asDate($this->end_date)->format('d.m.Y')
+                : $this->asDate($this->start_date)->format('d.m.Y')
         );
     }
 

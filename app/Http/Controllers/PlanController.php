@@ -55,6 +55,8 @@ class PlanController extends Controller
         $plans = $course
             ->plans()
             ->where('month', $month)
+            ->orderBy('start_date')
+            ->orderBy('end_date')
             ->get();
 
         $numericMonth = (int) $month;
