@@ -2,11 +2,26 @@
   <ThePage padding>
     <Head title="Отчет о выполнении плана воспитательной и идеологической работы" />
     <div class="text-bold text-right">{{ props.course.number }} курс обучения</div>
-    <h1 class="text-h4 text-center q-mb-md">
+    <h1 class="text-h4 text-center">
       <span class="text-uppercase">Отчет</span><br />
       о выполнении плана воспитательной и идеологической работы куратора учебной группы, проведении внеплановых
       мероприятий
     </h1>
+    <a
+      class="block text-center q-mb-md"
+      href="#"
+      @click="
+        router.visit(
+          route('groups.courses.plans.index', {
+            group: props.group.id,
+            course_number: props.course.number,
+            month: props.month,
+          })
+        )
+      "
+    >
+      Перейти к плану
+    </a>
     <ReportForm class="q-mb-md" v-model="reports" :date="date" @load-plan="loadPlan" />
   </ThePage>
 </template>
@@ -18,6 +33,7 @@ import { downloadFile, inertiaFetch, onSave } from '@/helpers'
 import { CourseModel, GroupModel, ReportFormModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
+import route from 'ziggy-js'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel; month: string }>()
 

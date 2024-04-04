@@ -2,11 +2,26 @@
   <ThePage padding>
     <Head title="План воспитательной и идеологической работы" />
     <div class="text-bold text-right">{{ props.course.number }} курс обучения</div>
-    <h1 class="text-h4 text-center q-mb-md">
+    <h1 class="text-h4 text-center">
       <span class="text-uppercase">План</span><br />
       воспитательной и идеологической работы учебной группы № {{ props.course.group_name }}<br />
       на {{ month }} {{ date.getFullYear() }} г.
     </h1>
+    <a
+      class="block text-center q-mb-md"
+      href="#"
+      @click="
+        router.visit(
+          route('groups.courses.reports.show', {
+            group: props.group.id,
+            course_number: props.course.number,
+            month: props.month,
+          })
+        )
+      "
+    >
+      Перейти к отчету
+    </a>
     <q-markup-table separator="cell" wrap-cells>
       <thead>
         <tr>
@@ -77,10 +92,11 @@ import ThePage from '@/components/ThePage.vue'
 import { downloadFile, formatDate, onSave } from '@/helpers'
 import { PlanService } from '@/services'
 import { CourseModel, GroupModel } from '@/types'
-import { Head } from '@inertiajs/vue3'
-import { date, date as quasarDate, useQuasar } from 'quasar'
+import { Head, router } from '@inertiajs/vue3'
+import { date as quasarDate, useQuasar } from 'quasar'
 import { computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
+import route from 'ziggy-js'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel; month: string }>()
 const $q = useQuasar()
