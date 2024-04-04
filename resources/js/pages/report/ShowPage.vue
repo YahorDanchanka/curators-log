@@ -32,6 +32,7 @@ import ThePage from '@/components/ThePage.vue'
 import { downloadFile, inertiaFetch, onSave } from '@/helpers'
 import { CourseModel, GroupModel, ReportFormModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import route from 'ziggy-js'
 
@@ -57,7 +58,7 @@ function loadPlan() {
   )
 }
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(
     route('groups.courses.reports.print-single', {
       group: props.group.id,
@@ -67,7 +68,7 @@ document.addEventListener('print', () => {
   )
 })
 
-document.addEventListener('save', () => {
+useEventListener(document, 'save', () => {
   onSave(
     inertiaFetch(
       route('groups.courses.reports.sync', {

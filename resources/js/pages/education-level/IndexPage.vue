@@ -65,6 +65,7 @@
 
 <script lang="ts" setup>
 import CourseTitle from '@/components/CourseTitle.vue'
+import ThePage from '@/components/ThePage.vue'
 import { downloadFile, inertiaFetch, onSave } from '@/helpers'
 import {
   BaseTable,
@@ -75,11 +76,11 @@ import {
   GroupModel,
 } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { meanBy } from 'lodash'
 import { uid } from 'quasar'
 import { Required } from 'utility-types'
 import { computed, ref } from 'vue'
-import ThePage from '@/components/ThePage.vue'
 
 const props = defineProps<{
   group: GroupModel
@@ -150,13 +151,16 @@ function updateRow(studentId: BaseTable['id'], characteristicId: BaseTable['id']
   }
 }
 
-document.addEventListener('sync', () => {
+useEventListener(document, 'sync', () => {
   router.get(
-    route('groups.courses.education-level.load-prev-course', { group: props.group.id, course_number: props.course.number })
+    route('groups.courses.education-level.load-prev-course', {
+      group: props.group.id,
+      course_number: props.course.number,
+    })
   )
 })
 
-document.addEventListener('save', () => {
+useEventListener(document, 'save', () => {
   onSave(
     inertiaFetch(
       route('groups.courses.education-level.sync', { group: props.group.id, course_number: props.course.number }),
@@ -170,7 +174,7 @@ document.addEventListener('save', () => {
   )
 })
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(
     route('groups.courses.education-level.print', {
       group: props.group.id,

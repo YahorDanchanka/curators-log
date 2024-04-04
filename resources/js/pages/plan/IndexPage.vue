@@ -93,6 +93,7 @@ import { downloadFile, formatDate, onSave } from '@/helpers'
 import { PlanService } from '@/services'
 import { CourseModel, GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { date as quasarDate, useQuasar } from 'quasar'
 import { computed, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -116,11 +117,11 @@ const date = computed(() => {
 const month = computed(() => quasarDate.formatDate(date.value, 'MMMM').toLowerCase())
 const calendarBoundaries = computed(() => quasarDate.formatDate(quasarDate.startOfDate(date.value, 'month'), 'YYYY/MM'))
 
-document.addEventListener('save', () => {
+useEventListener(document, 'save', () => {
   onSave(planService.save(props.group.id, props.course.number, props.month))
 })
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(
     route('groups.courses.plans.print', {
       group: props.group.id,

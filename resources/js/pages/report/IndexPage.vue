@@ -70,6 +70,7 @@ import ThePage from '@/components/ThePage.vue'
 import { downloadFile } from '@/helpers'
 import { CourseModel, GroupModel, ReportFormModel, ReportTable } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { groupBy, sum } from 'lodash'
 import { date as quasarDate } from 'quasar'
 import route from 'ziggy-js'
@@ -90,7 +91,7 @@ function getTotalHours(reports: ReportFormModel) {
   return sum(reports.map((report) => report.hours_per_week + (report.hours_saturday ?? 0)))
 }
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(
     route('groups.courses.reports.print', {
       group: props.group.id,

@@ -223,21 +223,22 @@
 </template>
 
 <script setup lang="ts">
-import ThePage from '@/components/ThePage.vue'
 import AsocialBehaviorTable from '@/components/AsocialBehaviorTable.vue'
 import ExpertAdviceTable from '@/components/ExpertAdviceTable.vue'
 import IndividualWorkTable from '@/components/IndividualWorkTable.vue'
 import StudentAchievementTable from '@/components/StudentAchievementTable.vue'
 import StudentCardField from '@/components/StudentCardField.vue'
+import ThePage from '@/components/ThePage.vue'
 import { downloadFile, formatDate, onSave } from '@/helpers'
 import {
-  AsocialBehaviorService,
-  ExpertAdviceService,
-  IndividualWorkService,
-  StudentAchievementService,
+AsocialBehaviorService,
+ExpertAdviceService,
+IndividualWorkService,
+StudentAchievementService,
 } from '@/services'
 import { GroupModel, StudentModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { Required } from 'utility-types'
 import route from 'ziggy-js'
 
@@ -252,7 +253,7 @@ const props = defineProps<{
 
 const title = 'Карта персонифицированного учета'
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(route('groups.students.print', { group: props.group.id, student_number: props.studentNumber }))
 })
 </script>

@@ -156,6 +156,7 @@ import { StudentRepository } from '@/repositories'
 import { StudentCharacteristicService, StudentEmploymentService } from '@/services'
 import { CourseModel, GroupModel, IEnum, StudentModel } from '@/types'
 import { Head } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { useQuasar } from 'quasar'
 import { computed, reactive, ref, toRaw, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -180,11 +181,11 @@ const studentRepository = computed(() => new StudentRepository(toRaw(props.group
 const brsmStudents = computed<StudentModel[]>(() => studentRepository.value.getBRSMStudents())
 const leadershipStudents = computed<StudentModel[]>(() => studentRepository.value.getLeadershipStudents())
 
-document.addEventListener('save', () => {
+useEventListener(document, 'save', () => {
   onSave(studentEmploymentService.save(props.group.id, props.course.number))
 })
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(
     route('groups.courses.student-employment.print', { group: props.group.id, course_number: props.course.number })
   )

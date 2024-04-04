@@ -73,6 +73,7 @@ import { downloadFile, formatDate, onSave } from '@/helpers'
 import { InteractionWithParentService } from '@/services'
 import { GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { useQuasar } from 'quasar'
 import { Required } from 'utility-types'
 import { useI18n } from 'vue-i18n'
@@ -107,7 +108,7 @@ const columns = [
   },
 ]
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(
     route('groups.interaction-with-parents.print', {
       group: props.group.id,

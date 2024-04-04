@@ -35,6 +35,7 @@ import { downloadFile } from '@/helpers'
 import { StudentRelativeService } from '@/services'
 import { GroupModel, RelativeModel, StudentModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
@@ -58,7 +59,7 @@ function onEdit(relative: RelativeModel, type: string = 'adult') {
   )
 }
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(route('groups.students.relatives.print', { group: props.group.id, student_number: props.studentNumber }))
 })
 

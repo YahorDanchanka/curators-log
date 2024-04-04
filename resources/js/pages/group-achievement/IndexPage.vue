@@ -92,6 +92,7 @@ import { downloadFile, onSave } from '@/helpers'
 import { GroupAchievementService } from '@/services'
 import { CourseModel, GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { useQuasar } from 'quasar'
 import { Required } from 'utility-types'
 import { computed } from 'vue'
@@ -110,7 +111,7 @@ const secondSemesterAchievements = computed(() =>
   props.course.achievements.filter((achievement) => achievement.semester === '2')
 )
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(
     route('groups.courses.achievements.print', {
       group: props.group.id,

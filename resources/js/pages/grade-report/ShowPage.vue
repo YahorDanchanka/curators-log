@@ -27,6 +27,7 @@ import { GradeDTO, GradeRowDTO, GradeSubjectDTO, GradeTableDTO } from '@/dto'
 import { downloadFile } from '@/helpers'
 import type { CourseModel, GradeReportModel, GradeReportTable, GradeSummaryResponse, GroupModel } from '@/types'
 import { Head } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import axios from 'axios'
 import { mapValues } from 'lodash'
 import { Required } from 'utility-types'
@@ -68,7 +69,7 @@ function onGradeTableSave() {
   )
 }
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(
     route('groups.courses.grade-reports.print', {
       group: props.group.id,

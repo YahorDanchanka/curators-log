@@ -64,6 +64,7 @@ import { downloadFile, formatDate, onSave } from '@/helpers'
 import { SocioPedagogicalCharacteristicService } from '@/services'
 import { CharacteristicStudentTable, CharacteristicTable, CourseModel, GroupModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { Required } from 'utility-types'
 import { computed, ref } from 'vue'
 
@@ -99,7 +100,7 @@ function printWord() {
   )
 }
 
-document.addEventListener('sync', () => {
+useEventListener(document, 'sync', () => {
   router.get(
     route('groups.courses.socio-pedagogical-characteristic.load-prev-course', {
       group: props.group.id,
@@ -108,11 +109,11 @@ document.addEventListener('sync', () => {
   )
 })
 
-document.addEventListener('save', () => {
+useEventListener(document, 'save', () => {
   onSave(SocioPedagogicalCharacteristicService.sync(props.group.id, props.course.number, attachedCharacteristics.value))
 })
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   isPrintMenuVisible.value = true
 })
 </script>

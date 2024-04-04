@@ -20,6 +20,7 @@ import { onSave } from '@/helpers'
 import { OtherCharacteristicService } from '@/services'
 import { AttachedCharacteristic, CharacteristicTable, CourseModel, GroupModel } from '@/types'
 import { Head } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { Required } from 'utility-types'
 import { computed, ref } from 'vue'
 
@@ -35,7 +36,7 @@ const attachedCharacteristics = ref<AttachedCharacteristic[]>(
 
 const title = computed(() => `Прочие характеристики учебной группы № ${props.course.group_name}`)
 
-document.addEventListener('save', () => {
+useEventListener(document, 'save', () => {
   onSave(OtherCharacteristicService.sync(props.group.id, props.course.number, attachedCharacteristics.value))
 })
 </script>

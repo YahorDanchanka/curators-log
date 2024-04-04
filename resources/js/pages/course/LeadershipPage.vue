@@ -108,14 +108,15 @@
 </template>
 
 <script lang="ts" setup>
-import ThePage from '@/components/ThePage.vue'
-import { computed, reactive } from 'vue'
-import { Head, router } from '@inertiajs/vue3'
-import { BaseTable, CharacteristicTable, CourseModel, GroupModel, LeadershipFormModel } from '@/types'
 import CourseTitle from '@/components/CourseTitle.vue'
+import ThePage from '@/components/ThePage.vue'
 import { downloadFile, onSave } from '@/helpers'
-import { LeadershipService } from '@/services'
 import { StudentRepository } from '@/repositories'
+import { LeadershipService } from '@/services'
+import { BaseTable, CharacteristicTable, CourseModel, GroupModel, LeadershipFormModel } from '@/types'
+import { Head, router } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
+import { computed, reactive } from 'vue'
 
 const props = defineProps<{
   group: GroupModel
@@ -155,17 +156,17 @@ function addGroupCompositionRow(characteristicId: BaseTable['id']) {
   })
 }
 
-document.addEventListener('sync', () => {
+useEventListener(document, 'sync', () => {
   router.get(
     route('groups.courses.leadership.load-prev-course', { group: props.group.id, course_number: props.course.number })
   )
 })
 
-document.addEventListener('save', () => {
+useEventListener(document, 'save', () => {
   onSave(LeadershipService.sync(props.group.id, props.course.number, modelValue))
 })
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(route('groups.courses.leadership.print', { group: props.group.id, course_number: props.course.number }))
 })
 </script>

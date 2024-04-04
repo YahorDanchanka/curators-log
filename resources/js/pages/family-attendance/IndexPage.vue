@@ -95,6 +95,7 @@ import {
   GroupModel,
 } from '@/types'
 import { Head } from '@inertiajs/vue3'
+import { useEventListener } from '@vueuse/core'
 import { groupBy } from 'lodash'
 import { uid } from 'quasar'
 import { Required } from 'utility-types'
@@ -206,11 +207,11 @@ function setValue(column: FamilyAttendanceFormModelColumn, studentId: BaseTable[
   }
 }
 
-document.addEventListener('print', () => {
+useEventListener(document, 'print', () => {
   downloadFile(route('groups.family-attendances.print', { group: props.group.id }))
 })
 
-document.addEventListener('save', () => {
+useEventListener(document, 'save', () => {
   onSave(
     inertiaFetch(route('groups.family-attendances.sync', { group: props.group.id }), {
       method: 'post',
