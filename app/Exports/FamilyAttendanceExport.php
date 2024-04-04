@@ -21,6 +21,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Illuminate\Database\Eloquent\Builder;
 
 class FamilyAttendanceExport implements
     FromCollection,
@@ -42,9 +43,12 @@ class FamilyAttendanceExport implements
         $this->students = $group
             ->students()
             ->select(['id', 'surname', 'name', 'patronymic', 'group_id'])
+            ->doesntHave('expulsion')
             ->get();
 
-        $this->familyAttendances = FamilyAttendance::whereRelation('student', 'group_id', $group->id)->get();
+        $this->familyAttendances = FamilyAttendance::whereHas('student', function (Builder $query) use ($group) {
+            $query->where('group_id', $group->id)->doesntHave('expulsion');
+        })->get();
     }
 
     public function properties(): array
@@ -66,7 +70,9 @@ class FamilyAttendanceExport implements
     public function headings(): array
     {
         $groupedRowsByDate = FamilyAttendanceRow::orderBy('date')
-            ->whereRelation('familyAttendance.student', 'group_id', $this->group->id)
+            ->whereHas('familyAttendance.student', function (Builder $query) {
+                $query->where('group_id', $this->group->id)->doesntHave('expulsion');
+            })
             ->get()
             ->groupBy(fn(FamilyAttendanceRow $row) => "{$row->date}|{$row->course_id}");
 

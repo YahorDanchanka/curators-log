@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Classes\GradeCalculator;
 use App\Http\Requests\GradeReportRequest;
+use App\Models\Expulsion;
 use App\Models\GradeReport;
 use App\Models\Group;
 use App\Models\Student;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -53,7 +55,7 @@ class GradeReportController extends Controller
                 ->get(),
         ]);
 
-        $group->load('students');
+        $group->load(['students' => fn(HasMany $query) => $query->doesntHave('expulsion')]);
         $gradeReport->load('grade');
         $group->students->each(fn(Student $student) => $student->append('initials'));
 
@@ -90,7 +92,22 @@ class GradeReportController extends Controller
             abort(404);
         }
 
+        $expulsionStudentIds = Expulsion::select('student_id')
+            ->get()
+            ->pluck('student_id');
+
         $body = json_decode($gradeReport->grade->body, true)['subjects'] ?? [];
+
+        foreach ($body as $bodyIndex => $subject) {
+            $rows = $subject['rows'] ?? [];
+
+            foreach ($rows as $studentId => $row) {
+                if ($expulsionStudentIds->contains($studentId) && isset($body[$bodyIndex]['rows'][$studentId])) {
+                    unset($body[$bodyIndex]['rows'][$studentId]);
+                }
+            }
+        }
+
         $calculator = new GradeCalculator($body);
 
         $students = Student::whereIn('id', $calculator->getStudentIds())
@@ -98,6 +115,7 @@ class GradeReportController extends Controller
             ->orderBy('surname')
             ->orderBy('name')
             ->orderBy('patronymic')
+            ->doesntHave('expulsion')
             ->get();
 
         $reader = IOFactory::createReader('Xlsx');

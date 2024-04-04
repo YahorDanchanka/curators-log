@@ -11,6 +11,8 @@ class Address extends Model
 {
     use HasFactory;
 
+    protected $with = ['region', 'district'];
+
     protected $fillable = [
         'type',
         'residence',

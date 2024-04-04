@@ -70,8 +70,7 @@ class SocioPedagogicalCharacteristicController extends Controller
                     'studyAddress',
                     'expulsion',
                 ])
-                ->doesntHave('expulsion')
-                ->orWhereRelation('expulsion.course', 'number', '>=', $course_number),
+                ->doesntHave('expulsion'),
         ]);
 
         $group->students->each(fn(Student $student) => $student->append(['initials', 'is_nonresident', 'is_dorm']));
@@ -115,6 +114,7 @@ class SocioPedagogicalCharacteristicController extends Controller
             new SocioPedagogicalCharacteristicExport(
                 $group
                     ->students()
+                    ->doesntHave('expulsion')
                     ->with([
                         'characteristics' => fn(BelongsToMany $query) => $query
                             ->where('type', 'socio-pedagogical')

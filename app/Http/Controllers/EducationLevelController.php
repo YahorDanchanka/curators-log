@@ -9,6 +9,7 @@ use App\Models\CharacteristicStudent;
 use App\Models\EducationLevel;
 use App\Models\Group;
 use App\Models\Student;
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
@@ -23,7 +24,9 @@ class EducationLevelController extends Controller
         $course = $group->findCourseByNumber($courseNumber);
         $course->append('group_name');
         $group->load([
-            'students' => fn(HasMany $query) => $query->select(['id', 'surname', 'name', 'patronymic', 'group_id']),
+            'students' => fn(HasMany $query) => $query
+                ->select(['id', 'surname', 'name', 'patronymic', 'group_id'])
+                ->doesntHave('expulsion'),
         ]);
         $group->students->each(fn(Student $student) => $student->append('initials'));
         $characteristics = $this->getCharacteristics();
@@ -68,7 +71,10 @@ class EducationLevelController extends Controller
         $course = $group->findCourseByNumber($courseNumber);
         return Excel::download(
             new EducationLevelExport(
-                $group->students,
+                $group
+                    ->students()
+                    ->doesntHave('expulsion')
+                    ->get(),
                 $this->getCharacteristics(),
                 $this->getEducationLevels($course->id)
             ),
@@ -112,7 +118,9 @@ class EducationLevelController extends Controller
     protected function getEducationLevels($courseId): Collection
     {
         return EducationLevel::with('characteristicStudent')
-            ->whereRelation('characteristicStudent', 'course_id', $courseId)
+            ->whereHas('characteristicStudent', function (Builder $query) use ($courseId) {
+                $query->where('course_id', $courseId)->doesntHave('student.expulsion');
+            })
             ->get();
     }
 }

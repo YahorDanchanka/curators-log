@@ -29,6 +29,7 @@ class LeadershipController extends Controller
         $group->load([
             'students' => fn(HasMany $query) => $query
                 ->select(['id', 'surname', 'name', 'patronymic', 'group_id'])
+                ->doesntHave('expulsion')
                 ->with([
                     'characteristics' => fn(BelongsToMany $query) => $query
                         ->wherePivot('course_id', $course->id)
@@ -110,7 +111,7 @@ class LeadershipController extends Controller
         $headerRow->addCell($cellWidths[2])->addText('Фамилия, имя, отчество', null, $cellCentered);
 
         $compositions = Characteristic::select(['id', 'name'])
-            ->with('students')
+            ->with(['students' => fn($query) => $query->doesntHave('expulsion')])
             ->where('type', 'group-composition')
             ->get();
 

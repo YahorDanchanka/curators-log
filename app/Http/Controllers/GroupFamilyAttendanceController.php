@@ -12,6 +12,7 @@ use App\Models\Student;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Illuminate\Database\Eloquent\Builder;
 
 class GroupFamilyAttendanceController extends Controller
 {
@@ -19,7 +20,9 @@ class GroupFamilyAttendanceController extends Controller
     {
         $group->load([
             'courses',
-            'students' => fn(HasMany $query) => $query->select(['id', 'surname', 'name', 'patronymic', 'group_id']),
+            'students' => fn(HasMany $query) => $query
+                ->select(['id', 'surname', 'name', 'patronymic', 'group_id'])
+                ->doesntHave('expulsion'),
             'students.relatives',
         ]);
 
@@ -30,9 +33,14 @@ class GroupFamilyAttendanceController extends Controller
             $student->relatives->each(fn(Relative $relative) => $relative->append('initials'));
         });
 
-        $familyAttendance = FamilyAttendance::whereRelation('student', 'group_id', $group->id)->get();
+        $familyAttendance = FamilyAttendance::whereHas('student', function (Builder $query) use ($group) {
+            $query->where('group_id', $group->id)->doesntHave('expulsion');
+        })->get();
+
         $familyAttendanceRows = FamilyAttendanceRow::orderBy('date')
-            ->whereRelation('familyAttendance.student', 'group_id', $group->id)
+            ->whereHas('familyAttendance.student', function (Builder $query) use ($group) {
+                $query->where('group_id', $group->id)->doesntHave('expulsion');
+            })
             ->get();
 
         return Inertia::render('family-attendance/IndexPage', [

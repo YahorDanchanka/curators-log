@@ -71,6 +71,7 @@ class LeadershipService
         return $course
             ->characteristics()
             ->where('characteristic_id', $characteristicId->value)
+            ->doesntHave('student.expulsion')
             ->first()?->student;
     }
 }

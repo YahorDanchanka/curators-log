@@ -21,7 +21,11 @@ class GroupStudentController extends Controller
     public function index(Group $group)
     {
         $group->append('name');
-        $group->load(['students.address', 'students.studyAddress']);
+        $group->load([
+            'students' => fn(HasMany $query) => $query->doesntHave('expulsion'),
+            'students.address',
+            'students.studyAddress',
+        ]);
 
         $group->students->each(function (Student $student) {
             $student->append('age');

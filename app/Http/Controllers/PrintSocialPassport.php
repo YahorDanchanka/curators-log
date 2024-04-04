@@ -40,6 +40,7 @@ class PrintSocialPassport extends Controller
                 'passport',
                 'characteristics' => fn(BelongsToMany $query) => $query->wherePivot('course_id', $course->id),
             ])
+            ->doesntHave('expulsion')
             ->get();
 
         $templateProcessor->setValues([

@@ -9,11 +9,17 @@ class AnalyticsService
 {
     public function get(AnalyticsStrategyInterface $strategy, ?Course $course = null): Collection
     {
-        return $strategy->query($course)->get();
+        return $strategy
+            ->query($course)
+            ->doesntHave('expulsion')
+            ->get();
     }
 
     public function count(AnalyticsStrategyInterface $strategy, ?Course $course = null): int
     {
-        return $strategy->query($course)->count();
+        return $strategy
+            ->query($course)
+            ->doesntHave('expulsion')
+            ->count();
     }
 }
