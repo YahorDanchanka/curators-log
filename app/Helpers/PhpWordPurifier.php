@@ -11,7 +11,9 @@ class PhpWordPurifier
 
     public static function purifyString(string $value): string
     {
-        return strip_tags($value, '<w:br>');
+        $text = htmlspecialchars($value);
+        $text = preg_replace('/&lt;w:br\s?\/&gt;/', '<w:br />', $text);
+        return $text;
     }
 
     public static function purifyArray(array $array): array

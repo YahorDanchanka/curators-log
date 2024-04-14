@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PlanSectionEnum;
+use App\Helpers\PhpWordPurifier;
 use App\Http\Requests\PlanRequest;
 use App\Models\Group;
 use App\Models\Plan;
@@ -77,7 +78,7 @@ class PlanController extends Controller
 
         $planMapFunction = fn($postfix = '') => fn(Plan $plan) => [
             "date$postfix" => $plan->date,
-            "content$postfix" => strip_tags($plan->content),
+            "content$postfix" => PhpWordPurifier::purify($plan->content),
             "done$postfix" => $plan->done ? 'Выполнено' : 'Не выполнено',
         ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Tables;
 
+use App\Helpers\PhpWordPurifier;
 use App\Models\Report;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -99,7 +100,10 @@ class ReportTable
 
         $this->table
             ->addCell($this->contentCellWidth, ['valign' => 'center'])
-            ->addText(strip_tags($report->content), $this->fStyles, [...$this->pStyles, 'alignment' => Jc::START]);
+            ->addText(PhpWordPurifier::purify($report->content), $this->fStyles, [
+                ...$this->pStyles,
+                'alignment' => Jc::START,
+            ]);
         $this->table
             ->addCell(1000, ['valign' => 'center'])
             ->addText($report->hours_per_week, $this->fStyles, $this->pStyles);
