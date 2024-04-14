@@ -4,6 +4,7 @@ import {
   CharacteristicStudentTable,
   CharacteristicTable,
   ExpertAdviceTable,
+  ExpulsionTable,
   IndividualWorkTable,
   PassportModel,
   RelativeModel,
@@ -34,4 +35,5 @@ export type StudentModel = StudentTable & {
   individual_work?: IndividualWorkTable[]
   student_individual_work?: IndividualWorkTable[]
   relative_individual_work?: IndividualWorkTable[]
+  expulsion?: ExpulsionTable | null
 }

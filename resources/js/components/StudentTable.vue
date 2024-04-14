@@ -2,7 +2,7 @@
   <AppTable
     class="student-table"
     id="student-table"
-    :rows="props.students"
+    :rows="studentsWithoutExpulsion"
     :columns="columns"
     :rows-per-page-options="[0]"
   >
@@ -35,7 +35,7 @@
             color="primary"
             icon="visibility"
             round
-            @click="emit('show', props.row, props.rowIndex)"
+            @click="emit('show', props.row, getStudentNumber(props.row.id)!)"
           />
           <q-btn
             class="q-mr-sm"
@@ -43,7 +43,7 @@
             color="primary"
             icon="edit"
             round
-            @click="emit('edit', props.row, props.rowIndex)"
+            @click="emit('edit', props.row, getStudentNumber(props.row.id)!)"
           />
           <q-btn class="q-mr-sm" size="sm" color="negative" icon="delete" round @click="emit('delete', props.row)" />
           <q-btn icon="more_vert" size="sm" round>
@@ -63,6 +63,7 @@ import ListGenerator from '@/components/ListGenerator.vue'
 import { formatDate } from '@/helpers'
 import { MenuList, StudentModel } from '@/types'
 import { sortBy } from 'lodash'
+import { computed } from 'vue'
 
 const props = defineProps<{ title?: string; students: StudentModel[] }>()
 const emit = defineEmits<{
@@ -72,13 +73,20 @@ const emit = defineEmits<{
   (e: 'delete', student: StudentModel): void
 }>()
 
+const studentsWithoutExpulsion = computed(() => props.students.filter((student) => !student.expulsion))
+
+function getStudentNumber(studentId: string | number) {
+  const studentIndex = props.students.findIndex((student) => student.id == studentId)
+  return studentIndex !== -1 ? studentIndex + 1 : null
+}
+
 const columns = [
   {
     name: 'number',
     label: '№',
     align: 'left',
     sortable: true,
-    field: (row: StudentModel) => props.students.findIndex((student) => student === row) + 1,
+    field: (row: StudentModel) => studentsWithoutExpulsion.value.findIndex((student) => student === row) + 1,
   },
   {
     name: 'surname',

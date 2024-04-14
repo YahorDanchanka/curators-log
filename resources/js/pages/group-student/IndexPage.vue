@@ -7,10 +7,12 @@
       :students="props.group.students"
       @create="router.get(route('groups.students.create', { group: props.group.id }))"
       @show="
-        (student, index) => router.get(route('groups.students.show', { group: props.group.id, student: index + 1 }))
+        (student, studentNumber) =>
+          router.get(route('groups.students.show', { group: props.group.id, student: studentNumber }))
       "
       @edit="
-        (student, index) => router.get(route('groups.students.edit', { group: props.group.id, student: index + 1 }))
+        (student, studentNumber) =>
+          router.get(route('groups.students.edit', { group: props.group.id, student: studentNumber }))
       "
       @delete="(student) => onDeleteConfirm(student.id)"
     />
