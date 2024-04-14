@@ -105,6 +105,9 @@ class PrintSocialPassport extends Controller
                 'student_characteristic' => implode(
                     $lineSeparator,
                     array_filter([
+                        $student->characteristics->contains('id', 7) || $student->characteristics->contains('id', 8)
+                            ? 'ГО'
+                            : null,
                         $student->characteristics->contains('id', 15) ? 'СОП' : null,
                         $student->characteristics->contains('id', 17) ? 'ИПУ' : null,
                         $student->characteristics->contains('id', 13) ? 'И' : null,
