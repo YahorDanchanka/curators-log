@@ -1,11 +1,12 @@
 <template>
-  <ThePage padding>
+  <ThePage class="other-characteristic-page page_flex" padding use-height>
     <Head :title="title" />
     <h1 class="course-title text-h4 q-mb-md">
       <span class="course-title__header">{{ title }}</span>
       <strong class="course-title__course">{{ props.course.number }} курс обучения</strong>
     </h1>
     <StudentCharacteristicTable
+      class="other-characteristic-page__table page__table q-markup-table_header_sticky q-markup-table_column_sticky"
       v-model="attachedCharacteristics"
       :characteristics="props.characteristics"
       :students="props.group.students"
@@ -40,3 +41,8 @@ useEventListener(document, 'save', () => {
   onSave(OtherCharacteristicService.sync(props.group.id, props.course.number, attachedCharacteristics.value))
 })
 </script>
+
+<style lang="sass" scoped>
+.other-characteristic-page__table
+  height: calc(100% - 16px - 24px - 80px)
+</style>

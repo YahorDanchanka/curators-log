@@ -235,6 +235,10 @@ function getCourseActionList(course: CourseModel): MenuList {
         route: route('groups.courses.socio-pedagogical-characteristic.index', { group, course_number }),
       },
       {
+        label: 'Прочие характеристики',
+        route: route('groups.courses.other-characteristic.index', { group, course_number }),
+      },
+      {
         label: 'Ведомости успеваемости',
         route: route('groups.courses.grade-reports.index', { group, course: course_number }),
       },

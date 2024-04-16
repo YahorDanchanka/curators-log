@@ -1,12 +1,20 @@
 <template>
-  <q-markup-table separator="cell" wrap-cells>
+  <q-markup-table class="student-characteristic-table" separator="cell" wrap-cells>
     <thead>
-      <slot name="thead_afterbegin">
-        <th class="cell_autowidth">№<br />п/п</th>
-        <th>Фамилия, имя, отчество</th>
-      </slot>
-      <th v-for="characteristic in props.characteristics" :key="characteristic.id">{{ characteristic.name }}</th>
-      <slot name="thead_beforeend" />
+      <tr>
+        <slot name="thead_afterbegin">
+          <th class="cell_autowidth">№<br />п/п</th>
+          <th>Фамилия, имя, отчество</th>
+        </slot>
+        <th
+          class="text-center student-characteristic-table__characteristic"
+          v-for="characteristic in props.characteristics"
+          :key="characteristic.id"
+        >
+          {{ characteristic.name }}
+        </th>
+        <slot name="thead_beforeend" />
+      </tr>
     </thead>
     <tbody>
       <slot
@@ -43,7 +51,10 @@
 import { AttachedCharacteristic, CharacteristicTable, StudentModel } from '@/types'
 
 const attachedCharacteristics = defineModel<AttachedCharacteristic[]>({ required: true })
-const props = defineProps<{ characteristics: CharacteristicTable[]; students: StudentModel[] }>()
+const props = defineProps<{
+  characteristics: CharacteristicTable[]
+  students: StudentModel[]
+}>()
 
 function getAttachedCharacteristicComparator(student: StudentModel, characteristic: CharacteristicTable) {
   return (c: AttachedCharacteristic) => c.student_id === student.id && c.characteristic_id === characteristic.id
@@ -73,3 +84,8 @@ function attachOrDetachCharacteristic(student: StudentModel, characteristic: Cha
   }
 }
 </script>
+
+<style lang="sass" scoped>
+.student-characteristic-table__characteristic
+  min-width: 150px
+</style>

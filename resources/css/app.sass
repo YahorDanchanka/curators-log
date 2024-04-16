@@ -91,3 +91,40 @@ img
 .page__table
   max-height: 100%
   height: calc(100% - 16px - 24px)
+
+.q-markup-table_header_sticky
+  thead tr:first-child th
+    /* bg color is important for th; just specify one */
+    background-color: white
+
+  thead tr th
+    position: sticky
+    z-index: 2
+
+  thead tr:first-child th
+    top: 0
+
+  /* this is when the loading indicator appears */
+  &.q-table--loading thead tr:last-child th
+    /* height of all previous header rows */
+    top: 48px
+
+  /* prevent scrolling behind sticky top row on focus */
+  tbody
+    /* height of all previous header rows */
+    scroll-margin-top: 48px
+
+.q-markup-table_column_sticky
+  thead tr:first-child th:first-child
+    /* bg color is important for th; just specify one */
+    background-color: white
+
+  td:first-child
+    background-color: white
+
+  tbody
+    th:first-child,
+    td:first-child
+      position: sticky
+      left: 0
+      z-index: 1

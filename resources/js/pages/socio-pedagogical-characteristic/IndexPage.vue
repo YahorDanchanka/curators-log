@@ -1,14 +1,16 @@
 <template>
-  <ThePage padding>
+  <ThePage class="socio-pedagogical-characteristic-page page_flex" padding use-height>
     <Head :title="title" />
     <h1 class="course-title text-h4 q-mb-md">
       <span class="course-title__header">{{ title }}</span>
       <strong class="course-title__course">{{ props.course.number }} курс обучения</strong>
     </h1>
     <StudentCharacteristicTable
+      class="socio-pedagogical-characteristic-page__table page__table q-markup-table_header_sticky q-markup-table_column_sticky"
       v-model="attachedCharacteristics"
       :characteristics="props.characteristics"
       :students="props.group.students"
+      sticky-header
     >
       <template #thead_afterbegin>
         <th class="cell_autowidth">№<br />п/п</th>
@@ -117,3 +119,8 @@ useEventListener(document, 'print', () => {
   isPrintMenuVisible.value = true
 })
 </script>
+
+<style lang="sass" scoped>
+.socio-pedagogical-characteristic-page__table
+  height: calc(100% - 16px - 24px - 80px)
+</style>
