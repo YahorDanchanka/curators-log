@@ -1,3 +1,4 @@
+export * from './absence.table'
 export * from './address.table'
 export * from './administrative-division.table'
 export * from './advice.table'

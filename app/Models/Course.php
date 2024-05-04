@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -57,6 +58,11 @@ class Course extends Model
     public function gradeReports(): HasMany
     {
         return $this->hasMany(GradeReport::class);
+    }
+
+    public function absences(): Builder
+    {
+        return Absence::whereBetween('date', [$this->start_education, $this->end_education]);
     }
 
     protected function groupName(): Attribute

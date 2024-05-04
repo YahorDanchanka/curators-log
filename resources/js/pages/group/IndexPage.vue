@@ -215,6 +215,15 @@ function getCourseActionList(course: CourseModel): MenuList {
         ],
       },
       {
+        label: 'Пропуски',
+        items: [
+          ...quasarLangRu.date.months.map((month, monthIndex) => ({
+            label: month,
+            route: route('groups.courses.absences.index', { group: group, month: monthIndex + 1, course_number }),
+          })),
+        ],
+      },
+      {
         label: 'Достижения учебной группы',
         route: route('groups.courses.achievements.index', { group, course: course_number }),
       },

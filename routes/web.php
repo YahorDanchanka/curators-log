@@ -27,6 +27,7 @@ use App\Http\Controllers\OtherCharacteristicController;
 use App\Http\Controllers\PrintSocialPassport;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\StudentAchievementController;
+use App\Http\Controllers\AbsenceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -232,5 +233,8 @@ Route::prefix('groups/{group}')
                 Route::post('/other-characteristic', [OtherCharacteristicController::class, 'sync'])->name(
                     'other-characteristic.sync'
                 );
+
+                Route::get('/absences/{month}', [AbsenceController::class, 'index'])->name('absences.index');
+                Route::post('/absences/{month}', [AbsenceController::class, 'sync'])->name('absences.sync');
             });
     });
