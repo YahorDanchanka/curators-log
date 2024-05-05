@@ -18,6 +18,17 @@ export interface IBreadcrumb {
   url?: string
 }
 
+export interface WithPolicyAccessors {
+  can: {
+    view: boolean
+    edit: boolean
+    delete: boolean
+  }
+  can_view: boolean
+  can_edit: boolean
+  can_delete: boolean
+}
+
 export * from './api'
 export * from './components'
 export * from './forms'

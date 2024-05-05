@@ -4,9 +4,11 @@ namespace App\Http\Middleware;
 
 use App\Enums\CharacteristicId;
 use App\Models\AdministrativeDivision;
+use App\Models\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
+use Illuminate\Support\Facades\Gate;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -49,6 +51,9 @@ class HandleInertiaRequests extends Middleware
                 'CharacteristicId' => CharacteristicId::array(),
             ],
             'administrativeDivisions' => $administrativeDivisions,
+            'auth.user' => $request->user(),
+            'auth.permissions.specialties.viewAny' => Gate::allows('viewAny', Specialty::class),
+            'auth.permissions.specialties.create' => Gate::allows('create', Specialty::class),
         ]);
     }
 }

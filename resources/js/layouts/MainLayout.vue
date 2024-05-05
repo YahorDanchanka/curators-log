@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import ListGenerator from '@/components/ListGenerator.vue'
+import { can } from '@/helpers'
 import BaseLayout from '@/layouts/BaseLayout.vue'
 import { MenuList } from '@/types'
 import { router } from '@inertiajs/vue3'
@@ -55,6 +56,7 @@ const menuList = ref<MenuList>([
     route: route('specialties.index'),
     label: 'Специальности',
     icon: 'school',
+    hidden: !can('specialties.viewAny'),
   },
   {
     route: route('curators.index'),
