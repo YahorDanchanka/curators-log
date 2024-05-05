@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Enums\CharacteristicId;
 use App\Models\AdministrativeDivision;
+use App\Models\Curator;
 use App\Models\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -54,6 +55,8 @@ class HandleInertiaRequests extends Middleware
             'auth.user' => $request->user(),
             'auth.permissions.specialties.viewAny' => Gate::allows('viewAny', Specialty::class),
             'auth.permissions.specialties.create' => Gate::allows('create', Specialty::class),
+            'auth.permissions.curators.viewAny' => Gate::allows('viewAny', Curator::class),
+            'auth.permissions.curators.create' => Gate::allows('create', Curator::class),
         ]);
     }
 }

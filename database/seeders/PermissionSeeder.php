@@ -25,7 +25,15 @@ class PermissionSeeder extends Seeder
             'specialties.delete',
         ];
 
-        $permissions = [...$permissions, ...$specialtyPermissions];
+        $curatorPermissions = [
+            'curators.viewAny',
+            'curators.viewOwn',
+            'curators.create',
+            'curators.editOwn',
+            'curators.deleteOwn',
+        ];
+
+        $permissions = [...$permissions, ...$specialtyPermissions, ...$curatorPermissions];
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
@@ -33,7 +41,7 @@ class PermissionSeeder extends Seeder
 
         // create roles and assign existing permissions
         $curator = Role::create(['name' => 'curator']);
-        $curator->givePermissionTo([...$specialtyPermissions]);
+        $curator->givePermissionTo([...$specialtyPermissions, ...$curatorPermissions]);
 
         Role::create(['name' => 'admin']);
     }

@@ -22,6 +22,7 @@
           </q-td>
           <q-td>
             <q-btn
+              v-if="props.row.can?.edit"
               class="q-mr-sm"
               size="sm"
               color="primary"
@@ -30,6 +31,7 @@
               @click="router.get(route('curators.edit', { curator: props.row.id }))"
             />
             <q-btn
+            v-if="props.row.can?.delete"
               size="sm"
               color="negative"
               icon="delete"

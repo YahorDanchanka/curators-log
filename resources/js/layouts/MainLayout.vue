@@ -62,6 +62,7 @@ const menuList = ref<MenuList>([
     route: route('curators.index'),
     label: 'Кураторы',
     icon: 'supervisor_account',
+    hidden: !can('curators.viewAny'),
   },
   { route: route('groups.index'), label: 'Группы', icon: 'groups' },
   {

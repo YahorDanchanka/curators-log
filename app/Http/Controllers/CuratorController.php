@@ -13,9 +13,16 @@ use Inertia\Inertia;
 
 class CuratorController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Curator::class, 'curator');
+    }
+
     public function index()
     {
-        $curators = Curator::with('user')->get();
+        $query = Curator::with('user');
+        $curators = auth()->user()->is_admin ? $query->get() : $query->where('user_id', auth()->id())->get();
+        $curators->each->append('can');
         return Inertia::render('curator/IndexPage', compact('curators'));
     }
 
