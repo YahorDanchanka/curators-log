@@ -5,7 +5,14 @@
       <template v-slot:top="data">
         <div class="q-table__title">Группы</div>
         <q-space />
-        <q-btn color="primary" icon="add" size="sm" round @click="router.get(route('groups.create'))" />
+        <q-btn
+          v-if="can('groups.create')"
+          color="primary"
+          icon="add"
+          size="sm"
+          round
+          @click="router.get(route('groups.create'))"
+        />
       </template>
 
       <template v-slot:header="props">
@@ -34,6 +41,7 @@
           </q-td>
           <q-td>
             <q-btn
+              v-if="props.row.can?.edit"
               class="q-mr-sm"
               icon="edit"
               color="primary"
@@ -42,6 +50,7 @@
               @click="router.get(route('groups.edit', { group: props.row.id }))"
             />
             <q-btn
+              v-if="props.row.can?.delete"
               class="q-mr-sm"
               icon="delete"
               color="negative"
@@ -91,7 +100,7 @@
 
 <script lang="ts" setup>
 import ListGenerator from '@/components/ListGenerator.vue'
-import { formatDate } from '@/helpers'
+import { formatDate, can } from '@/helpers'
 import { GroupService } from '@/services'
 import { CourseModel, GroupModel, MenuList } from '@/types'
 import { Head, router } from '@inertiajs/vue3'

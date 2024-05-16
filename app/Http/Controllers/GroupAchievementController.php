@@ -10,6 +10,11 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class GroupAchievementController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Group::class, 'group');
+    }
+
     public function index(Group $group, string $courseNumber)
     {
         $course = $group->findCourseByNumber($courseNumber);
@@ -59,6 +64,8 @@ class GroupAchievementController extends Controller
 
     public function print(Group $group, string $courseNumber)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
 
         $achievements = $course->achievements()->get();

@@ -8,12 +8,15 @@ use App\Models\Student;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class AbsenceController extends Controller
 {
     public function index(Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
         $course->append('group_name');
 
@@ -34,6 +37,7 @@ class AbsenceController extends Controller
 
     public function sync(Request $request, Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($courseNumber);
 
         $validated = $request->validate([

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use PhpOffice\PhpWord\Element\TextBreak;
 use PhpOffice\PhpWord\Shared\Converter;
@@ -20,6 +21,8 @@ class ReportController extends Controller
 {
     public function index(Group $group, string $courseNumber)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
         $course->append('group_name');
 
@@ -44,6 +47,7 @@ class ReportController extends Controller
 
     public function show(Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('view', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $course->load(['reports' => fn(HasMany $query) => $query->where('month', $month)]);
         $course->append('group_name');
@@ -56,6 +60,7 @@ class ReportController extends Controller
 
     public function printSingle(Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('view', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $course->load(['reports' => fn(HasMany $query) => $query->where('month', $month)]);
 
@@ -99,6 +104,7 @@ class ReportController extends Controller
 
     public function print(Group $group, string $courseNumber)
     {
+        Gate::authorize('view', $group);
         $course = $group->findCourseByNumber($courseNumber);
 
         $templateProcessor = new TemplateProcessor(resource_path('documents/report.docx'));
@@ -158,6 +164,7 @@ class ReportController extends Controller
 
     public function loadPlan(Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $plans = $course
             ->plans()
@@ -189,6 +196,7 @@ class ReportController extends Controller
 
     public function sync(ReportRequest $request, Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $validated = $request->validated();
 

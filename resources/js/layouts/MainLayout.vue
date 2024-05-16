@@ -64,7 +64,7 @@ const menuList = ref<MenuList>([
     icon: 'supervisor_account',
     hidden: !can('curators.viewAny'),
   },
-  { route: route('groups.index'), label: 'Группы', icon: 'groups' },
+  { route: route('groups.index'), label: 'Группы', icon: 'groups', hidden: !can('groups.viewAny') },
   {
     label: 'Выйти',
     icon: 'logout',

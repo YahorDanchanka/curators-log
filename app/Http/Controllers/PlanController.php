@@ -10,6 +10,7 @@ use App\Models\Plan;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use PhpOffice\PhpWord\TemplateProcessor;
 
@@ -17,6 +18,8 @@ class PlanController extends Controller
 {
     public function index(Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
         $course->load(['plans' => fn(HasMany $query) => $query->where('month', $month)]);
         $course->append('group_name');
@@ -29,6 +32,8 @@ class PlanController extends Controller
 
     public function sync(PlanRequest $request, Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('update', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
         $validated = $request->validated();
 
@@ -52,6 +57,7 @@ class PlanController extends Controller
 
     public function print(Group $group, string $courseNumber, string $month)
     {
+        Gate::authorize('view', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $plans = $course
             ->plans()

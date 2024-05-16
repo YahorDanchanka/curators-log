@@ -13,11 +13,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Gate;
 
 class GroupFamilyAttendanceController extends Controller
 {
     public function index(Group $group)
     {
+        Gate::authorize('view', $group);
+
         $group->load([
             'courses',
             'students' => fn(HasMany $query) => $query
@@ -52,6 +55,8 @@ class GroupFamilyAttendanceController extends Controller
 
     public function sync(GroupFamilyAttendanceRequest $request, Group $group)
     {
+        Gate::authorize('update', $group);
+
         $validated = $request->validated();
 
         DB::transaction(function () use ($group, $validated) {
@@ -70,6 +75,8 @@ class GroupFamilyAttendanceController extends Controller
 
     public function print(Group $group)
     {
+        Gate::authorize('view', $group);
+
         return (new FamilyAttendanceExport($group))->download(
             'Учет посещаемости родителями (другими законными представителями) проводимых мероприятий.xlsx'
         );

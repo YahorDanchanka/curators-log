@@ -5,14 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InteractionWithParentRequest;
 use App\Models\Group;
 use App\Models\InteractionWithParent;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class InteractionWithParentController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Group::class, 'group');
+    }
+
     public function index(Group $group)
     {
         $group->append('name');
@@ -57,6 +62,7 @@ class InteractionWithParentController extends Controller
 
     public function print(Group $group)
     {
+        Gate::authorize('view', $group);
         $templateProcessor = new TemplateProcessor(resource_path('documents/interaction-with-parents.docx'));
 
         $templateProcessor->cloneRowAndSetValues(

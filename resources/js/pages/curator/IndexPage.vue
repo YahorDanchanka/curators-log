@@ -5,7 +5,14 @@
       <template v-slot:top="data">
         <h1 class="q-table__title" style="line-height: normal">Кураторы</h1>
         <q-space />
-        <q-btn color="primary" icon="add" size="sm" round @click="router.get(route('curators.create'))" />
+        <q-btn
+          v-if="can('curators.create')"
+          color="primary"
+          icon="add"
+          size="sm"
+          round
+          @click="router.get(route('curators.create'))"
+        />
       </template>
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -31,7 +38,7 @@
               @click="router.get(route('curators.edit', { curator: props.row.id }))"
             />
             <q-btn
-            v-if="props.row.can?.delete"
+              v-if="props.row.can?.delete"
               size="sm"
               color="negative"
               icon="delete"
@@ -47,7 +54,7 @@
 
 <script lang="ts" setup>
 import AppTable from '@/components/AppTable.vue'
-import { onSave } from '@/helpers'
+import { onSave, can } from '@/helpers'
 import { CuratorService } from '@/services'
 import { CuratorModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'

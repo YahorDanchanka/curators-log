@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpWord\TemplateProcessor;
@@ -47,6 +48,7 @@ class SocioPedagogicalCharacteristicController extends Controller
 {
     public function index(Group $group, string $course_number)
     {
+        Gate::authorize('view', $group);
         $course = $group->findCourseByNumber($course_number);
         $course->append('group_name');
 
@@ -109,6 +111,7 @@ class SocioPedagogicalCharacteristicController extends Controller
 
     public function print(Group $group, string $course_number)
     {
+        Gate::authorize('view', $group);
         $course = $group->findCourseByNumber($course_number);
         return Excel::download(
             new SocioPedagogicalCharacteristicExport(
@@ -129,6 +132,7 @@ class SocioPedagogicalCharacteristicController extends Controller
 
     public function printWord(Group $group, string $course_number, AnalyticsService $analyticsService)
     {
+        Gate::authorize('view', $group);
         $course = $group->findCourseByNumber($course_number);
         $templateProcessor = new TemplateProcessor(resource_path('documents/social-pedagogical-characteristics.docx'));
 
@@ -186,6 +190,7 @@ class SocioPedagogicalCharacteristicController extends Controller
         string $courseNumber,
         StudentCharacteristicService $studentCharacteristicService
     ) {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $prevCourse = $group->findPrevCourse($courseNumber);
 

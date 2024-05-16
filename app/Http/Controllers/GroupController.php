@@ -14,14 +14,24 @@ use Inertia\Inertia;
 
 class GroupController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Group::class, 'group');
+    }
+
     public function index()
     {
-        $groups = Group::with(['courses' => fn(HasMany $query) => $query->with(['curator']), 'specialty'])
-            ->orderByRaw('(SELECT start_education FROM courses WHERE courses.group_id = groups.id LIMIT 1) DESC')
-            ->get();
+        $query = Group::with(['courses' => fn(HasMany $query) => $query->with(['curator']), 'specialty'])->orderByRaw(
+            '(SELECT start_education FROM courses WHERE courses.group_id = groups.id LIMIT 1) DESC'
+        );
+
+        // see here
+        $groups = auth()->user()->is_admin
+            ? $query->get()
+            : $query->whereRelation('courses', 'curator_id', '=', auth()->user()->curator->id)->get();
 
         $groups->each(function (Group $group) {
-            $group->append('current_course', 'name', 'education_period');
+            $group->append('current_course', 'name', 'education_period', 'can');
             $group->courses->each(fn(Course $course) => $course->curator->append('full_name'));
         });
 

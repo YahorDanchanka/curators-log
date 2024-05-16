@@ -13,11 +13,17 @@ use App\Models\StudentAchievement;
 use App\Services\GroupStudentService;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Inertia\Inertia;
 
 class GroupStudentController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Group::class, 'group');
+    }
+
     public function index(Group $group)
     {
         $group->append('name');
@@ -110,6 +116,8 @@ class GroupStudentController extends Controller
 
     public function print(Group $group, string $studentNumber)
     {
+        Gate::authorize('view', $group);
+
         $student = $group->findStudentByNumber($studentNumber);
         $templateProcessor = new TemplateProcessor(resource_path('documents/student-card.docx'));
 

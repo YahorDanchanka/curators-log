@@ -12,12 +12,15 @@ use App\Services\Analytics\Strategies\FemaleStudentsStrategy;
 use App\Services\Analytics\Strategies\MaleStudentsStrategy;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class PrintSocialPassport extends Controller
 {
     public function __invoke(Group $group, string $courseNumber, AnalyticsService $analyticsService)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
         $templateProcessor = new TemplateProcessor(resource_path('documents/social-passport.docx'));
 

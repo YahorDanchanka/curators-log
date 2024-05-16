@@ -13,6 +13,7 @@ use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\Element\Table;
@@ -24,6 +25,8 @@ class LeadershipController extends Controller
 {
     public function index(Group $group, string $course_number)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($course_number);
         $course->append('group_name');
         $group->load([
@@ -61,6 +64,8 @@ class LeadershipController extends Controller
         LeadershipService $leadershipService,
         GroupCompositionService $groupCompositionService
     ) {
+        Gate::authorize('update', $group);
+
         $course = $group->findCourseByNumber($course_number);
         $validated = $request->validated();
 
@@ -82,6 +87,7 @@ class LeadershipController extends Controller
         LeadershipService $leadershipService,
         GroupCompositionService $groupCompositionService
     ) {
+        Gate::authorize('view', $group);
         $course = $group->findCourseByNumber($course_number);
 
         $templateProcessor = new TemplateProcessor(resource_path('documents/group-asset.docx'));
@@ -147,6 +153,7 @@ class LeadershipController extends Controller
         string $courseNumber,
         StudentCharacteristicService $studentCharacteristicService
     ) {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $prevCourse = $group->findPrevCourse($courseNumber);
 

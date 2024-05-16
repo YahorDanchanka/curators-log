@@ -10,6 +10,7 @@ use App\Repositories\StudentRepository;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use PhpOffice\PhpWord\TemplateProcessor;
 
@@ -17,6 +18,8 @@ class StudentEmploymentController extends Controller
 {
     public function index(Group $group, string $course_number)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($course_number);
         $course->append('group_name');
 
@@ -55,6 +58,7 @@ class StudentEmploymentController extends Controller
 
     public function sync(StudentEmploymentRequest $request, Group $group, string $course_number)
     {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($course_number);
         $validated = $request->validated();
 
@@ -78,6 +82,8 @@ class StudentEmploymentController extends Controller
 
     public function print(Group $group, string $course_number)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($course_number);
 
         $group->load([
