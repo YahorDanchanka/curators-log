@@ -7,6 +7,7 @@ use App\Models\AdministrativeDivision;
 use App\Models\Curator;
 use App\Models\Group;
 use App\Models\Specialty;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
@@ -60,6 +61,7 @@ class HandleInertiaRequests extends Middleware
             'auth.permissions.curators.create' => Gate::allows('create', Curator::class),
             'auth.permissions.groups.viewAny' => Gate::allows('viewAny', Group::class),
             'auth.permissions.groups.create' => Gate::allows('create', Group::class),
+            'auth.permissions.students.create' => Gate::allows('create', Student::class),
         ]);
     }
 }

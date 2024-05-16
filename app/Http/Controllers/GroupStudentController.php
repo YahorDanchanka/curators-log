@@ -19,18 +19,15 @@ use Inertia\Inertia;
 
 class GroupStudentController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Group::class, 'group');
-    }
-
     public function index(Group $group)
     {
+        Gate::authorize('viewAny', Group::class);
+
         $group->append('name');
         $group->load(['students.address', 'students.studyAddress', 'students.expulsion']);
 
         $group->students->each(function (Student $student) {
-            $student->append('age');
+            $student->append('age', 'can');
             $student->address?->append('address');
             $student->studyAddress?->append('address');
         });
@@ -40,12 +37,14 @@ class GroupStudentController extends Controller
 
     public function create(Group $group)
     {
+        Gate::authorize('create', Student::class);
         $group->append('name');
         return Inertia::render('group-student/CreatePage', compact('group'));
     }
 
     public function store(Group $group, GroupStudentRequest $request, GroupStudentService $groupStudentService)
     {
+        Gate::authorize('update', $group);
         $groupStudentService->create($group, $request);
         return to_route('groups.students.index', ['group' => $group->id]);
     }
@@ -53,6 +52,7 @@ class GroupStudentController extends Controller
     public function show(Group $group, string $studentNumber)
     {
         $student = $group->findStudentByNumber($studentNumber);
+        Gate::authorize('view', $student);
 
         $student->load([
             'address',
@@ -91,6 +91,7 @@ class GroupStudentController extends Controller
 
     public function edit(Group $group, string $studentNumber)
     {
+        Gate::authorize('update', $group);
         $student = $group->findStudentByNumber($studentNumber);
         $student->load(['address', 'studyAddress', 'passport']);
         $group->append('name');
@@ -104,21 +105,22 @@ class GroupStudentController extends Controller
         GroupStudentRequest $request,
         GroupStudentService $groupStudentService
     ) {
+        Gate::authorize('update', $group);
         $groupStudentService->update($student, $request);
         return to_route('groups.students.index', ['group' => $group->id]);
     }
 
     public function destroy(Group $group, Student $student, GroupStudentService $groupStudentService)
     {
+        Gate::authorize('delete', $group);
         $groupStudentService->delete($student);
         return to_route('groups.students.index', ['group' => $group->id]);
     }
 
     public function print(Group $group, string $studentNumber)
     {
-        Gate::authorize('view', $group);
-
         $student = $group->findStudentByNumber($studentNumber);
+        Gate::authorize('view', $student);
         $templateProcessor = new TemplateProcessor(resource_path('documents/student-card.docx'));
 
         $templateProcessor->setValues([

@@ -35,7 +35,23 @@ class PermissionSeeder extends Seeder
 
         $groupPermissions = ['groups.viewAny', 'groups.viewOwn', 'groups.create', 'groups.editOwn', 'groups.deleteOwn'];
 
-        $permissions = [...$permissions, ...$specialtyPermissions, ...$curatorPermissions, ...$groupPermissions];
+        $studentPermissions = [
+            'students.viewAny',
+            'students.viewOwn',
+            'students.create',
+            'students.achievements',
+            'students.asocialBehaviors',
+            'students.expertAdvice',
+            'students.individualWorks',
+        ];
+
+        $permissions = [
+            ...$permissions,
+            ...$specialtyPermissions,
+            ...$curatorPermissions,
+            ...$groupPermissions,
+            ...$studentPermissions,
+        ];
 
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);
@@ -43,7 +59,24 @@ class PermissionSeeder extends Seeder
 
         // create roles and assign existing permissions
         $curator = Role::create(['name' => 'curator']);
-        $curator->givePermissionTo([...$specialtyPermissions, ...$curatorPermissions, ...$groupPermissions]);
+        $curator->givePermissionTo([
+            ...$specialtyPermissions,
+            ...$curatorPermissions,
+            ...$groupPermissions,
+            ...$studentPermissions,
+        ]);
+
+        // create roles and assign existing permissions
+        $psychologist = Role::create(['name' => 'psychologist']);
+        $psychologist->givePermissionTo([
+            $groupPermissions[0],
+            'students.viewAny',
+            'students.viewOwn',
+            'students.achievements',
+            'students.asocialBehaviors',
+            'students.expertAdvice',
+            'students.individualWorks',
+        ]);
 
         Role::create(['name' => 'admin']);
     }

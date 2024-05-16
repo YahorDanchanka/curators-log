@@ -26,9 +26,13 @@ class GroupController extends Controller
         );
 
         // see here
-        $groups = auth()->user()->is_admin
-            ? $query->get()
-            : $query->whereRelation('courses', 'curator_id', '=', auth()->user()->curator->id)->get();
+        $groups =
+            auth()->user()->is_admin ||
+            auth()
+                ->user()
+                ->hasRole('psychologist')
+                ? $query->get()
+                : $query->whereRelation('courses', 'curator_id', '=', auth()->user()->curator->id)->get();
 
         $groups->each(function (Group $group) {
             $group->append('current_course', 'name', 'education_period', 'can');
