@@ -9,9 +9,15 @@ use Inertia\Inertia;
 
 class SpecialtyController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Specialty::class, 'specialty');
+    }
+
     public function index()
     {
         $specialties = Specialty::all();
+        $specialties->each->append('can');
         return Inertia::render('specialty/IndexPage', compact('specialties'));
     }
 

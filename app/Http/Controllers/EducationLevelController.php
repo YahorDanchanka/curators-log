@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -21,6 +22,8 @@ class EducationLevelController extends Controller
 {
     public function index(Group $group, string $courseNumber)
     {
+        Gate::authorize('show', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
         $course->append('group_name');
         $group->load([
@@ -41,6 +44,7 @@ class EducationLevelController extends Controller
 
     public function sync(EducationLevelRequest $request, Group $group, string $courseNumber)
     {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $validated = $request->validated();
 
@@ -68,6 +72,7 @@ class EducationLevelController extends Controller
 
     public function print(Group $group, string $courseNumber)
     {
+        Gate::authorize('show', $group);
         $course = $group->findCourseByNumber($courseNumber);
         return Excel::download(
             new EducationLevelExport(
@@ -84,6 +89,7 @@ class EducationLevelController extends Controller
 
     public function loadPrevCourse(Group $group, string $courseNumber)
     {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $prevCourse = $group->findPrevCourse($courseNumber);
 

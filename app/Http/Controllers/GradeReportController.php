@@ -10,6 +10,7 @@ use App\Models\Group;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -17,6 +18,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class GradeReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Group::class, 'group');
+    }
+
     public function index(Group $group, string $courseNumber)
     {
         $course = $group->findCourseByNumber($courseNumber);
@@ -86,6 +92,8 @@ class GradeReportController extends Controller
 
     public function print(Group $group, string $courseNumber, GradeReport $gradeReport)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
 
         if (!$gradeReport->grade) {

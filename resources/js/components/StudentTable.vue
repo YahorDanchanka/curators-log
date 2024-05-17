@@ -9,7 +9,7 @@
     <template v-slot:top="data">
       <div v-if="title" class="q-table__title">{{ title }}</div>
       <q-space />
-      <q-btn color="primary" icon="add" size="sm" round @click="emit('create')" />
+      <q-btn v-if="can('students.create')" color="primary" icon="add" size="sm" round @click="emit('create')" />
     </template>
     <template v-slot:header="props">
       <q-tr :props="props">
@@ -30,6 +30,7 @@
         </q-td>
         <q-td>
           <q-btn
+            v-if="props.row.can?.view"
             class="q-mr-sm"
             size="sm"
             color="primary"
@@ -38,6 +39,7 @@
             @click="emit('show', props.row, getStudentNumber(props.row.id)!)"
           />
           <q-btn
+            v-if="props.row.can?.edit"
             class="q-mr-sm"
             size="sm"
             color="primary"
@@ -45,7 +47,15 @@
             round
             @click="emit('edit', props.row, getStudentNumber(props.row.id)!)"
           />
-          <q-btn class="q-mr-sm" size="sm" color="negative" icon="delete" round @click="emit('delete', props.row)" />
+          <q-btn
+            v-if="props.row.can?.delete"
+            class="q-mr-sm"
+            size="sm"
+            color="negative"
+            icon="delete"
+            round
+            @click="emit('delete', props.row)"
+          />
           <q-btn icon="more_vert" size="sm" round>
             <q-popup-proxy>
               <ListGenerator :list="getStudentActionList(props.row, props.rowIndex)" />
@@ -60,7 +70,7 @@
 <script setup lang="ts">
 import AppTable from '@/components/AppTable.vue'
 import ListGenerator from '@/components/ListGenerator.vue'
-import { formatDate } from '@/helpers'
+import { formatDate, can } from '@/helpers'
 import { MenuList, StudentModel } from '@/types'
 import { sortBy } from 'lodash'
 import { computed } from 'vue'

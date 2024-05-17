@@ -11,6 +11,11 @@ use Inertia\Inertia;
 
 class ExpulsionController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Group::class, 'group');
+    }
+
     public function index(Group $group, string $course_number)
     {
         $course = $this->getFormData($group, $course_number)['course'];

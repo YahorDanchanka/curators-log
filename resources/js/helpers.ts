@@ -1,7 +1,9 @@
-import { CourseTable } from '@/types'
+import { CourseTable, UserModel } from '@/types'
 import { VisitOptions } from '@inertiajs/core/types/types'
-import { router } from '@inertiajs/vue3'
-import { Notify, date } from 'quasar'
+import { router, usePage } from '@inertiajs/vue3'
+import { ValidationResult } from 'joi'
+import { get } from 'lodash'
+import { Notify, ValidationRule, date } from 'quasar'
 
 export function difference<T>(arr1: T, arr2: T): T {
   return arr1.filter((x) => !arr2.includes(x))
@@ -49,4 +51,25 @@ export function getCourseDate(course: CourseTable, month: number): Date {
 
 export function getDaysInMonth(month: number, year: number): number {
   return new Date(year, month, 0).getDate()
+}
+
+export function can(permission: string): boolean {
+  const page = usePage<{
+    auth: { user?: UserModel | null; permissions: object }
+  }>()
+  const user = page.props.auth.user
+  const permissions = page.props.auth.permissions
+
+  if (!user) {
+    return false
+  }
+
+  return !!get(permissions, permission)
+}
+
+/**
+ * Используется в quasar-формах для вывода ошибок
+ */
+export function getValidationRules(validated: ValidationResult<any>, key: string): ValidationRule[] {
+  return [() => validated.error?.details.find((item: any) => item.path.join('.') === key)?.message || true]
 }

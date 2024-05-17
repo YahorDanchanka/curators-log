@@ -28,6 +28,7 @@ use App\Http\Controllers\PrintSocialPassport;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\StudentAchievementController;
 use App\Http\Controllers\AbsenceController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,6 +65,10 @@ Route::resource('curators', CuratorController::class)
     ->middleware('auth');
 
 Route::resource('specialties', SpecialtyController::class)
+    ->except(['show'])
+    ->middleware('auth');
+
+Route::resource('users', UserController::class)
     ->except(['show'])
     ->middleware('auth');
 

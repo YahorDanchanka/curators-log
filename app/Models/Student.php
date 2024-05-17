@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\ModelAge;
 use App\Traits\ModelInitials;
+use App\Traits\PolicyAccessors;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Student extends Model
 {
-    use HasFactory, ModelInitials, ModelAge;
+    use HasFactory, ModelInitials, ModelAge, PolicyAccessors;
 
     protected $fillable = [
         'surname',
@@ -51,7 +52,7 @@ class Student extends Model
 
     public function group(): BelongsTo
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Group::class);
     }
 
     public function employments(): HasMany

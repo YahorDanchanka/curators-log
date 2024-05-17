@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import ListGenerator from '@/components/ListGenerator.vue'
+import { can } from '@/helpers'
 import BaseLayout from '@/layouts/BaseLayout.vue'
 import { MenuList } from '@/types'
 import { router } from '@inertiajs/vue3'
@@ -52,16 +53,24 @@ function toggleLeftDrawer() {
 
 const menuList = ref<MenuList>([
   {
+    route: route('users.index'),
+    label: 'Пользователи',
+    icon: 'admin_panel_settings',
+    hidden: !can('users.viewAny'),
+  },
+  {
     route: route('specialties.index'),
     label: 'Специальности',
     icon: 'school',
+    hidden: !can('specialties.viewAny'),
   },
   {
     route: route('curators.index'),
     label: 'Кураторы',
     icon: 'supervisor_account',
+    hidden: !can('curators.viewAny'),
   },
-  { route: route('groups.index'), label: 'Группы', icon: 'groups' },
+  { route: route('groups.index'), label: 'Группы', icon: 'groups', hidden: !can('groups.viewAny') },
   {
     label: 'Выйти',
     icon: 'logout',

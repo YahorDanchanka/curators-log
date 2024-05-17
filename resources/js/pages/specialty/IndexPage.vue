@@ -5,7 +5,14 @@
       <template v-slot:top="data">
         <h1 class="q-table__title" style="line-height: normal">Специальности</h1>
         <q-space />
-        <q-btn color="primary" icon="add" size="sm" round @click="router.get(route('specialties.create'))" />
+        <q-btn
+          v-if="can('specialties.create')"
+          color="primary"
+          icon="add"
+          size="sm"
+          round
+          @click="router.get(route('specialties.create'))"
+        />
       </template>
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -22,6 +29,7 @@
           </q-td>
           <q-td>
             <q-btn
+              v-if="props.row.can?.edit"
               class="q-mr-sm"
               size="sm"
               color="primary"
@@ -30,6 +38,7 @@
               @click="router.get(route('specialties.edit', { specialty: props.row.id }))"
             />
             <q-btn
+              v-if="props.row.can?.delete"
               size="sm"
               color="negative"
               icon="delete"
@@ -45,7 +54,7 @@
 
 <script lang="ts" setup>
 import AppTable from '@/components/AppTable.vue'
-import { onSave } from '@/helpers'
+import { onSave, can } from '@/helpers'
 import { SpecialtyService } from '@/services'
 import { SpecialtyTable } from '@/types'
 import { Head, router } from '@inertiajs/vue3'

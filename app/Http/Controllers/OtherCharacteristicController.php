@@ -10,11 +10,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Http\Requests\SocioPedagogicalCharacteristicRequest;
 use App\Models\CharacteristicStudent;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class OtherCharacteristicController extends Controller
 {
     public function index(Group $group, string $courseNumber)
     {
+        Gate::authorize('view', $group);
+
         $course = $group->findCourseByNumber($courseNumber);
         $course->append('group_name');
 
@@ -42,6 +45,7 @@ class OtherCharacteristicController extends Controller
 
     public function sync(SocioPedagogicalCharacteristicRequest $request, Group $group, string $courseNumber)
     {
+        Gate::authorize('update', $group);
         $course = $group->findCourseByNumber($courseNumber);
         $validated = $request->validated();
 

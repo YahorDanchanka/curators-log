@@ -9,9 +9,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Inertia\Inertia;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class AdviceController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Group::class, 'group');
+    }
+
     public function index(Group $group)
     {
         $group->append('name');
@@ -51,6 +57,8 @@ class AdviceController extends Controller
 
     public function print(Group $group)
     {
+        Gate::authorize('view', $group);
+
         $templateProcessor = new TemplateProcessor(resource_path('documents/advice.docx'));
 
         $templateProcessor->cloneRowAndSetValues(

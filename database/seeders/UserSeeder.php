@@ -17,8 +17,7 @@ class UserSeeder extends Seeder
             throw new \Exception('Login or password is empty');
         }
 
-        User::insert([
-            ['login' => env('ADMIN_LOGIN'), 'password' => Hash::make(env('ADMIN_PASSWORD'))],
-        ]);
+        $user = User::create(['login' => env('ADMIN_LOGIN'), 'password' => Hash::make(env('ADMIN_PASSWORD'))]);
+        $user->assignRole('admin');
     }
 }

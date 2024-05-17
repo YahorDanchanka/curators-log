@@ -13,6 +13,11 @@ use PhpOffice\PhpWord\TemplateProcessor;
 
 class StudentRelativeController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Group::class, 'group');
+    }
+
     public function index(Group $group, string $studentNumber)
     {
         $student = $group->findStudentByNumber($studentNumber);
