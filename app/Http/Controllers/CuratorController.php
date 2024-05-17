@@ -38,6 +38,7 @@ class CuratorController extends Controller
         DB::transaction(function () use ($validated) {
             $user = User::create([...$validated, 'password' => Hash::make($validated['password'])]);
             $user->curator()->create($validated);
+            $user->assignRole('curator');
         });
 
         return to_route('curators.index');

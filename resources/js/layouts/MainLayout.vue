@@ -53,6 +53,12 @@ function toggleLeftDrawer() {
 
 const menuList = ref<MenuList>([
   {
+    route: route('users.index'),
+    label: 'Пользователи',
+    icon: 'admin_panel_settings',
+    hidden: !can('users.viewAny'),
+  },
+  {
     route: route('specialties.index'),
     label: 'Специальности',
     icon: 'school',

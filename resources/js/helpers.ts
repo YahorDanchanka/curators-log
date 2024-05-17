@@ -1,8 +1,9 @@
 import { CourseTable, UserModel } from '@/types'
 import { VisitOptions } from '@inertiajs/core/types/types'
 import { router, usePage } from '@inertiajs/vue3'
+import { ValidationResult } from 'joi'
 import { get } from 'lodash'
-import { Notify, date } from 'quasar'
+import { Notify, ValidationRule, date } from 'quasar'
 
 export function difference<T>(arr1: T, arr2: T): T {
   return arr1.filter((x) => !arr2.includes(x))
@@ -64,4 +65,11 @@ export function can(permission: string): boolean {
   }
 
   return !!get(permissions, permission)
+}
+
+/**
+ * Используется в quasar-формах для вывода ошибок
+ */
+export function getValidationRules(validated: ValidationResult<any>, key: string): ValidationRule[] {
+  return [() => validated.error?.details.find((item: any) => item.path.join('.') === key)?.message || true]
 }
