@@ -1,10 +1,7 @@
 <template>
   <ThePage class="other-characteristic-page page_flex" padding use-height>
     <Head :title="title" />
-    <h1 class="course-title text-h4 q-mb-md">
-      <span class="course-title__header">{{ title }}</span>
-      <strong class="course-title__course">{{ props.course.number }} курс обучения</strong>
-    </h1>
+    <CourseTitle :title="title" :course-number="props.course.number" />
     <StudentCharacteristicTable
       class="other-characteristic-page__table page__table q-markup-table_header_sticky q-markup-table_column_sticky"
       v-model="attachedCharacteristics"
@@ -24,6 +21,7 @@ import { Head } from '@inertiajs/vue3'
 import { useEventListener } from '@vueuse/core'
 import { Required } from 'utility-types'
 import { computed, ref } from 'vue'
+import CourseTitle from '@/components/CourseTitle.vue'
 
 const props = defineProps<{
   group: Required<GroupModel, 'students'>

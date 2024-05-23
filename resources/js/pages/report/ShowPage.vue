@@ -1,12 +1,11 @@
 <template>
   <ThePage padding>
     <Head title="Отчет о выполнении плана воспитательной и идеологической работы" />
-    <div class="text-bold text-right">{{ props.course.number }} курс обучения</div>
-    <h1 class="text-h4 text-center">
+    <CourseTitle :course-number="props.course.number">
       <span class="text-uppercase">Отчет</span><br />
       о выполнении плана воспитательной и идеологической работы куратора учебной группы, проведении внеплановых
       мероприятий
-    </h1>
+    </CourseTitle>
     <a
       class="block text-center q-mb-md"
       href="#"
@@ -27,6 +26,7 @@
 </template>
 
 <script lang="ts" setup>
+import CourseTitle from '@/components/CourseTitle.vue'
 import ReportForm from '@/components/ReportForm.vue'
 import ThePage from '@/components/ThePage.vue'
 import { downloadFile, inertiaFetch, onSave } from '@/helpers'

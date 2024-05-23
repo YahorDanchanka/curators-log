@@ -1,10 +1,7 @@
 <template>
   <ThePage class="socio-pedagogical-characteristic-page page_flex" padding use-height>
     <Head :title="title" />
-    <h1 class="course-title text-h4 q-mb-md">
-      <span class="course-title__header">{{ title }}</span>
-      <strong class="course-title__course">{{ props.course.number }} курс обучения</strong>
-    </h1>
+    <CourseTitle :title="title" :course-number="props.course.number" />
     <StudentCharacteristicTable
       class="socio-pedagogical-characteristic-page__table page__table q-markup-table_header_sticky q-markup-table_column_sticky"
       v-model="attachedCharacteristics"
@@ -60,6 +57,7 @@
 </template>
 
 <script lang="ts" setup>
+import CourseTitle from '@/components/CourseTitle.vue'
 import StudentCharacteristicTable from '@/components/StudentCharacteristicTable.vue'
 import ThePage from '@/components/ThePage.vue'
 import { downloadFile, formatDate, onSave } from '@/helpers'

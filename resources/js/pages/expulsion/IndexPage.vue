@@ -1,23 +1,19 @@
 <template>
   <ThePage padding>
     <Head :title="title" />
-    <h1 class="course-title text-h4 q-mb-md">
-      <span class="course-title__header"
-        >{{ title }}
-        <q-btn
-          color="primary"
-          icon="add"
-          size="sm"
-          title="Добавить"
-          round
-          @click="
-            router.get(
-              route('groups.courses.expulsions.create', { group: props.group.id, course: props.course.number })
-            )
-          "
-      /></span>
-      <strong class="course-title__course">{{ props.course.number }} курс обучения</strong>
-    </h1>
+    <CourseTitle :course-number="props.course.number">
+      {{ title }}
+      <q-btn
+        color="primary"
+        icon="add"
+        size="sm"
+        title="Добавить"
+        round
+        @click="
+          router.get(route('groups.courses.expulsions.create', { group: props.group.id, course: props.course.number }))
+        "
+      />
+    </CourseTitle>
     <q-markup-table separator="cell" wrap-cells>
       <thead>
         <tr>
@@ -73,6 +69,7 @@
 </template>
 
 <script lang="ts" setup>
+import CourseTitle from '@/components/CourseTitle.vue'
 import ThePage from '@/components/ThePage.vue'
 import { ExpulsionService } from '@/services/ExpulsionService'
 import { BaseTable, CourseModel, GroupModel } from '@/types'

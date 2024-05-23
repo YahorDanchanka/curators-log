@@ -1,12 +1,11 @@
 <template>
   <ThePage padding>
     <Head title="План воспитательной и идеологической работы" />
-    <div class="text-bold text-right">{{ props.course.number }} курс обучения</div>
-    <h1 class="text-h4 text-center">
+    <CourseTitle :course-number="props.course.number">
       <span class="text-uppercase">План</span><br />
       воспитательной и идеологической работы учебной группы № {{ props.course.group_name }}<br />
       на {{ month }} {{ date.getFullYear() }} г.
-    </h1>
+    </CourseTitle>
     <a
       class="block text-center q-mb-md"
       href="#"
@@ -88,6 +87,7 @@
 </template>
 
 <script setup lang="ts">
+import CourseTitle from '@/components/CourseTitle.vue'
 import ThePage from '@/components/ThePage.vue'
 import { downloadFile, formatDate, onSave } from '@/helpers'
 import { PlanService } from '@/services'
