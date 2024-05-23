@@ -4,7 +4,7 @@
       <q-header elevated class="bg-primary text-white">
         <q-toolbar>
           <q-btn icon="menu" @click="toggleLeftDrawer" dense flat round />
-          <q-toolbar-title> Журнал куратора </q-toolbar-title>
+          <q-toolbar-title> АРМ зам. директора по воспитательной работе УО "ГГАЭК" </q-toolbar-title>
           <q-btn v-if="props.loading" class="q-mr-sm" icon="sync" flat round dense @click="emitEvent('sync')">
             <q-tooltip> Загрузить из предыдущего курса </q-tooltip>
           </q-btn>
