@@ -32,6 +32,7 @@ class AbsenceController extends Controller
         return Inertia::render('absence/IndexPage', [
             ...compact('group', 'course', 'month', 'absences'),
             'saving' => true,
+            'printing' => true,
         ]);
     }
 

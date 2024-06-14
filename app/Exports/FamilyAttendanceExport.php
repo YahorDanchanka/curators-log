@@ -201,7 +201,7 @@ class FamilyAttendanceExport implements
     {
         if ($student instanceof Student) {
             $familyAttendance = $this->familyAttendances->where('student_id', $student->id)->first();
-            $rows = $familyAttendance?->rows ?? [];
+            $rows = $familyAttendance?->rows ?? collect([]);
 
             $values = $this->columns
                 ->map(function ($columnValue) use ($rows) {

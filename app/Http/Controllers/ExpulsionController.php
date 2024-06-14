@@ -20,7 +20,7 @@ class ExpulsionController extends Controller
     {
         $course = $this->getFormData($group, $course_number)['course'];
         $course->append('group_name');
-        return Inertia::render('expulsion/IndexPage', compact('group', 'course'));
+        return Inertia::render('expulsion/IndexPage', [...compact('group', 'course'), 'printing' => true]);
     }
 
     public function create(Group $group, string $course_number)

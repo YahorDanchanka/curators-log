@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\GroupAchievement;
 use Inertia\Inertia;
 use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\Gate;
 
 class GroupAchievementController extends Controller
 {

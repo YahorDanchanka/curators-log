@@ -32,7 +32,7 @@ class GroupStudentController extends Controller
             $student->studyAddress?->append('address');
         });
 
-        return Inertia::render('group-student/IndexPage', compact('group'));
+        return Inertia::render('group-student/IndexPage', [...compact('group'), 'printing' => true]);
     }
 
     public function create(Group $group)
