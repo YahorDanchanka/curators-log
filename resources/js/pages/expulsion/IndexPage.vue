@@ -77,6 +77,8 @@ import { Head, router } from '@inertiajs/vue3'
 import { useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
+import { useEventListener } from '@vueuse/core'
+import { downloadFile } from '@/helpers'
 
 const props = defineProps<{ group: GroupModel; course: CourseModel }>()
 const $q = useQuasar()
@@ -97,4 +99,13 @@ function onDeleteConfirm(expulsionId: string | number) {
     ExpulsionService.delete(props.group.id, props.course.number, expulsionId)
   })
 }
+
+useEventListener(document, 'print', () => {
+  downloadFile(
+    route('groups.courses.expulsions.print', {
+      group: props.group.id,
+      course: props.course.number,
+    })
+  )
+})
 </script>

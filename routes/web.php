@@ -87,9 +87,14 @@ Route::resource('groups.interaction-with-parents', InteractionWithParentControll
 Route::resource('groups.courses.achievements', GroupAchievementController::class)
     ->except(['show'])
     ->middleware('auth');
+
 Route::resource('groups.courses.expulsions', ExpulsionController::class)
     ->except(['show'])
     ->middleware('auth');
+Route::get('/groups/{group}/courses/{course}/expulsions/print', [ExpulsionController::class, 'print'])->name(
+    'groups.courses.expulsions.print'
+);
+
 Route::resource('groups.courses.grade-reports', GradeReportController::class)->middleware('auth');
 
 Route::resource('groups.students.achievements', StudentAchievementController::class)

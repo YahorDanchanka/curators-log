@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PhpWordPurifier;
 use App\Http\Requests\ExpulsionRequest;
 use App\Models\Expulsion;
 use App\Models\Group;
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Gate;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class ExpulsionController extends Controller
 {
@@ -67,6 +71,35 @@ class ExpulsionController extends Controller
             'group' => $group->id,
             'course' => $course->number,
         ]);
+    }
+
+    public function print(Group $group, string $course_number)
+    {
+        Gate::authorize('view', $group);
+
+        $course = $group->findCourseByNumber($course_number);
+        $templateProcessor = new TemplateProcessor(resource_path('documents/expulsions.docx'));
+
+        $templateProcessor->setValue('course', $course_number);
+        $templateProcessor->cloneRowAndSetValues(
+            'initials',
+            $course->expulsions
+                ->map(
+                    fn(Expulsion $expulsion) => PhpWordPurifier::purify([
+                        'initials' => $expulsion->student->initials,
+                        'date' => Carbon::parse($expulsion->date)->format('d.m.Y'),
+                        'is_initiator_student' => $expulsion->initiator === 'student' ? '+' : '',
+                        'is_initiator_college' => $expulsion->initiator === 'college' ? '+' : '',
+                        'reason' => $expulsion->reason,
+                    ])
+                )
+                ->toArray()
+        );
+
+        return response()->streamDownload(
+            fn() => $templateProcessor->saveAs('php://output'),
+            "Отчисления за период обучения {$course->group_name}.docx"
+        );
     }
 
     protected function getFormData(Group $group, string|int $course_number): array
