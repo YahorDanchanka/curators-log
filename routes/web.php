@@ -76,7 +76,12 @@ Route::resource('groups', GroupController::class)
     ->except(['show'])
     ->middleware('auth');
 
+Route::get('/groups/{group}/students/print', [GroupStudentController::class, 'printStudentList'])
+    ->name('groups.students.printStudentList')
+    ->middleware('auth');
+
 Route::resource('groups.students', GroupStudentController::class)->middleware('auth');
+
 Route::resource('groups.advice', AdviceController::class)
     ->except(['show'])
     ->middleware('auth');
@@ -91,9 +96,10 @@ Route::resource('groups.courses.achievements', GroupAchievementController::class
 Route::resource('groups.courses.expulsions', ExpulsionController::class)
     ->except(['show'])
     ->middleware('auth');
-Route::get('/groups/{group}/courses/{course}/expulsions/print', [ExpulsionController::class, 'print'])->name(
-    'groups.courses.expulsions.print'
-);
+
+Route::get('/groups/{group}/courses/{course}/expulsions/print', [ExpulsionController::class, 'print'])
+    ->name('groups.courses.expulsions.print')
+    ->middleware('auth');
 
 Route::resource('groups.courses.grade-reports', GradeReportController::class)->middleware('auth');
 

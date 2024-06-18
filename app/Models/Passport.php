@@ -15,7 +15,7 @@ class Passport extends Model
     protected function passport(): Attribute
     {
         return Attribute::make(
-            get: fn() => "$this->id_number, $this->series$this->number выдан $this->district_department РОВД от " .
+            get: fn() => "$this->id_number, $this->series$this->number выдан $this->district_department от " .
                 $this->asDate($this->issue_date)->format('d.m.Y')
         );
     }

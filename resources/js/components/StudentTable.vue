@@ -226,6 +226,13 @@ const columns = [
     sortable: true,
     field: (row: StudentModel) => row.study_address?.address ?? row.address?.address,
   },
+  {
+    name: 'passport',
+    label: 'Паспортные данные',
+    align: 'left',
+    sortable: true,
+    field: (row: StudentModel) => row.passport?.passport,
+  },
 ]
 
 function getStudentActionList(student: StudentModel, index: number): MenuList {

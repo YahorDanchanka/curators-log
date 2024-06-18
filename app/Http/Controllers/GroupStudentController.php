@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PhpWordPurifier;
 use App\Http\Requests\GroupStudentRequest;
 use App\Models\AsocialBehavior;
 use App\Models\ExpertAdvice;
@@ -12,8 +13,13 @@ use App\Models\Student;
 use App\Models\StudentAchievement;
 use App\Services\GroupStudentService;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\SimpleType\Jc;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Inertia\Inertia;
 
@@ -30,9 +36,14 @@ class GroupStudentController extends Controller
             $student->append('age', 'can');
             $student->address?->append('address');
             $student->studyAddress?->append('address');
+            $student->passport?->append('passport');
         });
 
-        return Inertia::render('group-student/IndexPage', [...compact('group'), 'printing' => true]);
+        return Inertia::render('group-student/IndexPage', [
+            ...compact('group'),
+            'printing' => true,
+            'columns' => $this->getColumnAllowList(),
+        ]);
     }
 
     public function create(Group $group)
@@ -225,5 +236,111 @@ class GroupStudentController extends Controller
             fn() => $templateProcessor->saveAs('php://output'),
             "Карта персонифицированного учета {$student->initials}.docx"
         );
+    }
+
+    public function printStudentList(Request $request, Group $group)
+    {
+        Gate::authorize('viewAny', Group::class);
+
+        $validated = $request->validate([
+            'columns' => 'required|array',
+            'columns.*' => Rule::in(
+                $this->getColumnAllowList()
+                    ->pluck('value')
+                    ->toArray()
+            ),
+        ]);
+
+        $columns = $validated['columns'] ?? [];
+
+        $students = $group->students
+            ->map(
+                fn(Student $student, $index) => PhpWordPurifier::purify(
+                    Arr::only(
+                        [
+                            ...$student->getAttributes(),
+                            'initials' => $student->initials,
+                            'address' => $student->address?->address,
+                            'study_address' => $student->study_address?->address,
+                            'number' => $index + 1,
+                            'age' => $student->age,
+                            'passport' => $student->passport?->passport,
+                        ],
+                        $validated['columns']
+                    )
+                )
+            )
+            ->toArray();
+
+        $phpWord = new PhpWord();
+        $fontStyles = ['name' => 'Times New Roman', 'size' => 12];
+
+        $section = $phpWord->addSection(['orientation' => 'landscape']);
+
+        $section->addText(
+            "Список учащихся учебной группы {$group->name}",
+            [...$fontStyles, 'bold' => true],
+            ['alignment' => Jc::CENTER]
+        );
+
+        $table = $section->addTable(['width' => 100 * 50, 'unit' => 'pct', 'borderSize' => 6]);
+        $table->addRow();
+
+        foreach ($columns as $column) {
+            $foundColumn = $this->getColumnAllowList()
+                ->where('value', $column)
+                ->first();
+
+            if (!$foundColumn) {
+                continue;
+            }
+
+            $table->addCell()->addText($foundColumn['label'], [...$fontStyles, 'bold' => true]);
+        }
+
+        foreach ($students as $student) {
+            $table->addRow();
+
+            foreach ($columns as $column) {
+                $foundColumn = $this->getColumnAllowList()
+                    ->where('value', $column)
+                    ->first();
+
+                if (!$foundColumn || !isset($student[$column])) {
+                    continue;
+                }
+
+                $table->addCell()->addText($student[$column], $fontStyles);
+            }
+        }
+
+        return response()->streamDownload(
+            fn() => $phpWord->save('php://output'),
+            "Список учащихся {$group->name}.docx"
+        );
+    }
+
+    protected function getColumnAllowList(): \Illuminate\Support\Collection
+    {
+        return collect([
+            ['value' => 'number', 'label' => '№'],
+            ['value' => 'initials', 'label' => 'ФИО'],
+            ['value' => 'sex', 'label' => 'Пол'],
+            ['value' => 'birthday', 'label' => 'Дата рождения'],
+            ['value' => 'age', 'label' => 'Возраст'],
+            ['value' => 'citizenship', 'label' => 'Гражданство'],
+            ['value' => 'home_phone', 'label' => 'Домашний телефон'],
+            ['value' => 'phone', 'label' => 'Телефон'],
+            ['value' => 'educational_institution', 'label' => 'Учреждение образования'],
+            ['value' => 'social_conditions', 'label' => 'Социальные условия'],
+            ['value' => 'hobbies', 'label' => 'Увлечения'],
+            ['value' => 'other_details', 'label' => 'Другая информация'],
+            ['value' => 'medical_certificate_date', 'label' => 'Дата справки'],
+            ['value' => 'health', 'label' => 'Группа здоровья'],
+            ['value' => 'apprenticeship', 'label' => 'Основа'],
+            ['value' => 'address', 'label' => 'Домашний адрес'],
+            ['value' => 'study_address', 'label' => 'Место проживания в период обучения'],
+            ['value' => 'passport', 'label' => 'Паспортные данные'],
+        ]);
     }
 }
