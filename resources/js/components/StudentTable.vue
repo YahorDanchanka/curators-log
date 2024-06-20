@@ -56,7 +56,12 @@
             round
             @click="emit('delete', props.row)"
           />
-          <q-btn icon="more_vert" size="sm" round>
+          <q-btn
+            v-if="getStudentActionList(props.row, props.rowIndex).some((item) => !item.hidden)"
+            icon="more_vert"
+            size="sm"
+            round
+          >
             <q-popup-proxy>
               <ListGenerator :list="getStudentActionList(props.row, props.rowIndex)" />
             </q-popup-proxy>
@@ -70,7 +75,7 @@
 <script setup lang="ts">
 import AppTable from '@/components/AppTable.vue'
 import ListGenerator from '@/components/ListGenerator.vue'
-import { formatDate, can } from '@/helpers'
+import { can, formatDate, isPsychologist } from '@/helpers'
 import { MenuList, StudentModel } from '@/types'
 import { sortBy } from 'lodash'
 import { computed } from 'vue'
@@ -241,6 +246,7 @@ function getStudentActionList(student: StudentModel, index: number): MenuList {
       {
         label: 'Родственники',
         route: route('groups.students.relatives.index', { group: student.group_id, student: index + 1 }),
+        hidden: isPsychologist(),
       },
     ],
     'label'

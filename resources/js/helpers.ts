@@ -73,3 +73,16 @@ export function can(permission: string): boolean {
 export function getValidationRules(validated: ValidationResult<any>, key: string): ValidationRule[] {
   return [() => validated.error?.details.find((item: any) => item.path.join('.') === key)?.message || true]
 }
+
+export function isPsychologist() {
+  const page = usePage<{
+    auth: { user?: UserModel | null; permissions: object }
+  }>()
+  const user = page.props.auth.user
+
+  if (!user) {
+    return false
+  }
+
+  return user.roles?.some(role => role.name === 'psychologist')
+}

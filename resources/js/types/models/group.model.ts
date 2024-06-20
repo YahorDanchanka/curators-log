@@ -1,13 +1,21 @@
-import { AdviceTable, CourseModel, GroupTable, InteractionWithParentTable, StudentModel } from '@/types'
+import {
+  AdviceTable,
+  CourseModel,
+  GroupTable,
+  InteractionWithParentTable,
+  StudentModel,
+  WithPolicyAccessors,
+} from '@/types'
 
-export type GroupModel = GroupTable & {
-  name?: string | null
-  education_period?: string | null
-  courses?: CourseModel[]
-  current_course?: CourseModel | null
-  students?: StudentModel[]
-  interaction_with_parents?: InteractionWithParentTable[]
-  first_course?: CourseModel
-  last_course?: CourseModel
-  advice?: AdviceTable[]
-}
+export type GroupModel = GroupTable &
+  WithPolicyAccessors & {
+    name?: string | null
+    education_period?: string | null
+    courses?: CourseModel[]
+    current_course?: CourseModel | null
+    students?: StudentModel[]
+    interaction_with_parents?: InteractionWithParentTable[]
+    first_course?: CourseModel
+    last_course?: CourseModel
+    advice?: AdviceTable[]
+  }

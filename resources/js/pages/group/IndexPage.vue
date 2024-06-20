@@ -82,7 +82,12 @@
                     {{ col.value }}
                   </q-td>
                   <q-td>
-                    <q-btn icon="more_vert" size="sm" round>
+                    <q-btn
+                      v-if="getCourseActionList(props.row).some((item) => !item.hidden)"
+                      icon="more_vert"
+                      size="sm"
+                      round
+                    >
                       <q-popup-proxy>
                         <ListGenerator :list="getCourseActionList(props.row)" />
                       </q-popup-proxy>
@@ -100,9 +105,9 @@
 
 <script lang="ts" setup>
 import ListGenerator from '@/components/ListGenerator.vue'
-import { formatDate, can } from '@/helpers'
+import { can, formatDate, isPsychologist } from '@/helpers'
 import { GroupService } from '@/services'
-import { CourseModel, GroupModel, MenuList } from '@/types'
+import { CourseModel, GroupModel, MenuList, UserModel } from '@/types'
 import { Head, router } from '@inertiajs/vue3'
 import { sortBy } from 'lodash'
 import { QTableColumn, useQuasar } from 'quasar'
@@ -110,7 +115,7 @@ import quasarLangRu from 'quasar/lang/ru'
 import { useI18n } from 'vue-i18n'
 import route from 'ziggy-js'
 
-const props = defineProps<{ groups: GroupModel[] }>()
+const props = defineProps<{ groups: GroupModel[]; auth: { user: UserModel } }>()
 const $q = useQuasar()
 const { t } = useI18n()
 
@@ -183,10 +188,12 @@ function getGroupActionList(group: GroupModel): MenuList {
             route: route('groups.interaction-with-parents.index', { group }),
           },
         ],
+        hidden: isPsychologist(),
       },
       {
         label: 'Замечания и предложения по организации идеологической и воспитательной работы',
         route: route('groups.advice.index', { group: group }),
+        hidden: isPsychologist(),
       },
     ],
     'label'
@@ -202,6 +209,7 @@ function getCourseActionList(course: CourseModel): MenuList {
       {
         label: 'Актив учебной группы',
         route: route('groups.courses.leadership.index', { group, course_number }),
+        hidden: isPsychologist(),
       },
       {
         label:
@@ -213,6 +221,7 @@ function getCourseActionList(course: CourseModel): MenuList {
             route: route('groups.courses.reports.show', { group: group, month: monthIndex + 1, course_number }),
           })),
         ],
+        hidden: isPsychologist(),
       },
       {
         label: 'План идеологической и воспитательной работы',
@@ -222,6 +231,7 @@ function getCourseActionList(course: CourseModel): MenuList {
             route: route('groups.courses.plans.index', { group: group, month: monthIndex + 1, course_number }),
           })),
         ],
+        hidden: isPsychologist(),
       },
       {
         label: 'Пропуски',
@@ -231,39 +241,48 @@ function getCourseActionList(course: CourseModel): MenuList {
             route: route('groups.courses.absences.index', { group: group, month: monthIndex + 1, course_number }),
           })),
         ],
+        hidden: isPsychologist(),
       },
       {
         label: 'Достижения учебной группы',
         route: route('groups.courses.achievements.index', { group, course: course_number }),
+        hidden: isPsychologist(),
       },
       {
         label: 'Занятость учащихся общественно полезной деятельностью',
         route: route('groups.courses.student-employment.index', { group, course_number }),
+        hidden: isPsychologist(),
       },
       {
         label: 'Отчисления за период обучения',
         route: route('groups.courses.expulsions.index', { group, course: course_number }),
+        hidden: isPsychologist(),
       },
       {
         label: 'Результаты изучения уровня воспитанности учащихся',
         route: route('groups.courses.education-level.index', { group, course_number }),
+        hidden: isPsychologist(),
       },
       {
         label: 'Социально-педагогическая характеристика',
         route: route('groups.courses.socio-pedagogical-characteristic.index', { group, course_number }),
+        hidden: isPsychologist(),
       },
       {
         label: 'Прочие характеристики',
         route: route('groups.courses.other-characteristic.index', { group, course_number }),
+        hidden: isPsychologist(),
       },
       {
         label: 'Ведомости успеваемости',
         route: route('groups.courses.grade-reports.index', { group, course: course_number }),
+        hidden: isPsychologist(),
       },
       {
         label: 'Социальный паспорт',
         route: route('groups.courses.social-passport.print', { group, course_number }),
         download: true,
+        hidden: isPsychologist(),
       },
     ],
     'label'
