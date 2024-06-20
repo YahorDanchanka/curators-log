@@ -23,7 +23,7 @@
               {{ characteristic.name }}
             </span>
           </th>
-          <th>
+          <th class="cell_sticky cell_sticky_top">
             <div class="education-level-table__column text_vertical">Итоговая оценка учащегося</div>
           </th>
         </tr>
