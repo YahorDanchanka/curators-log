@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithDefaultStyles;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -23,7 +24,8 @@ class EducationLevelExport implements
     WithMapping,
     WithColumnWidths,
     WithStyles,
-    WithDefaultStyles
+    WithDefaultStyles,
+    WithProperties
 {
     protected int $rowNumber = 1;
     protected array $characteristicBoundaries;
@@ -42,6 +44,14 @@ class EducationLevelExport implements
         $this->tableBoundaries = [
             'A1',
             Coordinate::stringFromColumnIndex($this->characteristics->count() + 3) . $this->students->count() + 2,
+        ];
+    }
+
+    public function properties(): array
+    {
+        return [
+            'creator' => config('app.author'),
+            'lastModifiedBy' => config('app.author'),
         ];
     }
 

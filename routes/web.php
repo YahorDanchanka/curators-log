@@ -251,6 +251,7 @@ Route::prefix('groups/{group}')
                 );
 
                 Route::get('/absences/{month}', [AbsenceController::class, 'index'])->name('absences.index');
+                Route::get('/absences/{month}/print', [AbsenceController::class, 'print'])->name('absences.print');
                 Route::post('/absences/{month}', [AbsenceController::class, 'sync'])->name('absences.sync');
             });
     });

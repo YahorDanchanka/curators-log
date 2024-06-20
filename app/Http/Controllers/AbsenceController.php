@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AbsencesExport;
 use App\Models\Absence;
 use App\Models\Group;
 use App\Models\Student;
+use App\Services\AbsenceService;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AbsenceController extends Controller
 {
-    public function index(Group $group, string $courseNumber, string $month)
+    public function index(Group $group, string $courseNumber, string $month, AbsenceService $absenceService)
     {
         Gate::authorize('view', $group);
 
         $course = $group->findCourseByNumber($courseNumber);
         $course->append('group_name');
 
-        $absences = $course
-            ->absences()
-            ->whereMonth('date', $month)
-            ->doesntHave('student.expulsion')
-            ->get();
+        $absences = $absenceService->find($course, $month)->get();
 
         $group->load(['students' => fn(HasMany $query) => $query->doesntHave('expulsion')]);
         $group->students->each(fn(Student $student) => $student->append('initials'));
@@ -63,5 +62,17 @@ class AbsenceController extends Controller
             'course_number' => $courseNumber,
             'month' => $month,
         ]);
+    }
+
+    public function print(Group $group, string $courseNumber, string $month)
+    {
+        Gate::authorize('view', $group);
+        $course = $group->findCourseByNumber($courseNumber);
+        return Excel::download(
+            new AbsencesExport($course, $month),
+            "Ведомость пропусков группы {$course->groupName} за {$course->getTargetDate(
+                (int) $month
+            )->monthName} {$course->getTargetDate((int) $month)->year}.xlsx"
+        );
     }
 }

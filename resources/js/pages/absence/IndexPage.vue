@@ -10,7 +10,7 @@
 import ThePage from '@/components/ThePage.vue'
 import AbsenceTable from '@/components/AbsenceTable.vue'
 import CourseTitle from '@/components/CourseTitle.vue'
-import { getCourseDate, inertiaFetch, onSave } from '@/helpers'
+import { downloadFile, getCourseDate, inertiaFetch, onSave } from '@/helpers'
 import { CourseModel, GroupModel, AbsenceTable as IAbsenceTable } from '@/types'
 import { Head } from '@inertiajs/vue3'
 import { useEventListener } from '@vueuse/core'
@@ -37,6 +37,16 @@ const title = computed(
       'MMMM'
     )} ${courseDate.value.getFullYear()}`
 )
+
+useEventListener(document, 'print', () => {
+  downloadFile(
+    route('groups.courses.absences.print', {
+      group: props.group.id,
+      course_number: props.course.number,
+      month: props.month,
+    })
+  )
+})
 
 useEventListener(document, 'save', () => {
   onSave(

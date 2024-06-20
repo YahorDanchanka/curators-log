@@ -69,7 +69,6 @@
 </template>
 
 <script lang="ts" setup>
-import { getDaysInMonth } from '@/helpers'
 import { AbsenceTable, StudentModel } from '@/types'
 import { useVModel } from '@vueuse/core'
 import { sumBy } from 'lodash'
@@ -85,7 +84,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const absences = useVModel(props, 'modelValue', emit)
 
-const daysInMonth = computed(() => getDaysInMonth(props.date.getMonth() - 1, props.date.getFullYear()))
+const daysInMonth = computed(() => quasarDate.daysInMonth(props.date))
 const totalReasonableCount = computed(() => sumBy(absences.value, 'reasonable_count'))
 const totalUnreasonableCount = computed(() => sumBy(absences.value, 'unreasonable_count'))
 

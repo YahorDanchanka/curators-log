@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Course extends Model
 {
@@ -63,6 +64,21 @@ class Course extends Model
     public function absences(): Builder
     {
         return Absence::whereBetween('date', [$this->start_education, $this->end_education]);
+    }
+
+    /**
+     * Создаёт дату с корректным годом, которая используется при вычислении
+     * количества дней в месяце. Например, 9,10,11,12 месяцы - n год, а
+     * остальные - n+1 год
+     */
+    public function getTargetDate(int $month)
+    {
+        $date = Carbon::createFromFormat(
+            'Y-m-d',
+            $month >= 9 && $month <= 12 ? $this->start_education : $this->end_education
+        );
+        $date->setMonth($month);
+        return $date;
     }
 
     protected function groupName(): Attribute

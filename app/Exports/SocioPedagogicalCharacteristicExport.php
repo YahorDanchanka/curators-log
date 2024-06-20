@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use Maatwebsite\Excel\Concerns\WithDefaultStyles;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -24,7 +25,8 @@ class SocioPedagogicalCharacteristicExport implements
     WithMapping,
     WithColumnWidths,
     WithStyles,
-    WithDefaultStyles
+    WithDefaultStyles,
+    WithProperties
 {
     protected int $rowNumber = 1;
     protected array $characteristicBoundaries;
@@ -48,6 +50,14 @@ class SocioPedagogicalCharacteristicExport implements
         return collect()
             ->merge($this->students)
             ->add('total');
+    }
+
+    public function properties(): array
+    {
+        return [
+            'creator' => config('app.author'),
+            'lastModifiedBy' => config('app.author'),
+        ];
     }
 
     public function headings(): array
