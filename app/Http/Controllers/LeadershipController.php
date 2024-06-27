@@ -122,7 +122,11 @@ class LeadershipController extends Controller
             ->get();
 
         foreach ($compositions as $composition) {
-            $students = $composition->students->values();
+            $students = $composition
+                ->students()
+                ->wherePivot('course_id', $course->id)
+                ->get()
+                ->values();
 
             $studentIndex = 0;
 
