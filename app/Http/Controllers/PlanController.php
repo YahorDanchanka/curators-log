@@ -21,7 +21,12 @@ class PlanController extends Controller
         Gate::authorize('view', $group);
 
         $course = $group->findCourseByNumber($courseNumber);
-        $course->load(['plans' => fn(HasMany $query) => $query->where('month', $month)]);
+        $course->load([
+            'plans' => fn(HasMany $query) => $query
+                ->where('month', $month)
+                ->orderBy('start_date')
+                ->orderBy('end_date'),
+        ]);
         $course->append('group_name');
         return Inertia::render('plan/IndexPage', [
             ...compact('group', 'course', 'month'),
