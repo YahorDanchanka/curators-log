@@ -161,8 +161,8 @@ class LeadershipController extends Controller
             $studentCharacteristicService->copyCharacteristicsByCourse(
                 $prevCourse,
                 $course,
-                fn(Builder $query) => $query->orWhere(
-                    fn($query1) => $query1->where('type', 'leadership')->where('type', 'group-composition')
+                fn(Builder $query) => $query->where(
+                    fn($query1) => $query1->where('type', 'leadership')->orWhere('type', 'group-composition')
                 )
             );
         } catch (UniqueConstraintViolationException $exception) {
